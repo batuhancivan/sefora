@@ -1,0 +1,58 @@
+import { Link } from 'react-router-dom'
+import { IconIg, IconPin, IconTt } from '../ui/Icons'
+
+export default function Footer() {
+  return (
+    <footer className="site-footer">
+      <div className="container footer-grid">
+        <div className="footer-brand">
+          <div className="logo-name">SEFORA</div>
+          <p>İtalyan estetiğinden ilham alan premium parfüm evi. Kokunuz, sizin imzanız.</p>
+          <div className="socials">
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+              <IconIg />
+            </a>
+            <a href="https://pinterest.com" target="_blank" rel="noreferrer" aria-label="Pinterest">
+              <IconPin />
+            </a>
+            <a href="https://tiktok.com" target="_blank" rel="noreferrer" aria-label="TikTok">
+              <IconTt />
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4>Kadın</h4>
+          <Link to="/kadin">Kadın Parfümleri</Link>
+          <Link to="/yeni">Yeni Gelenler</Link>
+          <Link to="/cok-satanlar">Çok Satanlar</Link>
+        </div>
+        <div>
+          <h4>Erkek</h4>
+          <Link to="/erkek">Erkek Parfümleri</Link>
+          <Link to="/yeni">Yeni Gelenler</Link>
+          <Link to="/cok-satanlar">Çok Satanlar</Link>
+        </div>
+        <div>
+          <h4>SEFORA</h4>
+          <Link to="/hakkimizda">Hakkımızda</Link>
+          <Link to="/hakkimizda">Hikayemiz</Link>
+          <Link to="/koleksiyonlar">Koleksiyonlarımız</Link>
+          <Link to="/blog">Blog</Link>
+        </div>
+        <div>
+          <h4>Yardım</h4>
+          <Link to="/iletisim">İletişim</Link>
+          <Link to="/teslimat">Teslimat</Link>
+          <Link to="/iade">İade</Link>
+          <Link to="/sss">Sıkça Sorulan Sorular</Link>
+        </div>
+      </div>
+      <div className="footer-bottom">
+        <div className="container">
+          <p>© 2026 SEFORA. Tüm hakları saklıdır.</p>
+          <p className="assignment">Yeni Medya Ve İletişim Ödevi İçin Batuhan Civan Tarafından Hazırlanmıştır</p>
+        </div>
+      </div>
+    </footer>
+  )
+}
