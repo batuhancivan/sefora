@@ -81,6 +81,38 @@ export function AuthProvider({ children }) {
 
     const logout = () => setSession(null)
 
+    const updateProfile = (patch) => {
+      if (!user) throw new Error('Önce giriş yapın.')
+      const mail = patch.email.trim().toLocaleLowerCase('tr')
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) throw new Error('Geçerli bir e-posta girin.')
+      if (users.some((u) => u.email === mail && u.id !== user.id)) {
+        throw new Error('Bu e-posta başka bir hesapta kayıtlı.')
+      }
+      const next = {
+        ...user,
+        first: patch.first.trim(),
+        last: patch.last.trim(),
+        email: mail,
+        phone: (patch.phone || '').trim(),
+        address: (patch.address || '').trim(),
+        city: (patch.city || '').trim(),
+        district: (patch.district || '').trim(),
+        zip: (patch.zip || '').trim(),
+        newsletter: Boolean(patch.newsletter),
+      }
+      setUsers((prev) => prev.map((u) => (u.id === user.id ? next : u)))
+      return next
+    }
+
+    const changePassword = async (current, nextPass) => {
+      if (!user) throw new Error('Önce giriş yapın.')
+      if (nextPass.length < 6) throw new Error('Yeni şifre en az 6 karakter olsun.')
+      const currentHash = await sha256(current)
+      if (user.passHash !== currentHash) throw new Error('Mevcut şifre hatalı.')
+      const passHash = await sha256(nextPass)
+      setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, passHash } : u)))
+    }
+
     const placeOrder = (payload) => {
       const no = nextOrderNo()
       const order = {
@@ -136,6 +168,8 @@ export function AuthProvider({ children }) {
       login,
       continueAsGuest,
       logout,
+      updateProfile,
+      changePassword,
       placeOrder,
       updateOrderStatus,
       myOrders,

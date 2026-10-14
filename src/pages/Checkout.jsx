@@ -40,6 +40,11 @@ export default function Checkout() {
       first: f.first || user?.first || '',
       last: f.last || user?.last || '',
       email: user?.email || guestEmail || f.email,
+      phone: f.phone || user?.phone || '',
+      address: f.address || user?.address || '',
+      city: f.city || user?.city || '',
+      district: f.district || user?.district || '',
+      zip: f.zip || user?.zip || '',
     }))
     setStep((s) => (s === 0 ? 1 : s))
   }, [user, guestEmail])

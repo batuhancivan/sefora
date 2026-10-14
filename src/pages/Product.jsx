@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getProductBySlug, getRelated } from '../data/products'
 import { SALE_PERCENT } from '../utils/promo'
@@ -13,12 +13,16 @@ const SECTIONS = ['Ürün Hakkında', 'Koku Notaları', 'Kullanım', 'Teslimat &
 export default function Product() {
   const { slug } = useParams()
   const product = getProductBySlug(slug)
-  const { addToCart, toggleFavorite, isFavorite } = useStore()
+  const { addToCart, toggleFavorite, isFavorite, trackView } = useStore()
   const [size, setSize] = useState(100)
   const [qty, setQty] = useState(1)
   const [open, setOpen] = useState(0)
   const [active, setActive] = useState(0)
   const related = useMemo(() => (product ? getRelated(product) : []), [product])
+
+  useEffect(() => {
+    if (product?.id) trackView(product.id)
+  }, [product?.id, trackView])
 
   if (!product) return <NotFound />
 

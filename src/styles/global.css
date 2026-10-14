@@ -2022,8 +2022,12 @@ body:has(.menu-panel) .wa-float {
   .blog-grid,
   .form-grid,
   .contact-cards,
-  .contact-layout {
+  .contact-layout,
+  .account-settings {
     grid-template-columns: 1fr;
+  }
+  .account-stats {
+    grid-template-columns: 1fr 1fr;
   }
   .benefits {
     grid-template-columns: 1fr 1fr;
@@ -2225,6 +2229,62 @@ body:has(.menu-panel) .wa-float {
 
 .auth-switch a {
   text-decoration: underline;
+}
+
+.account-page .page-title {
+  margin-bottom: 0.2rem;
+}
+
+.account-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.4rem;
+  margin: 1.6rem 0 2.2rem;
+  justify-content: flex-start;
+  border-bottom: 1px solid var(--line);
+}
+
+.account-tabs .tab {
+  padding: 0.55rem 0 0.75rem;
+}
+
+.account-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin-bottom: 2.4rem;
+}
+
+.account-stats article {
+  background: var(--ivory-2);
+  padding: 1.15rem 1.2rem 1rem;
+  border: 1px solid var(--line);
+}
+
+.account-stats span {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.45rem;
+}
+
+.account-stats b {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 500;
+}
+
+.account-settings {
+  display: grid;
+  grid-template-columns: 1.4fr 0.9fr;
+  gap: 1.4rem;
+  align-items: start;
+}
+
+.account-settings .auth-card {
+  width: 100%;
 }
 
 .account-head {

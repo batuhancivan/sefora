@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { PRODUCTS } from '../data/products'
 import { salePrice, vatFromGross } from '../utils/promo'
@@ -29,6 +29,7 @@ export function StoreProvider({ children }) {
     const old = readLegacy('sefora-favorites', [])
     return { guest: Array.isArray(old) ? old : [] }
   })
+  const [viewMap, setViewMap] = useLocalStorage('sefora-views', { guest: [] })
 
   useEffect(() => {
     if (!user) return
@@ -44,10 +45,32 @@ export function StoreProvider({ children }) {
       const mine = new Set([...(prev[user.id] || []), ...guest])
       return { ...prev, [user.id]: [...mine], guest: [] }
     })
-  }, [user, setCarts, setFavMap])
+    setViewMap((prev) => {
+      const guest = prev.guest || []
+      if (!guest.length) return prev
+      const mine = [...(prev[user.id] || [])]
+      guest.forEach((id) => {
+        if (!mine.includes(id)) mine.push(id)
+      })
+      return { ...prev, [user.id]: mine.slice(0, 16), guest: [] }
+    })
+  }, [user, setCarts, setFavMap, setViewMap])
 
   const cart = carts[accountKey] || []
   const favorites = favMap[accountKey] || []
+  const viewed = viewMap[accountKey] || []
+
+  const trackView = useCallback(
+    (id) => {
+      if (!id) return
+      setViewMap((prev) => {
+        const current = prev[accountKey] || []
+        if (current[0] === id) return prev
+        return { ...prev, [accountKey]: [id, ...current.filter((x) => x !== id)].slice(0, 16) }
+      })
+    },
+    [accountKey, setViewMap],
+  )
 
   const setCart = (updater) => {
     setCarts((prev) => {
@@ -127,6 +150,7 @@ export function StoreProvider({ children }) {
       net,
       total,
       favorites,
+      viewed,
       favMap,
       addToCart,
       updateQty,
@@ -134,8 +158,9 @@ export function StoreProvider({ children }) {
       clearCart,
       toggleFavorite,
       isFavorite,
+      trackView,
     }
-  }, [cart, carts, favorites, favMap, accountKey, setFavMap])
+  }, [cart, carts, favorites, viewed, favMap, accountKey, setFavMap, trackView])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

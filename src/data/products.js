@@ -239,4 +239,28 @@ export const getRelated = (product, count = 4) =>
     .sort((a, b) => Number(b.gender === product.gender) - Number(a.gender === product.gender))
     .slice(0, count)
 
+export const getForYou = (ids = [], count = 4) => {
+  const seed = ids.map((id) => PRODUCTS.find((p) => p.id === id)).filter(Boolean)
+  const skip = new Set(ids)
+  const genderScore = {}
+  const familyScore = {}
+  seed.forEach((p) => {
+    genderScore[p.gender] = (genderScore[p.gender] || 0) + 1
+    familyScore[p.family] = (familyScore[p.family] || 0) + 1
+  })
+  const ranked = PRODUCTS.filter((p) => !skip.has(p.id))
+    .map((p) => ({
+      p,
+      score:
+        (genderScore[p.gender] || 0) * 3 +
+        (familyScore[p.family] || 0) * 2 +
+        (p.bestSeller ? 1 : 0) +
+        (p.featured ? 1 : 0),
+    }))
+    .sort((a, b) => b.score - a.score || Number(b.p.featured) - Number(a.p.featured))
+  const picked = ranked.slice(0, count).map((x) => x.p)
+  if (picked.length) return picked
+  return PRODUCTS.filter((p) => p.featured || p.bestSeller).slice(0, count)
+}
+
 export const FAMILIES = ['Floral', 'Oriental', 'Woody', 'Citrus', 'Fresh']
