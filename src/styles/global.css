@@ -1727,68 +1727,89 @@ textarea:focus-visible {
   height: 100% !important;
   max-width: none !important;
   z-index: 200;
-  background: #0c0c0c;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(201, 169, 110, 0.08), transparent 55%),
+    #101010;
   color: #f4efe6;
-  display: flex;
-  flex-direction: column;
-  padding: 0.85rem 1.35rem calc(1.5rem + env(safe-area-inset-bottom));
+  display: grid;
+  place-items: center;
+  padding: 4.2rem 1.5rem calc(1.8rem + env(safe-area-inset-bottom));
   overflow: auto;
   box-shadow: none;
 }
 
-.menu-panel-top {
+.menu-panel-inner {
+  width: min(22rem, 100%);
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.35rem 0 1.4rem;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .menu-panel-brand {
   position: static !important;
   left: auto !important;
   transform: none !important;
-  text-align: left;
+  text-align: center;
   line-height: 1;
+  margin-bottom: 2.1rem;
 }
 
 .menu-panel-brand .logo-name {
-  color: #f4efe6;
-  font-size: 1.45rem;
+  color: #f6f1e8;
+  font-size: 1.55rem;
+  letter-spacing: 0.38em;
+  padding-left: 0.38em;
+}
+
+.menu-panel-brand .logo-sub {
+  display: block;
+  font-size: 0.52rem;
+  letter-spacing: 0.42em;
+  color: #c9a96e;
 }
 
 .menu-panel-close {
-  width: 2.5rem;
-  height: 2.5rem;
-  display: grid;
-  place-items: center;
-  color: #f4efe6;
-  flex-shrink: 0;
-}
-
-.menu-panel-close svg {
-  width: 1.2rem;
-  height: 1.2rem;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.5;
+  position: absolute;
+  top: calc(0.85rem + env(safe-area-inset-top));
+  right: 1.1rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(244, 239, 230, 0.55);
+  padding: 0.45rem;
 }
 
 .menu-panel-nav {
   display: grid;
   gap: 0.15rem;
-  padding: 0.4rem 0 1.5rem;
-  border-bottom: 1px solid rgba(244, 239, 230, 0.12);
+  width: 100%;
+  padding: 0 0 1.5rem;
+  border-bottom: 1px solid rgba(201, 169, 110, 0.22);
 }
 
 .menu-panel-nav a {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  align-items: baseline;
+  column-gap: 0.85rem;
   font-family: var(--font-serif);
-  font-size: clamp(1.85rem, 8vw, 2.45rem);
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  line-height: 1.2;
-  padding: 0.28rem 0;
+  font-size: 1.48rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  padding: 0.42rem 0;
   color: #f4efe6;
+  text-align: left;
+}
+
+.menu-panel-nav a em {
+  font-style: normal;
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  letter-spacing: 0.16em;
+  color: #c9a96e;
+  text-align: left;
 }
 
 .menu-panel-nav a.active {
@@ -1796,35 +1817,43 @@ textarea:focus-visible {
 }
 
 .menu-panel-tools {
-  display: grid;
-  gap: 0.55rem;
-  padding: 1.35rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1.15rem;
+  padding: 1.25rem 0 1.5rem;
 }
 
 .menu-panel-tools a {
-  font-size: 0.82rem;
-  letter-spacing: 0.18em;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(244, 239, 230, 0.78);
+  color: rgba(244, 239, 230, 0.62);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.menu-panel-tools a i {
+  font-style: normal;
+  font-size: 0.58rem;
+  letter-spacing: 0;
+  color: #c9a96e;
 }
 
 .menu-panel-tools a.active {
   color: #e8d09a;
 }
 
-.menu-panel-foot {
-  margin-top: auto;
-  display: grid;
-  gap: 0.45rem;
-  padding-top: 1.2rem;
-  border-top: 1px solid rgba(244, 239, 230, 0.12);
+.menu-panel-wa {
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #c9a96e;
 }
 
-.menu-panel-foot a {
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #e8d09a;
+body:has(.menu-panel) .wa-float {
+  display: none;
 }
 
 .sheet {
