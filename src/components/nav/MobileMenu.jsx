@@ -1,18 +1,26 @@
 import { Link, NavLink } from 'react-router-dom'
 import BrandMark from '../ui/BrandMark'
-import { CONTACT_PHONE, WHATSAPP_URL } from '../../utils/contact'
+import { CONTACT_PHONE, TIKTOK_URL, WHATSAPP_URL } from '../../utils/contact'
 import { useStore } from '../../context/StoreContext'
 import { useAuth } from '../../context/AuthContext'
+import { IconBag, IconClose, IconHeart, IconSearch, IconTt, IconUser, IconWa } from '../ui/Icons'
 
-const PRIMARY = [
+const SHOP = [
   ['/kadin', 'Kadın'],
   ['/erkek', 'Erkek'],
+  ['/yeni', 'Yeni gelenler'],
+  ['/cok-satanlar', 'Çok satanlar'],
   ['/koleksiyonlar', 'Koleksiyonlar'],
-  ['/hakkimizda', 'Hakkımızda'],
-  ['/blog', 'Blog'],
 ]
 
-export default function MobileMenu({ open, onClose }) {
+const HOUSE = [
+  ['/hakkimizda', 'Hakkımızda'],
+  ['/blog', 'Blog'],
+  ['/iletisim', 'İletişim'],
+  ['/teslimat', 'Teslimat'],
+]
+
+export default function MobileMenu({ open, onClose, onSearch }) {
   const { cartCount, favorites } = useStore()
   const { user } = useAuth()
   if (!open) return null
@@ -21,47 +29,80 @@ export default function MobileMenu({ open, onClose }) {
 
   return (
     <aside className="menu-panel" role="dialog" aria-modal="true" aria-label="Menü">
-      <button type="button" className="menu-panel-close" aria-label="Kapat" onClick={onClose}>
-        Kapat
-      </button>
+      <div className="menu-panel-top">
+        <Link to="/" className="menu-panel-brand" onClick={onClose}>
+          <BrandMark stacked={false} />
+        </Link>
+        <button type="button" className="menu-panel-close" aria-label="Kapat" onClick={onClose}>
+          <IconClose />
+        </button>
+      </div>
 
       <div className="menu-panel-inner">
-        <Link to="/" className="menu-panel-brand" onClick={onClose}>
-          <BrandMark />
-        </Link>
+        <section className="menu-hello">
+          <p className="menu-kicker">{user ? 'Hesabım' : 'Casa Sefora'}</p>
+          <p className="menu-hello-name">{user ? `${user.first} ${user.last}` : 'Hoş geldiniz'}</p>
+          <Link className="menu-account" to={accountTo} onClick={onClose}>
+            {user ? 'Siparişler, gezilenler ve ayarlar' : 'Giriş yap veya kayıt ol'}
+          </Link>
+        </section>
 
-        <nav className="menu-panel-nav">
-          {PRIMARY.map(([to, label], i) => (
-            <NavLink key={to} to={to} onClick={onClose}>
-              <em>{String(i + 1).padStart(2, '0')}</em>
-              {label}
-            </NavLink>
-          ))}
-        </nav>
-
-        <div className="menu-panel-tools">
+        <div className="menu-chips">
+          <button type="button" onClick={onSearch}>
+            <IconSearch />
+            Ara
+          </button>
           <NavLink to="/favoriler" onClick={onClose}>
-            Favoriler
+            <IconHeart />
+            Favori
             {favorites.length > 0 && <i>{favorites.length}</i>}
           </NavLink>
           <NavLink to="/sepet" onClick={onClose}>
+            <IconBag />
             Sepet
             {cartCount > 0 && <i>{cartCount}</i>}
           </NavLink>
           <NavLink to={accountTo} onClick={onClose}>
-            {user ? 'Hesabım' : 'Giriş'}
-          </NavLink>
-          <NavLink to="/siparis-takip" onClick={onClose}>
-            Takip
-          </NavLink>
-          <NavLink to="/iletisim" onClick={onClose}>
-            İletişim
+            <IconUser />
+            {user ? 'Hesap' : 'Giriş'}
           </NavLink>
         </div>
 
-        <a className="menu-panel-wa" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
-          WhatsApp {CONTACT_PHONE}
-        </a>
+        <section className="menu-block">
+          <h3>Alışveriş</h3>
+          <nav className="menu-shop">
+            {SHOP.map(([to, label]) => (
+              <NavLink key={to} to={to} onClick={onClose}>
+                {label}
+              </NavLink>
+            ))}
+          </nav>
+        </section>
+
+        <section className="menu-block">
+          <h3>Casa Sefora</h3>
+          <nav className="menu-house">
+            {HOUSE.map(([to, label]) => (
+              <NavLink key={to} to={to} onClick={onClose}>
+                {label}
+              </NavLink>
+            ))}
+            <NavLink to="/siparis-takip" onClick={onClose}>
+              Sipariş takip
+            </NavLink>
+          </nav>
+        </section>
+
+        <div className="menu-footer">
+          <a className="menu-panel-wa" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
+            <IconWa />
+            WhatsApp {CONTACT_PHONE}
+          </a>
+          <a className="menu-tt" href={TIKTOK_URL} target="_blank" rel="noreferrer">
+            <IconTt />
+            @casasefora.tr
+          </a>
+        </div>
       </div>
     </aside>
   )

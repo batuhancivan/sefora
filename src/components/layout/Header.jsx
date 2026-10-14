@@ -114,7 +114,14 @@ export default function Header() {
       </header>
       <SearchOverlay open={search} onClose={() => setSearch(false)} />
       <CartDrawer open={cart} onClose={() => setCart(false)} />
-      <MobileMenu open={menu} onClose={() => setMenu(false)} />
+      <MobileMenu
+        open={menu}
+        onClose={() => setMenu(false)}
+        onSearch={() => {
+          setMenu(false)
+          setSearch(true)
+        }}
+      />
     </>
   )
 }
