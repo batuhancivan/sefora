@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCatalog } from '../../context/CatalogContext'
+import { useStore } from '../../context/StoreContext'
 import PriceTag from '../ui/PriceTag'
 import { IconClose } from '../ui/Icons'
 
 export default function SearchOverlay({ open, onClose }) {
   const { shopProducts } = useCatalog()
+  const { trackEvent } = useStore()
   const [q, setQ] = useState('')
 
   useEffect(() => {
@@ -43,7 +45,15 @@ export default function SearchOverlay({ open, onClose }) {
       <div className="search-results">
         {results.length === 0 && <p>Sonuç bulunamadı.</p>}
         {results.map((p) => (
-          <Link key={p.id} to={`/urun/${p.slug}`} className="search-hit" onClick={onClose}>
+          <Link
+            key={p.id}
+            to={`/urun/${p.slug}`}
+            className="search-hit"
+            onClick={() => {
+              trackEvent('click', p.id)
+              onClose()
+            }}
+          >
             <img src={p.image} alt="" />
             <div>
               <strong>{p.name}</strong>

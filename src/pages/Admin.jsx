@@ -6,6 +6,7 @@ import { useCatalog } from '../context/CatalogContext'
 import { formatPrice } from '../utils/assets'
 import { ADMIN_EMAIL, ADMIN_PASSWORD, ORDER_STATUSES, statusLabel } from '../utils/orders'
 import { FAMILIES } from '../data/products'
+import Reports from './admin/Reports'
 import './admin/ops.css'
 
 function AdminLogin({ login }) {
@@ -135,6 +136,9 @@ function Dashboard({ orders, members, products, openCarts, setPage }) {
           <div style={{ padding: '0.6rem 0.85rem' }}>
             <button className="ops-btn" onClick={() => setPage('siparisler')}>
               Tüm siparişler
+            </button>
+            <button className="ops-btn" style={{ marginLeft: 8 }} onClick={() => setPage('raporlar')}>
+              Raporlar
             </button>
           </div>
         </div>
@@ -663,6 +667,7 @@ function Carts({ openCarts, products }) {
 
 const NAV = [
   ['ozet', 'Özet'],
+  ['raporlar', 'Raporlar'],
   ['siparisler', 'Siparişler'],
   ['urunler', 'Ürünler / stok'],
   ['musteriler', 'Müşteriler'],
@@ -672,7 +677,7 @@ const NAV = [
 export default function Admin() {
   const navigate = useNavigate()
   const { isAdmin, users, orders, updateOrderStatus, logout, login } = useAuth()
-  const { carts } = useStore()
+  const { carts, stats } = useStore()
   const { products, saveProduct, addProduct } = useCatalog()
   const [page, setPage] = useState('ozet')
   const [unlocking, setUnlocking] = useState(!isAdmin)
@@ -715,6 +720,7 @@ export default function Admin() {
 
   const titles = {
     ozet: ['Özet', 'Bugünkü iş listesi, ciro ve kritik stok'],
+    raporlar: ['Raporlar', 'Satış, tıklama ve ürün sayfası hareketleri'],
     siparisler: ['Siparişler', 'Durum güncelle, adrese bak, iptal et'],
     urunler: ['Ürünler ve stok', 'Fiyat, stok, vitrin ve gizle — mağazaya yansır'],
     musteriler: ['Müşteriler', 'Üyeler ve misafir sipariş e-postaları'],
@@ -758,6 +764,9 @@ export default function Admin() {
         <div className="ops-content">
           {page === 'ozet' && (
             <Dashboard orders={orders} members={members} products={products} openCarts={openCarts} setPage={setPage} />
+          )}
+          {page === 'raporlar' && (
+            <Reports orders={orders} products={products} events={stats?.events || []} />
           )}
           {page === 'siparisler' && <Orders orders={orders} updateOrderStatus={updateOrderStatus} />}
           {page === 'urunler' && (

@@ -5,12 +5,12 @@ import PriceTag from '../ui/PriceTag'
 import { IconHeart } from '../ui/Icons'
 
 export default function ProductCard({ product, onAdd }) {
-  const { isFavorite, toggleFavorite, addToCart } = useStore()
+  const { isFavorite, toggleFavorite, addToCart, trackEvent } = useStore()
   const fav = isFavorite(product.id)
 
   return (
     <article className="product-card">
-      <Link to={`/urun/${product.slug}`} className="product-media">
+      <Link to={`/urun/${product.slug}`} className="product-media" onClick={() => trackEvent('click', product.id)}>
         <img src={product.image} alt={product.name} />
         <span className="sale-flag">−%{SALE_PERCENT}</span>
       </Link>
@@ -22,7 +22,7 @@ export default function ProductCard({ product, onAdd }) {
         <IconHeart filled={fav} />
       </button>
       <div className="product-body">
-        <Link to={`/urun/${product.slug}`}>
+        <Link to={`/urun/${product.slug}`} onClick={() => trackEvent('click', product.id)}>
           <h3>{product.name}</h3>
         </Link>
         <p className="product-meta">

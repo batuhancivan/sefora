@@ -31,6 +31,7 @@ export function StoreProvider({ children }) {
     return { guest: Array.isArray(old) ? old : [] }
   })
   const [viewMap, setViewMap] = useLocalStorage('sefora-views', { guest: [] })
+  const [stats, setStats] = useLocalStorage('sefora-stats', { events: [] })
 
   useEffect(() => {
     if (!user) return
@@ -61,16 +62,32 @@ export function StoreProvider({ children }) {
   const favorites = favMap[accountKey] || []
   const viewed = viewMap[accountKey] || []
 
+  const trackEvent = useCallback(
+    (type, productId) => {
+      if (!type) return
+      setStats((prev) => {
+        const events = prev.events || []
+        const last = events[events.length - 1]
+        if (last && last.type === type && last.productId === productId && Date.now() - last.at < 1200) {
+          return prev
+        }
+        return { events: [...events, { at: Date.now(), type, productId: productId || null }].slice(-3000) }
+      })
+    },
+    [setStats],
+  )
+
   const trackView = useCallback(
     (id) => {
       if (!id) return
+      trackEvent('view', id)
       setViewMap((prev) => {
         const current = prev[accountKey] || []
         if (current[0] === id) return prev
         return { ...prev, [accountKey]: [id, ...current.filter((x) => x !== id)].slice(0, 16) }
       })
     },
-    [accountKey, setViewMap],
+    [accountKey, setViewMap, trackEvent],
   )
 
   const setCart = (updater) => {
@@ -95,6 +112,7 @@ export function StoreProvider({ children }) {
         const price = product.sizes.find((s) => s.ml === size)?.price ?? product.price
         return [...prev, { id: product.id, size, qty: Math.min(cap, qty), price }]
       })
+      trackEvent('cart', product.id)
     }
 
     const updateQty = (id, size, qty) => {
@@ -117,6 +135,7 @@ export function StoreProvider({ children }) {
         const next = current.includes(id) ? current.filter((x) => x !== id) : [...current, id]
         return { ...prev, [accountKey]: next }
       })
+      trackEvent('fav', id)
     }
 
     const isFavorite = (id) => favorites.includes(id)
@@ -162,8 +181,10 @@ export function StoreProvider({ children }) {
       toggleFavorite,
       isFavorite,
       trackView,
+      trackEvent,
+      stats,
     }
-  }, [cart, carts, favorites, viewed, favMap, accountKey, setFavMap, trackView, products])
+  }, [cart, carts, favorites, viewed, favMap, accountKey, setFavMap, trackView, trackEvent, stats, products])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }
