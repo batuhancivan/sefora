@@ -18,7 +18,7 @@ export function Shipping() {
   return (
     <Info title="Teslimat">
       <p>
-        2.800 TL ve üzeri alışverişlerde kargo ücretsizdir. Bu tutarın altındaki siparişlerde kargo 90 TL’dir.
+        2.800 TL ve üzeri alışverişlerde kargo ücretsizdir. Bu tutarın altındaki siparişlerde kargo 75 TL’dir.
       </p>
     </Info>
   )

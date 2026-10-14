@@ -123,7 +123,7 @@ export default function Product() {
                     {i === 2 && <p>{product.usage}</p>}
                     {i === 3 && (
                       <p>
-                        Demo mağaza: 2.800 TL üzeri kargo ücretsiz, altı 90 TL. İade talepleri 14 gün içinde
+                        Demo mağaza: 2.800 TL üzeri kargo ücretsiz, altı 75 TL. İade talepleri 14 gün içinde
                         iletişim formu üzerinden iletilebilir. Gerçek sipariş alınmaz.
                       </p>
                     )}

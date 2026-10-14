@@ -130,7 +130,7 @@ export function DistanceSales() {
       <h3>3. Ürün ve bedel</h3>
       <p>
         Fiyatlar Türk Lirası üzerinden ve sipariş anında sitede ilan edilen tutardır. Kargo, 2.800 TL ve üzeri
-        alışverişlerde ücretsizdir; bu tutarın altında 90 TL kargo ücreti uygulanır. Demo ödeme alınmaz.
+        alışverişlerde ücretsizdir; bu tutarın altında 75 TL kargo ücreti uygulanır. Demo ödeme alınmaz.
       </p>
       <h3>4. Teslimat</h3>
       <p>
