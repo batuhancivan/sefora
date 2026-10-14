@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useStore } from '../../context/StoreContext'
+import { useAuth } from '../../context/AuthContext'
 import { IconBag, IconHeart, IconMenu, IconSearch, IconUser } from '../ui/Icons'
 import BrandMark from '../ui/BrandMark'
 import SearchOverlay from '../search/SearchOverlay'
@@ -20,6 +21,7 @@ const NAV = [
 export default function Header() {
   const { pathname } = useLocation()
   const { cartCount, favorites } = useStore()
+  const { user } = useAuth()
   const [scrolled, setScrolled] = useState(false)
   const [search, setSearch] = useState(false)
   const [cart, setCart] = useState(false)
@@ -92,7 +94,11 @@ export default function Header() {
             <button className="icon-btn" aria-label="Ara" onClick={() => setSearch(true)}>
               <IconSearch />
             </button>
-            <Link className="icon-btn desktop-only" to="/iletisim" aria-label="Hesap">
+            <Link
+              className="icon-btn desktop-only"
+              to={user ? (user.role === 'admin' ? '/yonetim' : '/hesabim') : '/giris'}
+              aria-label={user ? 'Hesabım' : 'Giriş'}
+            >
               <IconUser />
             </Link>
             <Link className="icon-btn heart-desktop" to="/favoriler" aria-label="Favoriler">

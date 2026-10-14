@@ -9,8 +9,7 @@ export default function LaunchBand() {
         <p className="launch-kicker">Türkiye Lansmanı</p>
         <h2 id="launch-title">Casa Sefora Artık Türkiye'de</h2>
         <p className="launch-lead">
-          İtalyan imza parfümleri ilk kez Türkiye'de. Tüm koleksiyonda 24 saat boyunca geçerli %{SALE_PERCENT}{' '}
-          ayrıcalık — süre dolunca sayaç yeniden başlar.
+          İtalyan imza parfümleri ilk kez Türkiye'de. Tüm koleksiyonda 24 saat boyunca geçerli %{SALE_PERCENT} ayrıcalık.
         </p>
         <Countdown variant="boxes" />
         <Link className="btn btn-light" to="/koleksiyonlar">

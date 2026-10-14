@@ -50,6 +50,9 @@ export default function Footer() {
           <Link to="/teslimat">Teslimat</Link>
           <Link to="/iade">İade ve Cayma</Link>
           <Link to="/sss">Sıkça Sorulan Sorular</Link>
+          <Link to="/siparis-takip">Sipariş Takip</Link>
+          <Link to="/giris">Giriş / Kayıt</Link>
+          <Link to="/yonetim">Yönetim</Link>
         </div>
       </div>
       <div className="footer-legal">

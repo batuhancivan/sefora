@@ -2,10 +2,11 @@ import { Link } from 'react-router-dom'
 import { useStore } from '../../context/StoreContext'
 import { formatPrice } from '../../utils/assets'
 import PriceTag from '../ui/PriceTag'
+import VatSummary from './VatSummary'
 import { IconClose } from '../ui/Icons'
 
 export default function CartDrawer({ open, onClose }) {
-  const { cartItems, cartCount, savings, total, updateQty, removeFromCart } = useStore()
+  const { cartItems, cartCount, savings, vat, net, total, updateQty, removeFromCart } = useStore()
   if (!open) return null
 
   return (
@@ -25,7 +26,7 @@ export default function CartDrawer({ open, onClose }) {
               <img src={item.product?.image} alt="" />
               <div>
                 <strong>{item.product?.name}</strong>
-                <p className="product-meta">{item.size} ml</p>
+                <p className="product-meta">{item.size} ml · KDV dahil</p>
                 <div className="qty">
                   <button aria-label="Azalt" onClick={() => updateQty(item.id, item.size, item.qty - 1)}>
                     −
@@ -50,10 +51,7 @@ export default function CartDrawer({ open, onClose }) {
               <span>−{formatPrice(savings)}</span>
             </div>
           )}
-          <div className="summary-row">
-            <span>Toplam</span>
-            <strong>{formatPrice(total)}</strong>
-          </div>
+          <VatSummary compact net={net} vat={vat} total={total} />
           <Link className="btn btn-dark btn-full" to="/sepet" onClick={onClose}>
             Sepete Git
           </Link>

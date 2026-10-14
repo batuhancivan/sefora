@@ -1,13 +1,61 @@
-import { createContext, useContext, useMemo } from 'react'
+import { createContext, useContext, useEffect, useMemo } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { PRODUCTS } from '../data/products'
-import { salePrice } from '../utils/promo'
+import { salePrice, vatFromGross } from '../utils/promo'
+import { mergeLines } from '../utils/orders'
+import { useAuth } from './AuthContext'
 
 const StoreContext = createContext(null)
 
+const readLegacy = (key, fallback) => {
+  try {
+    const raw = localStorage.getItem(key)
+    return raw ? JSON.parse(raw) : fallback
+  } catch {
+    return fallback
+  }
+}
+
 export function StoreProvider({ children }) {
-  const [cart, setCart] = useLocalStorage('sefora-cart', [])
-  const [favorites, setFavorites] = useLocalStorage('sefora-favorites', [])
+  const { accountKey, user } = useAuth()
+  const [carts, setCarts] = useLocalStorage('sefora-carts', () => {
+    const mapped = readLegacy('sefora-carts', null)
+    if (mapped && typeof mapped === 'object' && !Array.isArray(mapped)) return mapped
+    return { guest: readLegacy('sefora-cart', []) }
+  })
+  const [favMap, setFavMap] = useLocalStorage('sefora-favs', () => {
+    const mapped = readLegacy('sefora-favs', null)
+    if (mapped && typeof mapped === 'object' && !Array.isArray(mapped)) return mapped
+    const old = readLegacy('sefora-favorites', [])
+    return { guest: Array.isArray(old) ? old : [] }
+  })
+
+  useEffect(() => {
+    if (!user) return
+    setCarts((prev) => {
+      const guest = prev.guest || []
+      if (!guest.length) return prev
+      const mine = prev[user.id] || []
+      return { ...prev, [user.id]: mergeLines(mine, guest), guest: [] }
+    })
+    setFavMap((prev) => {
+      const guest = prev.guest || []
+      if (!guest.length) return prev
+      const mine = new Set([...(prev[user.id] || []), ...guest])
+      return { ...prev, [user.id]: [...mine], guest: [] }
+    })
+  }, [user, setCarts, setFavMap])
+
+  const cart = carts[accountKey] || []
+  const favorites = favMap[accountKey] || []
+
+  const setCart = (updater) => {
+    setCarts((prev) => {
+      const current = prev[accountKey] || []
+      const next = typeof updater === 'function' ? updater(current) : updater
+      return { ...prev, [accountKey]: next }
+    })
+  }
 
   const value = useMemo(() => {
     const addToCart = (product, { size = 100, qty = 1 } = {}) => {
@@ -38,7 +86,11 @@ export function StoreProvider({ children }) {
     const clearCart = () => setCart([])
 
     const toggleFavorite = (id) => {
-      setFavorites((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]))
+      setFavMap((prev) => {
+        const current = prev[accountKey] || []
+        const next = current.includes(id) ? current.filter((x) => x !== id) : [...current, id]
+        return { ...prev, [accountKey]: next }
+      })
     }
 
     const isFavorite = (id) => favorites.includes(id)
@@ -59,17 +111,23 @@ export function StoreProvider({ children }) {
     const savings = listSubtotal - subtotal
     const shipping = subtotal === 0 || subtotal >= 1500 ? 0 : 79
     const total = subtotal + shipping
+    const vat = vatFromGross(total)
+    const net = total - vat
 
     return {
       cart,
+      carts,
       cartItems,
       cartCount,
       listSubtotal,
       subtotal,
       savings,
       shipping,
+      vat,
+      net,
       total,
       favorites,
+      favMap,
       addToCart,
       updateQty,
       removeFromCart,
@@ -77,7 +135,7 @@ export function StoreProvider({ children }) {
       toggleFavorite,
       isFavorite,
     }
-  }, [cart, favorites, setCart, setFavorites])
+  }, [cart, carts, favorites, favMap, accountKey, setFavMap])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

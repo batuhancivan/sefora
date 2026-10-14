@@ -14,6 +14,10 @@ import { Faq, Returns, Shipping } from './pages/Info'
 import Contact from './pages/Contact'
 import { ConsumerRights, Cookies, DistanceSales, Kvkk, PreInfo } from './pages/Legal'
 import NotFound from './pages/NotFound'
+import Auth from './pages/Auth'
+import Account from './pages/Account'
+import TrackOrder from './pages/TrackOrder'
+import Admin from './pages/Admin'
 
 export default function App() {
   return (
@@ -58,6 +62,11 @@ export default function App() {
         <Route path="/urun/:slug" element={<Product />} />
         <Route path="/sepet" element={<Cart />} />
         <Route path="/odeme" element={<Checkout />} />
+        <Route path="/giris" element={<Auth mode="login" />} />
+        <Route path="/kayit" element={<Auth mode="register" />} />
+        <Route path="/hesabim" element={<Account />} />
+        <Route path="/siparis-takip" element={<TrackOrder />} />
+        <Route path="/yonetim" element={<Admin />} />
         <Route path="/favoriler" element={<Favorites />} />
         <Route path="/hakkimizda" element={<About />} />
         <Route path="/blog" element={<Blog />} />

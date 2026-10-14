@@ -2,9 +2,11 @@ import { Link } from 'react-router-dom'
 import { useStore } from '../context/StoreContext'
 import { formatPrice } from '../utils/assets'
 import PriceTag from '../components/ui/PriceTag'
+import VatSummary from '../components/cart/VatSummary'
 
 export default function Cart() {
-  const { cartItems, listSubtotal, subtotal, savings, shipping, total, updateQty, removeFromCart } = useStore()
+  const { cartItems, listSubtotal, subtotal, savings, shipping, vat, net, total, updateQty, removeFromCart } =
+    useStore()
 
   if (cartItems.length === 0) {
     return (
@@ -32,7 +34,7 @@ export default function Cart() {
                 <Link to={`/urun/${item.product?.slug}`}>
                   <strong>{item.product?.name}</strong>
                 </Link>
-                <p className="product-meta">EDP {item.size} ml</p>
+                <p className="product-meta">EDP {item.size} ml · KDV dahil</p>
                 <div className="qty">
                   <button aria-label="Azalt" onClick={() => updateQty(item.id, item.size, item.qty - 1)}>
                     −
@@ -70,10 +72,7 @@ export default function Cart() {
             <span>Kargo</span>
             <span>{shipping === 0 ? 'Ücretsiz' : formatPrice(shipping)}</span>
           </div>
-          <div className="summary-row">
-            <strong>Genel toplam</strong>
-            <strong>{formatPrice(total)}</strong>
-          </div>
+          <VatSummary net={net} vat={vat} total={total} />
           <Link className="btn btn-dark btn-full" to="/odeme">
             Satın Al
           </Link>

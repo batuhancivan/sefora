@@ -1,7 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useStore } from '../context/StoreContext'
+import { useAuth } from '../context/AuthContext'
 import { formatPrice } from '../utils/assets'
+import VatSummary from '../components/cart/VatSummary'
 
 const empty = {
   first: '',
@@ -19,13 +21,28 @@ const empty = {
 }
 
 export default function Checkout() {
-  const { cartItems, listSubtotal, savings, total, clearCart } = useStore()
+  const { cartItems, listSubtotal, savings, shipping, vat, net, total, subtotal, clearCart } = useStore()
+  const { user, guestEmail, placeOrder, continueAsGuest } = useAuth()
   const navigate = useNavigate()
-  const [step, setStep] = useState(1)
+  const identified = Boolean(user || guestEmail)
+  const [step, setStep] = useState(identified ? 1 : 0)
   const [form, setForm] = useState(empty)
   const [errors, setErrors] = useState({})
-  const [order, setOrder] = useState('')
+  const [order, setOrder] = useState(null)
   const [accepted, setAccepted] = useState(false)
+  const [guestMail, setGuestMail] = useState(guestEmail)
+  const [identErr, setIdentErr] = useState('')
+
+  useEffect(() => {
+    if (!user && !guestEmail) return
+    setForm((f) => ({
+      ...f,
+      first: f.first || user?.first || '',
+      last: f.last || user?.last || '',
+      email: user?.email || guestEmail || f.email,
+    }))
+    setStep((s) => (s === 0 ? 1 : s))
+  }, [user, guestEmail])
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
 
@@ -47,20 +64,51 @@ export default function Checkout() {
       if (form.cvv.length < 3) e.cvv = 'CVV'
       if (!form.holder.trim()) e.holder = 'Kart üzerindeki isim'
     }
+    if (s === 0) e.ident = 'Giriş yapın, kayıt olun veya e-posta ile devam edin'
     if (s === 3 && !accepted) e.legal = 'Devam etmek için sözleşmeleri onaylayın'
     setErrors(e)
     return Object.keys(e).length === 0
   }
 
   const next = () => {
+    if (step === 0) return
     if (!validate(step)) return
     if (step < 3) setStep(step + 1)
   }
 
+  const guestContinue = (e) => {
+    e.preventDefault()
+    setIdentErr('')
+    try {
+      continueAsGuest(guestMail)
+      setForm((f) => ({ ...f, email: guestMail.trim().toLocaleLowerCase('tr') }))
+      setStep(1)
+    } catch (error) {
+      setIdentErr(error.message)
+    }
+  }
+
   const place = () => {
     if (!validate(3)) return
-    const no = `SFR-${Math.floor(240000 + Math.random() * 700000)}`
-    setOrder(no)
+    const created = placeOrder({
+      ...form,
+      items: cartItems.map((item) => ({
+        id: item.id,
+        name: item.product?.name || item.id,
+        size: item.size,
+        qty: item.qty,
+        listPrice: item.price,
+        salePrice: item.unitSale,
+      })),
+      listSubtotal,
+      savings,
+      subtotal,
+      shipping,
+      vat,
+      net,
+      total,
+    })
+    setOrder(created)
     clearCart()
     setStep(4)
   }
@@ -75,11 +123,21 @@ export default function Checkout() {
         <p className="page-lead" style={{ marginInline: 'auto' }}>
           Teşekkür ederiz. Bu bir demo sipariştir; gerçek ödeme alınmamıştır.
           <br />
-          Sipariş no: <strong>{order}</strong>
+          Sipariş no: <strong>{order.no}</strong>
+          <br />
+          Takip için bu numarayı ve {order.email} adresini saklayın.
         </p>
-        <Link className="btn btn-dark" to="/">
-          Ana Sayfaya Dön
-        </Link>
+        <div style={{ display: 'flex', gap: '0.7rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Link
+            className="btn btn-dark"
+            to={`/siparis-takip?no=${order.no}&email=${encodeURIComponent(order.email)}`}
+          >
+            Siparişi takip et
+          </Link>
+          <Link className="btn btn-outline" to="/">
+            Ana Sayfaya Dön
+          </Link>
+        </div>
       </div>
     )
   }
@@ -101,10 +159,40 @@ export default function Checkout() {
         <h1 className="page-title">Ödeme</h1>
         <div className="notice">Demo ödeme ekranıdır. Gerçek ödeme alınmaz.</div>
         <div className="steps">
-          <span className={step === 1 ? 'active' : ''}>1. Teslimat</span>
-          <span className={step === 2 ? 'active' : ''}>2. Ödeme</span>
-          <span className={step === 3 ? 'active' : ''}>3. Onay</span>
+          <span className={step === 0 ? 'active' : ''}>1. Hesap</span>
+          <span className={step === 1 ? 'active' : ''}>2. Teslimat</span>
+          <span className={step === 2 ? 'active' : ''}>3. Ödeme</span>
+          <span className={step === 3 ? 'active' : ''}>4. Onay</span>
         </div>
+
+        {step === 0 && (
+          <div className="auth-card" style={{ marginTop: '1rem' }}>
+            <h2>Nasıl devam edelim?</h2>
+            <p className="product-meta">Kayıtlıysanız giriş yapın. Değilseniz e-posta ile misafir sipariş verebilirsiniz.</p>
+            <Link className="btn btn-dark btn-full" to="/giris?next=/odeme">
+              Giriş yap
+            </Link>
+            <Link className="btn btn-outline btn-full" to="/kayit?next=/odeme">
+              Kayıt ol
+            </Link>
+            <form onSubmit={guestContinue}>
+              <p className="pdp-brand" style={{ marginTop: '1rem' }}>
+                E-posta ile devam et
+              </p>
+              <input
+                type="email"
+                placeholder="E-posta"
+                value={guestMail}
+                onChange={(e) => setGuestMail(e.target.value)}
+                required
+              />
+              {identErr && <p className="field-error">{identErr}</p>}
+              <button className="btn btn-outline btn-full" type="submit">
+                Misafir olarak devam
+              </button>
+            </form>
+          </div>
+        )}
 
         {step === 1 && (
           <div className="form-grid">
@@ -117,7 +205,12 @@ export default function Checkout() {
               {errors.last && <p className="field-error">{errors.last}</p>}
             </div>
             <div>
-              <input placeholder="E-posta" value={form.email} onChange={set('email')} />
+              <input
+                placeholder="E-posta"
+                value={form.email}
+                onChange={set('email')}
+                readOnly={Boolean(user || guestEmail)}
+              />
               {errors.email && <p className="field-error">{errors.email}</p>}
             </div>
             <div>
@@ -178,13 +271,19 @@ export default function Checkout() {
             <p className="product-meta">
               {form.address}, {form.district} / {form.city} {form.zip}
             </p>
-            <p style={{ margin: '1rem 0' }}>
-              <span className="price-old" style={{ marginRight: '0.6rem' }}>
-                {formatPrice(listSubtotal)}
-              </span>
-              <strong>Ödenecek tutar: {formatPrice(total)}</strong>
-            </p>
-            {savings > 0 && <p className="sale-save">Lansman indirimi: −{formatPrice(savings)}</p>}
+            <div className="summary" style={{ margin: '1rem 0' }}>
+              <div className="summary-row">
+                <span>Liste (KDV dahil)</span>
+                <span className="price-old">{formatPrice(listSubtotal)}</span>
+              </div>
+              {savings > 0 && (
+                <div className="summary-row sale-save">
+                  <span>Lansman indirimi</span>
+                  <span>−{formatPrice(savings)}</span>
+                </div>
+              )}
+              <VatSummary net={net} vat={vat} total={total} />
+            </div>
             <p className="notice">Demo ödeme ekranıdır. Gerçek ödeme alınmaz.</p>
             <label className="legal-check">
               <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} />
@@ -200,12 +299,12 @@ export default function Checkout() {
         )}
 
         <div style={{ display: 'flex', gap: '0.7rem', marginTop: '1.4rem' }}>
-          {step > 1 && (
+          {step > (identified ? 1 : 0) && step > 0 && (
             <button className="btn btn-outline" onClick={() => setStep(step - 1)}>
               Geri
             </button>
           )}
-          {step < 3 && (
+          {step > 0 && step < 3 && (
             <button className="btn btn-dark" onClick={next}>
               Devam
             </button>
