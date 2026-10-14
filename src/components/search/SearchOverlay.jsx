@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PRODUCTS } from '../../data/products'
+import PriceTag from '../ui/PriceTag'
 import { IconClose } from '../ui/Icons'
 
 export default function SearchOverlay({ open, onClose }) {
@@ -46,6 +47,7 @@ export default function SearchOverlay({ open, onClose }) {
             <div>
               <strong>{p.name}</strong>
               <p className="product-meta">{p.gender === 'women' ? 'Kadın' : 'Erkek'} · {p.family}</p>
+              <PriceTag amount={p.price} size="sm" />
             </div>
           </Link>
         ))}

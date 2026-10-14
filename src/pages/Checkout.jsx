@@ -19,7 +19,7 @@ const empty = {
 }
 
 export default function Checkout() {
-  const { cartItems, total, clearCart } = useStore()
+  const { cartItems, listSubtotal, savings, total, clearCart } = useStore()
   const navigate = useNavigate()
   const [step, setStep] = useState(1)
   const [form, setForm] = useState(empty)
@@ -179,8 +179,12 @@ export default function Checkout() {
               {form.address}, {form.district} / {form.city} {form.zip}
             </p>
             <p style={{ margin: '1rem 0' }}>
+              <span className="price-old" style={{ marginRight: '0.6rem' }}>
+                {formatPrice(listSubtotal)}
+              </span>
               <strong>Ödenecek tutar: {formatPrice(total)}</strong>
             </p>
+            {savings > 0 && <p className="sale-save">Lansman indirimi: −{formatPrice(savings)}</p>}
             <p className="notice">Demo ödeme ekranıdır. Gerçek ödeme alınmaz.</p>
             <label className="legal-check">
               <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} />

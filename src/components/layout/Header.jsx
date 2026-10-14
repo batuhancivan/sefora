@@ -6,6 +6,8 @@ import BrandMark from '../ui/BrandMark'
 import SearchOverlay from '../search/SearchOverlay'
 import CartDrawer from '../cart/CartDrawer'
 import MobileMenu from '../nav/MobileMenu'
+import Countdown from '../promo/Countdown'
+import { SALE_PERCENT } from '../../utils/promo'
 
 const NAV = [
   ['/kadin', 'Kadın'],
@@ -59,7 +61,17 @@ export default function Header() {
         İçeriğe geç
       </a>
       <header className={headerClass}>
-        <div className="announce">Italian Signature</div>
+        <div className="announce">
+          <span className="announce-msg">Casa Sefora artık Türkiye'de</span>
+          <span className="announce-sep" aria-hidden="true">
+            ·
+          </span>
+          <span>Tüm ürünlerde %{SALE_PERCENT}</span>
+          <span className="announce-sep" aria-hidden="true">
+            ·
+          </span>
+          <Countdown />
+        </div>
         <div className="nav">
           <div className="nav-left">
             <button className="icon-btn menu-toggle" aria-label="Menü" onClick={() => setMenu(true)}>

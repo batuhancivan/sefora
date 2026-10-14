@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useStore } from '../../context/StoreContext'
-import { formatPrice } from '../../utils/assets'
+import { SALE_PERCENT } from '../../utils/promo'
+import PriceTag from '../ui/PriceTag'
 import { IconHeart } from '../ui/Icons'
 
 export default function ProductCard({ product, onAdd }) {
@@ -11,6 +12,7 @@ export default function ProductCard({ product, onAdd }) {
     <article className="product-card">
       <Link to={`/urun/${product.slug}`} className="product-media">
         <img src={product.image} alt={product.name} />
+        <span className="sale-flag">−%{SALE_PERCENT}</span>
       </Link>
       <button
         className={`fav-btn${fav ? ' on' : ''}`}
@@ -26,7 +28,9 @@ export default function ProductCard({ product, onAdd }) {
         <p className="product-meta">
           {product.gender === 'women' ? 'Kadın' : 'Erkek'} · EDP {product.size}
         </p>
-        <p className="product-price">{formatPrice(product.price)}</p>
+        <p className="product-price">
+          <PriceTag amount={product.price} />
+        </p>
         <button
           className="btn btn-outline btn-full"
           onClick={() => {

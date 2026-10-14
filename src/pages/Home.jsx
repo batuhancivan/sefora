@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { PRODUCTS } from '../data/products'
 import { IMAGES } from '../utils/assets'
 import ProductCard from '../components/product/ProductCard'
+import LaunchBand from '../components/promo/LaunchBand'
 import { IconGift, IconLock, IconSpark, IconTruck } from '../components/ui/Icons'
 
 const TABS = [
@@ -73,6 +74,8 @@ export default function Home() {
           <span />
         </div>
       </section>
+
+      <LaunchBand />
 
       <section className="section">
         <div className="container">

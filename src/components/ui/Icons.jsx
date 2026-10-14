@@ -89,3 +89,23 @@ export const IconTt = () => (
     <path d="M14 6.5c1.2 1.6 2.8 2.4 4.5 2.6V12c-1.8-.1-3.4-.7-4.5-1.6V16a5 5 0 1 1-5-5c.2 0 .5 0 .7.1V13A3 3 0 1 0 13 16V4h1.5v2.5z" />
   </svg>
 )
+
+export const IconWa = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 3.6A8.2 8.2 0 0 0 5.4 16.3L4.2 20.3l4.1-1.1A8.2 8.2 0 1 0 12 3.6z" />
+    <path d="M9.2 8.6c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .5.4l.7 1.7c.1.2 0 .4-.1.5l-.4.5c-.1.1-.1.3 0 .5.3.5.8 1.1 1.4 1.5.2.1.4.1.5 0l.6-.4c.2-.1.4-.1.5 0l1.5.9c.2.1.3.3.3.5 0 .7-.6 1.7-2.4 1.7-1.4 0-3.3-.8-4.5-2.4-1.1-1.4-1.4-2.7-1.4-3.5 0-.4.2-1 .7-1.5z" fill="currentColor" stroke="none" />
+  </svg>
+)
+
+export const IconMail = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <rect x="4" y="6" width="16" height="12" rx="1.5" />
+    <path d="M5 8l7 5 7-5" />
+  </svg>
+)
+
+export const IconPhone = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M8 4.5h3.2l.8 2.2-1.6 1.2a11 11 0 0 0 5.7 5.7l1.2-1.6 2.2.8V18a1.5 1.5 0 0 1-1.5 1.5C10.6 19.5 4.5 13.4 4.5 6A1.5 1.5 0 0 1 6 4.5H8z" />
+  </svg>
+)

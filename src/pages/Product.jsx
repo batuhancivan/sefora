@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getProductBySlug, getRelated } from '../data/products'
-import { formatPrice } from '../utils/assets'
+import { SALE_PERCENT } from '../utils/promo'
 import { useStore } from '../context/StoreContext'
 import ProductCard from '../components/product/ProductCard'
+import PriceTag from '../components/ui/PriceTag'
+import Countdown from '../components/promo/Countdown'
 import NotFound from './NotFound'
 
 const SECTIONS = ['Ürün Hakkında', 'Koku Notaları', 'Kullanım', 'Teslimat & İade']
@@ -39,6 +41,7 @@ export default function Product() {
           <div>
             <div className="gallery-main">
               <img src={product.images[active]} alt={product.name} />
+              <span className="sale-flag">−%{SALE_PERCENT}</span>
             </div>
             <div className="thumbs">
               {product.images.map((src, i) => (
@@ -52,7 +55,12 @@ export default function Product() {
             <p className="pdp-brand">CASA SEFORA</p>
             <h1>{product.name.replace('SEFORA ', '')}</h1>
             <p className="pdp-type">Eau de Parfum</p>
-            <p className="pdp-price">{formatPrice(price)}</p>
+            <p className="pdp-price">
+              <PriceTag amount={price} size="lg" />
+            </p>
+            <p className="pdp-sale-note">
+              Türkiye lansmanı · 24 saat geçerli %{SALE_PERCENT} · <Countdown />
+            </p>
             <p className="product-meta">Boyut</p>
             <div className="size-pills">
               {product.sizes.map((s) => (

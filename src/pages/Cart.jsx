@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useStore } from '../context/StoreContext'
 import { formatPrice } from '../utils/assets'
+import PriceTag from '../components/ui/PriceTag'
 
 export default function Cart() {
-  const { cartItems, subtotal, shipping, total, updateQty, removeFromCart } = useStore()
+  const { cartItems, listSubtotal, subtotal, savings, shipping, total, updateQty, removeFromCart } = useStore()
 
   if (cartItems.length === 0) {
     return (
@@ -43,7 +44,9 @@ export default function Cart() {
                 </div>
                 <button onClick={() => removeFromCart(item.id, item.size)}>Kaldır</button>
               </div>
-              <div className="row-actions">{formatPrice(item.price * item.qty)}</div>
+              <div className="row-actions">
+                <PriceTag amount={item.price} qty={item.qty} size="sm" showBadge={false} />
+              </div>
             </div>
           ))}
         </div>
@@ -53,6 +56,14 @@ export default function Cart() {
           </h2>
           <div className="summary-row">
             <span>Ara toplam</span>
+            <span className="price-old">{formatPrice(listSubtotal)}</span>
+          </div>
+          <div className="summary-row sale-save">
+            <span>Lansman indirimi %25</span>
+            <span>−{formatPrice(savings)}</span>
+          </div>
+          <div className="summary-row">
+            <span>İndirimli tutar</span>
             <span>{formatPrice(subtotal)}</span>
           </div>
           <div className="summary-row">

@@ -14,16 +14,6 @@ export default function Info({ title, children }) {
   )
 }
 
-export function Contact() {
-  return (
-    <Info title="İletişim">
-      <p>Casa Sefora demo butiği — bu bir okul projesidir, gerçek mağaza yoktur.</p>
-      <p>E-posta: merhaba@casasefora.demo</p>
-      <p>Adres: Via della Bellezza, Milano (kurgusal)</p>
-    </Info>
-  )
-}
-
 export function Shipping() {
   return (
     <Info title="Teslimat">

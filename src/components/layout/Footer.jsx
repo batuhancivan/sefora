@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { IconIg, IconPin, IconTt } from '../ui/Icons'
+import { IconIg, IconPin, IconTt, IconWa } from '../ui/Icons'
+import { WHATSAPP_URL, CONTACT_PHONE } from '../../utils/contact'
 
 export default function Footer() {
   return (
@@ -18,6 +19,9 @@ export default function Footer() {
             </a>
             <a href="https://tiktok.com" target="_blank" rel="noreferrer" aria-label="TikTok">
               <IconTt />
+            </a>
+            <a href={WHATSAPP_URL} target="_blank" rel="noreferrer" aria-label={`WhatsApp ${CONTACT_PHONE}`}>
+              <IconWa />
             </a>
           </div>
         </div>

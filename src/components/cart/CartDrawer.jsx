@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useStore } from '../../context/StoreContext'
 import { formatPrice } from '../../utils/assets'
+import PriceTag from '../ui/PriceTag'
 import { IconClose } from '../ui/Icons'
 
 export default function CartDrawer({ open, onClose }) {
-  const { cartItems, cartCount, total, updateQty, removeFromCart } = useStore()
+  const { cartItems, cartCount, savings, total, updateQty, removeFromCart } = useStore()
   if (!open) return null
 
   return (
@@ -36,11 +37,19 @@ export default function CartDrawer({ open, onClose }) {
                 </div>
                 <button onClick={() => removeFromCart(item.id, item.size)}>Kaldır</button>
               </div>
-              <div>{formatPrice(item.price * item.qty)}</div>
+              <div>
+                <PriceTag amount={item.price} qty={item.qty} size="sm" showBadge={false} />
+              </div>
             </div>
           ))}
         </div>
         <div className="drawer-foot">
+          {savings > 0 && (
+            <div className="summary-row sale-save">
+              <span>Kazancınız</span>
+              <span>−{formatPrice(savings)}</span>
+            </div>
+          )}
           <div className="summary-row">
             <span>Toplam</span>
             <strong>{formatPrice(total)}</strong>
