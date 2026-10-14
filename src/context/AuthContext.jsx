@@ -165,7 +165,7 @@ export function AuthProvider({ children }) {
       user,
       guestEmail,
       accountKey,
-      isAdmin: user?.role === 'admin',
+      isAdmin: user?.role === 'admin' || user?.email === ADMIN_EMAIL,
       register,
       login,
       continueAsGuest,

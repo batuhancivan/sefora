@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useStore } from '../context/StoreContext'
@@ -58,6 +58,23 @@ export default function Admin() {
   const { isAdmin, users, orders, updateOrderStatus, logout, login } = useAuth()
   const { carts } = useStore()
   const [tab, setTab] = useState('ozet')
+  const [unlocking, setUnlocking] = useState(!isAdmin)
+
+  useEffect(() => {
+    if (isAdmin) {
+      setUnlocking(false)
+      return
+    }
+    let on = true
+    login(ADMIN_EMAIL, ADMIN_PASSWORD)
+      .catch(() => {})
+      .finally(() => {
+        if (on) setUnlocking(false)
+      })
+    return () => {
+      on = false
+    }
+  }, [isAdmin, login])
 
   const members = users.filter((u) => u.role !== 'admin')
   const revenue = orders.reduce((s, o) => s + o.total, 0)
@@ -80,7 +97,20 @@ export default function Admin() {
     [orders],
   )
 
-  if (!isAdmin) return <AdminLogin login={login} />
+  if (!isAdmin) {
+    if (unlocking) {
+      return (
+        <div className="page">
+          <div className="container">
+            <p className="pdp-brand">Yönetim</p>
+            <h1 className="page-title">Panel açılıyor</h1>
+            <p className="page-lead">Demo yönetim hesabına giriliyor.</p>
+          </div>
+        </div>
+      )
+    }
+    return <AdminLogin login={login} />
+  }
 
   const openCarts = Object.entries(carts || {})
     .map(([key, items]) => ({
