@@ -1505,6 +1505,23 @@ textarea:focus-visible {
   grid-column: 1 / -1;
 }
 
+.field {
+  display: grid;
+  gap: 0.32rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.field input {
+  font-size: 1rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  min-height: 3rem;
+}
+
 .form-grid input,
 .form-grid textarea {
   width: 100%;
@@ -2112,6 +2129,48 @@ body:has(.menu-panel) .wa-float {
   .account-settings {
     grid-template-columns: 1fr;
   }
+  .settings-switch {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: -0.4rem 0 1rem;
+    border: 1px solid var(--line);
+  }
+  .settings-switch button {
+    min-height: 2.85rem;
+    font-size: 0.84rem;
+    background: var(--paper);
+  }
+  .settings-switch button.active {
+    background: var(--ink);
+    color: var(--ivory);
+  }
+  .account-settings form {
+    display: none;
+  }
+  .account-settings form.is-open {
+    display: grid;
+  }
+  .account-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-bottom: 1.3rem;
+  }
+  .account-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .account-tabs .tab {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-height: 2.6rem;
+    padding: 0.55rem 0.75rem;
+  }
+  .account-head {
+    flex-direction: column;
+  }
+  .account-head .btn {
+    width: 100%;
+  }
   .account-stats {
     grid-template-columns: 1fr 1fr;
   }
@@ -2371,6 +2430,10 @@ body:has(.menu-panel) .wa-float {
 
 .account-settings .auth-card {
   width: 100%;
+}
+
+.settings-switch {
+  display: none;
 }
 
 .account-head {

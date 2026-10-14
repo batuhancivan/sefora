@@ -37,6 +37,7 @@ export default function Account() {
   const [err, setErr] = useState('')
   const [pwOk, setPwOk] = useState('')
   const [pwErr, setPwErr] = useState('')
+  const [pane, setPane] = useState('iletisim')
 
   useEffect(() => {
     if (!user) return
@@ -218,54 +219,94 @@ export default function Account() {
         )}
 
         {tab === 'ayarlar' && (
-          <div className="account-settings">
-            <form className="auth-card" onSubmit={saveProfile}>
-              <h2>İletişim ve teslimat</h2>
-              <p className="product-meta">Bu bilgiler ödeme ekranında otomatik doldurulur.</p>
-              <div className="form-grid">
-                <input placeholder="Ad" value={form.first} onChange={set('first')} required />
-                <input placeholder="Soyad" value={form.last} onChange={set('last')} required />
-                <input type="email" placeholder="E-posta" value={form.email} onChange={set('email')} required />
-                <input placeholder="Telefon" value={form.phone} onChange={set('phone')} />
-                <input className="full" placeholder="Adres" value={form.address} onChange={set('address')} />
-                <input placeholder="Şehir" value={form.city} onChange={set('city')} />
-                <input placeholder="İlçe" value={form.district} onChange={set('district')} />
-                <input className="full" placeholder="Posta kodu" value={form.zip} onChange={set('zip')} />
-              </div>
-              <label className="legal-check">
-                <input type="checkbox" checked={form.newsletter} onChange={set('newsletter')} />
-                <span>Casa Sefora lansman ve koleksiyon notlarını e-posta ile almak istiyorum.</span>
-              </label>
-              {err && <p className="field-error">{err}</p>}
-              {ok && <p className="news-ok">{ok}</p>}
-              <button className="btn btn-dark" type="submit">
-                Kaydet
+          <>
+            <div className="settings-switch" role="tablist">
+              <button type="button" className={pane === 'iletisim' ? 'active' : ''} onClick={() => setPane('iletisim')}>
+                İletişim
               </button>
-            </form>
+              <button type="button" className={pane === 'sifre' ? 'active' : ''} onClick={() => setPane('sifre')}>
+                Şifre
+              </button>
+            </div>
+            <div className="account-settings">
+              <form className={`auth-card${pane === 'iletisim' ? ' is-open' : ''}`} onSubmit={saveProfile}>
+                <h2>İletişim ve teslimat</h2>
+                <p className="product-meta">Ödeme ekranında otomatik doldurulur.</p>
+                <div className="form-grid">
+                  <label className="field">
+                    Ad
+                    <input value={form.first} onChange={set('first')} required autoComplete="given-name" />
+                  </label>
+                  <label className="field">
+                    Soyad
+                    <input value={form.last} onChange={set('last')} required autoComplete="family-name" />
+                  </label>
+                  <label className="field">
+                    E-posta
+                    <input type="email" value={form.email} onChange={set('email')} required autoComplete="email" />
+                  </label>
+                  <label className="field">
+                    Telefon
+                    <input type="tel" value={form.phone} onChange={set('phone')} autoComplete="tel" />
+                  </label>
+                  <label className="field full">
+                    Adres
+                    <input value={form.address} onChange={set('address')} autoComplete="street-address" />
+                  </label>
+                  <label className="field">
+                    Şehir
+                    <input value={form.city} onChange={set('city')} autoComplete="address-level1" />
+                  </label>
+                  <label className="field">
+                    İlçe
+                    <input value={form.district} onChange={set('district')} autoComplete="address-level2" />
+                  </label>
+                  <label className="field full">
+                    Posta kodu
+                    <input value={form.zip} onChange={set('zip')} inputMode="numeric" autoComplete="postal-code" />
+                  </label>
+                </div>
+                <label className="legal-check">
+                  <input type="checkbox" checked={form.newsletter} onChange={set('newsletter')} />
+                  <span>Lansman ve koleksiyon notlarını e-posta ile almak istiyorum.</span>
+                </label>
+                {err && <p className="field-error">{err}</p>}
+                {ok && <p className="news-ok">{ok}</p>}
+                <button className="btn btn-dark btn-full" type="submit">
+                  Kaydet
+                </button>
+              </form>
 
-            <form className="auth-card" onSubmit={savePassword}>
-              <h2>Şifre</h2>
-              <input
-                type="password"
-                placeholder="Mevcut şifre"
-                value={pw.current}
-                onChange={(e) => setPw((p) => ({ ...p, current: e.target.value }))}
-                required
-              />
-              <input
-                type="password"
-                placeholder="Yeni şifre"
-                value={pw.next}
-                onChange={(e) => setPw((p) => ({ ...p, next: e.target.value }))}
-                required
-              />
-              {pwErr && <p className="field-error">{pwErr}</p>}
-              {pwOk && <p className="news-ok">{pwOk}</p>}
-              <button className="btn btn-outline" type="submit">
-                Şifreyi güncelle
-              </button>
-            </form>
-          </div>
+              <form className={`auth-card${pane === 'sifre' ? ' is-open' : ''}`} onSubmit={savePassword}>
+                <h2>Şifre</h2>
+                <label className="field">
+                  Mevcut şifre
+                  <input
+                    type="password"
+                    value={pw.current}
+                    onChange={(e) => setPw((p) => ({ ...p, current: e.target.value }))}
+                    required
+                    autoComplete="current-password"
+                  />
+                </label>
+                <label className="field">
+                  Yeni şifre
+                  <input
+                    type="password"
+                    value={pw.next}
+                    onChange={(e) => setPw((p) => ({ ...p, next: e.target.value }))}
+                    required
+                    autoComplete="new-password"
+                  />
+                </label>
+                {pwErr && <p className="field-error">{pwErr}</p>}
+                {pwOk && <p className="news-ok">{pwOk}</p>}
+                <button className="btn btn-outline btn-full" type="submit">
+                  Şifreyi güncelle
+                </button>
+              </form>
+            </div>
+          </>
         )}
       </div>
     </div>
