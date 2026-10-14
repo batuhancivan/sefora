@@ -6,6 +6,7 @@ export default function Footer() {
     <footer className="site-footer">
       <div className="container footer-grid">
         <div className="footer-brand">
+          <div className="logo-casa">CASA</div>
           <div className="logo-name">SEFORA</div>
           <p>İtalyan estetiğinden ilham alan premium parfüm evi. Kokunuz, sizin imzanız.</p>
           <div className="socials">
@@ -33,7 +34,7 @@ export default function Footer() {
           <Link to="/cok-satanlar">Çok Satanlar</Link>
         </div>
         <div>
-          <h4>SEFORA</h4>
+          <h4>Casa Sefora</h4>
           <Link to="/hakkimizda">Hakkımızda</Link>
           <Link to="/hakkimizda">Hikayemiz</Link>
           <Link to="/koleksiyonlar">Koleksiyonlarımız</Link>
@@ -58,7 +59,7 @@ export default function Footer() {
       </div>
       <div className="footer-bottom">
         <div className="container">
-          <p>© 2026 SEFORA. Tüm hakları saklıdır.</p>
+          <p>© 2026 Casa Sefora. Tüm hakları saklıdır.</p>
           <p className="assignment">Yeni Medya Ve İletişim Ödevi İçin Batuhan Civan Tarafından Hazırlanmıştır</p>
         </div>
       </div>

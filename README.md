@@ -1,6 +1,6 @@
-# SEFORA | Italian Signature Parfums
+# Casa Sefora | Italian Signature Parfums
 
-SEFORA, Yeni Medya ve İletişim dersi için hazırlanmış kurgusal bir premium parfüm markasıdır. Site; İtalyan estetiği, editoryal moda dili ve frontend üzerinde çalışan bir e-ticaret demosunu bir araya getirir.
+Casa Sefora, Yeni Medya ve İletişim dersi için hazırlanmış kurgusal bir premium parfüm markasıdır. Site; İtalyan estetiği, editoryal moda dili ve frontend üzerinde çalışan bir e-ticaret demosunu bir araya getirir.
 
 Gerçek ödeme alınmaz. Sepet ve favoriler tarayıcıda `localStorage` ile saklanır.
 

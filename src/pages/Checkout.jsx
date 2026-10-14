@@ -70,7 +70,7 @@ export default function Checkout() {
   if (order) {
     return (
       <div className="success-box container">
-        <p className="pdp-brand">SEFORA</p>
+        <p className="pdp-brand">CASA SEFORA</p>
         <h1>Siparişiniz Alındı</h1>
         <p className="page-lead" style={{ marginInline: 'auto' }}>
           Teşekkür ederiz. Bu bir demo sipariştir; gerçek ödeme alınmamıştır.

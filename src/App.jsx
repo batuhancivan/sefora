@@ -50,7 +50,7 @@ export default function App() {
         <Route
           path="/cok-satanlar"
           element={
-            <Category extra="best" title="Çok Satanlar" crumb="Çok Satanlar" lead="En çok tercih edilen SEFORA kokuları." />
+            <Category extra="best" title="Çok Satanlar" crumb="Çok Satanlar" lead="En çok tercih edilen Casa Sefora kokuları." />
           }
         />
         <Route path="/koleksiyonlar" element={<Collections />} />

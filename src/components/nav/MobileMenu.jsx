@@ -19,7 +19,7 @@ export default function MobileMenu({ open, onClose }) {
       <button className="overlay" aria-label="Menüyü kapat" onClick={onClose} />
       <aside className="drawer nav" role="dialog" aria-modal="true" aria-label="Menü">
         <div className="drawer-head">
-          SEFORA
+          Casa Sefora
           <button className="icon-btn" aria-label="Kapat" onClick={onClose}>
             <IconClose />
           </button>

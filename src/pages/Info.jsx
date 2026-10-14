@@ -17,8 +17,8 @@ export default function Info({ title, children }) {
 export function Contact() {
   return (
     <Info title="İletişim">
-      <p>SEFORA demo butiği — bu bir okul projesidir, gerçek mağaza yoktur.</p>
-      <p>E-posta: merhaba@sefora.demo</p>
+      <p>Casa Sefora demo butiği — bu bir okul projesidir, gerçek mağaza yoktur.</p>
+      <p>E-posta: merhaba@casasefora.demo</p>
       <p>Adres: Via della Bellezza, Milano (kurgusal)</p>
     </Info>
   )
@@ -63,7 +63,7 @@ export function Faq() {
       <p>
         <strong>Ürünler gerçek mi?</strong>
         <br />
-        SEFORA kurgusal bir markadır. Görseller kampanya ve ders projesi için üretilmiştir.
+        Casa Sefora kurgusal bir markadır. Görseller kampanya ve ders projesi için üretilmiştir.
       </p>
       <p>
         <strong>Kişisel verilerim ne olur?</strong>

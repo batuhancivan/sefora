@@ -37,7 +37,7 @@ export default function Home() {
       setErr('Lütfen geçerli bir e-posta adresi girin.')
       return
     }
-    setOk('SEFORA dünyasına hoş geldiniz. Kaydınız alındı.')
+    setOk('Casa Sefora dünyasına hoş geldiniz. Kaydınız alındı.')
     setEmail('')
   }
 
@@ -45,11 +45,12 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="hero-media">
-          <img className="desktop" src={IMAGES.heroDesktop} alt="SEFORA Italian Signature kampanyası" />
-          <img className="mobile" src={IMAGES.heroMobile} alt="SEFORA Italian Signature kampanyası" />
+          <img className="desktop" src={IMAGES.heroDesktop} alt="Casa Sefora Italian Signature kampanyası" />
+          <img className="mobile" src={IMAGES.heroMobile} alt="Casa Sefora Italian Signature kampanyası" />
         </div>
         <div className="hero-shade" />
         <div className="hero-copy reveal">
+          <p className="hero-house">CASA</p>
           <h1>SEFORA</h1>
           <p className="hero-kicker">ITALIAN SIGNATURE</p>
           <p className="hero-tag">Kokunuz, Sizin İmzanız.</p>
@@ -63,7 +64,7 @@ export default function Home() {
           </div>
         </div>
         <div className="seal" aria-hidden="true">
-          Italian Signature
+          Casa Sefora
           <b>SEFORA</b>
         </div>
         <div className="hero-dots" aria-hidden="true">
@@ -127,12 +128,12 @@ export default function Home() {
           </div>
         </div>
         <div className="editorial-panel portrait">
-          <img src={IMAGES.storyPortrait} alt="SEFORA marka hikâyesi" />
+          <img src={IMAGES.storyPortrait} alt="Casa Sefora marka hikâyesi" />
           <div className="editorial-shade" />
           <div className="editorial-copy">
             <h2>Koku, Bir Kimliktir.</h2>
             <p>
-              SEFORA, kokunun yalnızca bir parfüm değil, kişiliğin görünmez bir imzası olduğuna inanır.
+              Casa Sefora, kokunun yalnızca bir parfüm değil, kişiliğin görünmez bir imzası olduğuna inanır.
               İtalyan estetiğinden ilham alan koleksiyonlar, modern zarafet ile zamansız karakteri bir araya getirir.
             </p>
             <Link className="link-arrow" to="/hakkimizda">
@@ -178,13 +179,13 @@ export default function Home() {
           <div className="benefit">
             <IconSpark />
             <h3>Özenle Hazırlanan Sipariş</h3>
-            <p>SEFORA deneyimi</p>
+            <p>Casa Sefora deneyimi</p>
           </div>
         </div>
       </section>
 
       <section className="newsletter container">
-        <h2>SEFORA Dünyasına Katılın</h2>
+        <h2>Casa Sefora Dünyasına Katılın</h2>
         <p>Özel koleksiyonlar, yeni lansmanlar ve size özel haberlerden ilk siz haberdar olun.</p>
         <form className="news-form" onSubmit={subscribe}>
           <input

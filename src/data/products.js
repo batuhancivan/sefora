@@ -23,7 +23,7 @@ export const PRODUCTS = [
     new: true,
     bestSeller: true,
     description:
-      'Luna, gece ışığının sessiz parıltısından ilham alır. Yumuşak çiçek dokusu, ılık amber ve temiz musk ile birleşerek modern bir feminen imza bırakır. SEFORA’nın en çok tercih edilen kadın kokularından biridir.',
+      'Luna, gece ışığının sessiz parıltısından ilham alır. Yumuşak çiçek dokusu, ılık amber ve temiz musk ile birleşerek modern bir feminen imza bırakır. Casa Sefora’nın en çok tercih edilen kadın kokularından biridir.',
     notes: {
       top: ['Bergamot', 'Pembe biber', 'Armut'],
       heart: ['Yasemin', 'Gül', 'Şakayık'],

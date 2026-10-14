@@ -4,7 +4,7 @@ import Info from './Info'
 function DemoNote() {
   return (
     <p className="notice">
-      Bu metinler, Yeni Medya ve İletişim dersi kapsamında hazırlanan kurgusal SEFORA e-ticaret demosu
+      Bu metinler, Yeni Medya ve İletişim dersi kapsamında hazırlanan kurgusal Casa Sefora e-ticaret demosu
       içindir. Gerçek bir ticari işletme, satış veya ödeme söz konusu değildir.
     </p>
   )
@@ -15,7 +15,7 @@ export function Kvkk() {
     <Info title="KVKK Aydınlatma Metni">
       <DemoNote />
       <p>
-        6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca, veri sorumlusu sıfatıyla SEFORA
+        6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca, veri sorumlusu sıfatıyla Casa Sefora
         (kurgusal parfüm evi) tarafından işlenen kişisel verilere ilişkin olarak aşağıdaki aydınlatma metni
         sunulmaktadır. Kozmetik ve parfümeri sektöründe faaliyet gösteren çevrimiçi butiklerde olduğu gibi,
         bu metin; toplanan verilerin neler olduğu, hangi amaçlarla kullanıldığı ve haklarınızı nasıl
@@ -23,7 +23,7 @@ export function Kvkk() {
       </p>
       <h3>1. Veri sorumlusu</h3>
       <p>
-        SEFORA Demo Butiği · E-posta: kvkk@sefora.demo · Adres: Via della Bellezza, Milano (kurgusal)
+        Casa Sefora Demo Butiği · E-posta: kvkk@casasefora.demo · Adres: Via della Bellezza, Milano (kurgusal)
       </p>
       <h3>2. İşlenen kişisel veriler</h3>
       <p>
@@ -64,7 +64,7 @@ export function Kvkk() {
         etme ve kanuna aykırı işleme nedeniyle zarara uğramanız hâlinde tazminat talep etme haklarına sahipsiniz.
       </p>
       <p>
-        Başvurularınızı kvkk@sefora.demo adresine iletebilirsiniz. Talepler, KVKK ve ilgili tebliğ uyarınca
+        Başvurularınızı kvkk@casasefora.demo adresine iletebilirsiniz. Talepler, KVKK ve ilgili tebliğ uyarınca
         en geç otuz gün içinde sonuçlandırılır.
       </p>
       <p>
@@ -79,7 +79,7 @@ export function Cookies() {
     <Info title="Çerez Politikası">
       <DemoNote />
       <p>
-        SEFORA internet sitesi, ziyaret deneyimini kolaylaştırmak, sepet ve favori tercihlerinizi hatırlamak
+        Casa Sefora internet sitesi, ziyaret deneyimini kolaylaştırmak, sepet ve favori tercihlerinizi hatırlamak
         ve site performansını ölçmek amacıyla çerezler ve benzeri teknolojiler kullanabilir. Parfüm e-ticaret
         sitelerinde yaygın olduğu üzere zorunlu, işlevsel ve (onayınız varsa) analitik/pazarlama çerezleri
         söz konusu olabilir.
@@ -111,18 +111,18 @@ export function DistanceSales() {
       <DemoNote />
       <p>
         İşbu Mesafeli Satış Sözleşmesi, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler
-        Yönetmeliği hükümleri uyarınca, satıcı ile alıcı arasında elektronik ortamda kurulur. SEFORA
+        Yönetmeliği hükümleri uyarınca, satıcı ile alıcı arasında elektronik ortamda kurulur. Casa Sefora
         koleksiyonlarındaki eau de parfum ürünlerinin mesafeli satışı bu çerçevede düzenlenir.
       </p>
       <h3>1. Taraflar</h3>
       <p>
-        <strong>Satıcı:</strong> SEFORA Demo Butiği (kurgusal) · kvkk@sefora.demo
+        <strong>Satıcı:</strong> Casa Sefora Demo Butiği (kurgusal) · kvkk@casasefora.demo
         <br />
         <strong>Alıcı:</strong> Sipariş formunda beyan edilen ad, soyad, iletişim ve teslimat bilgileri.
       </p>
       <h3>2. Konu</h3>
       <p>
-        Sözleşmenin konusu, alıcının SEFORA internet sitesinden elektronik ortamda sipariş ettiği parfüm
+        Sözleşmenin konusu, alıcının Casa Sefora internet sitesinden elektronik ortamda sipariş ettiği parfüm
         ürünlerinin satışı ve teslimidir. Ürün nitelikleri, fiyatı, adedi ve teslimat bilgileri sipariş özetinde
         yer alır.
       </p>
@@ -159,7 +159,7 @@ export function PreInfo() {
       <DemoNote />
       <p>
         Mesafeli Sözleşmeler Yönetmeliği uyarınca sipariş öncesinde tüketicinin aşağıdaki hususlarda
-        bilgilendirilmesi gerekir. SEFORA, parfümeri e-ticaret pratiklerine uygun olarak bu özeti sipariş
+        bilgilendirilmesi gerekir. Casa Sefora, parfümeri e-ticaret pratiklerine uygun olarak bu özeti sipariş
         onayından önce sunar.
       </p>
       <ul>
@@ -185,7 +185,7 @@ export function ConsumerRights() {
     <Info title="Tüketici Hakları">
       <DemoNote />
       <p>
-        SEFORA, 6502 sayılı Tüketicinin Korunması Hakkında Kanun başta olmak üzere tüketici mevzuatına
+        Casa Sefora, 6502 sayılı Tüketicinin Korunması Hakkında Kanun başta olmak üzere tüketici mevzuatına
         uygun hareket etmeyi ilke edinir. Parfüm ve kozmetik ürünlerinin mesafeli satışında tüketicinin;
         doğru bilgilendirme, ayıplı maldan sorumluluk, cayma ve şikâyet hakları saklıdır.
       </p>
@@ -203,7 +203,7 @@ export function ConsumerRights() {
       </p>
       <h3>Şikâyet ve başvuru</h3>
       <p>
-        Öncelikle iletisim@sefora.demo üzerinden müşteri hizmetlerine başvurulabilir. Çözülemeyen
+        Öncelikle iletisim@casasefora.demo üzerinden müşteri hizmetlerine başvurulabilir. Çözülemeyen
         uyuşmazlıklarda tüketicinin yerleşim yerindeki Tüketici Hakem Heyeti veya Tüketici Mahkemesi
         yetkilidir. Ticaret Bakanlığı’nın tüketici şikâyet kanalları da kullanılabilir.
       </p>

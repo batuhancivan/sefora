@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useStore } from '../../context/StoreContext'
 import { IconBag, IconHeart, IconMenu, IconSearch, IconUser } from '../ui/Icons'
+import BrandMark from '../ui/BrandMark'
 import SearchOverlay from '../search/SearchOverlay'
 import CartDrawer from '../cart/CartDrawer'
 import MobileMenu from '../nav/MobileMenu'
@@ -72,9 +73,8 @@ export default function Header() {
               ))}
             </div>
           </div>
-          <Link to="/" className="logo" aria-label="SEFORA ana sayfa">
-            <span className="logo-name">SEFORA</span>
-            <span className="logo-sub">ITALIAN SIGNATURE</span>
+          <Link to="/" className="logo" aria-label="Casa Sefora ana sayfa">
+            <BrandMark />
           </Link>
           <div className="nav-right">
             <button className="icon-btn" aria-label="Ara" onClick={() => setSearch(true)}>

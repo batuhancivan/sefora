@@ -49,7 +49,7 @@ export default function Product() {
             </div>
           </div>
           <div>
-            <p className="pdp-brand">SEFORA</p>
+            <p className="pdp-brand">CASA SEFORA</p>
             <h1>{product.name.replace('SEFORA ', '')}</h1>
             <p className="pdp-type">Eau de Parfum</p>
             <p className="pdp-price">{formatPrice(price)}</p>

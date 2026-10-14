@@ -5,13 +5,13 @@ export const POSTS = [
     slug: 'parfum-notalari-nasil-okunur',
     title: 'Parfüm Notaları Nasıl Okunur?',
     excerpt:
-      'Üst, kalp ve dip notalar bir kokunun zaman içindeki hikâyesini anlatır. SEFORA koleksiyonlarını daha bilinçli seçmek için notaları okumayı öğrenin.',
+      'Üst, kalp ve dip notalar bir kokunun zaman içindeki hikâyesini anlatır. Casa Sefora koleksiyonlarını daha bilinçli seçmek için notaları okumayı öğrenin.',
     image: IMAGES.productWomen,
     date: '12 Mart 2026',
     read: '5 dk',
     content: [
       'Bir parfüm, tek bir koku değil; zamanla açılan üç katmanlı bir kompozisyondur. Üst notalar ilk saniyelerde hissedilir, kalp notalar kişiliğini gösterir, dip notalar ise ciltte kalan imzayı oluşturur.',
-      'SEFORA’da her şişenin yanında yer alan nota haritası, kokuyu bir moda koleksiyonu gibi okumanızı ister: siluet, kumaş, detay. Bergamot gibi parlak açılışlar gün ışığını; gül ve yasemin kalbi zarafeti; sandal ve misk ise kalıcılığı taşır.',
+      'Casa Sefora’da her şişenin yanında yer alan nota haritası, kokuyu bir moda koleksiyonu gibi okumanızı ister: siluet, kumaş, detay. Bergamot gibi parlak açılışlar gün ışığını; gül ve yasemin kalbi zarafeti; sandal ve misk ise kalıcılığı taşır.',
       'Notaları okurken kendi ritminizi dinleyin. Sevdiğiniz bir kumaşın dokusu gibi, bazı akorlar size doğal gelir. Bu bir kimya sınavı değil, bir zevk meselesidir.',
     ],
   },
@@ -40,7 +40,7 @@ export const POSTS = [
     content: [
       'Koku seçimi bir kimlik çalışmasıdır. Sevdiğiniz kumaşlar, dinlediğiniz müzik, tercih ettiğiniz saatler — hepsi bir iz bırakır. Çiçeksi kompozisyonlar yumuşak bir ışıltı; odunsu yapılar daha dik bir siluet taşır.',
       'Koleksiyonumuzu denemek için acele etmeyin. Kokuyu ciltte en az yirmi dakika bekletin. İlk iz, her zaman gerçek karakter değildir.',
-      'SEFORA, “doğru” bir koku dayatmaz. Kadın ve erkek hatları birer öneridir; imza size aittir.',
+      'Casa Sefora, “doğru” bir koku dayatmaz. Kadın ve erkek hatları birer öneridir; imza size aittir.',
     ],
   },
   {
@@ -53,7 +53,7 @@ export const POSTS = [
     read: '7 dk',
     content: [
       'İtalyan estetiği, ölçülü lüksü sever. Abartı değil, oran; gürültü değil, ışık. Parfümeri geleneği de bu duyguya yakındır: seçilmiş hammaddeler, net siluetler, zamansız formlar.',
-      'SEFORA’nın kurgusal evreni Milano’nun taş işçiliğinden, göl kıyılarının akşam ışığından ve İtalyan terziliğinin sade gururundan beslenir. Her koleksiyon, bir şehir hatırası gibi kurgulanmıştır.',
+      'Casa Sefora’nın kurgusal evreni Milano’nun taş işçiliğinden, göl kıyılarının akşam ışığından ve İtalyan terziliğinin sade gururundan beslenir. Her koleksiyon, bir şehir hatırası gibi kurgulanmıştır.',
       'Bu bir okul projesinin marka hikâyesidir; yine de taşımak istediği his gerçektir: koku, görünmez bir stil ifadesidir.',
     ],
   },

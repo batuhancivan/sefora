@@ -13,15 +13,15 @@ export default function About() {
             <p className="pdp-brand">ITALIAN SIGNATURE</p>
             <h1>İtalyan Zarafetinden İlhamla</h1>
             <p className="page-lead">
-              SEFORA, kokunun yalnızca bir parfüm değil, kişiliğin görünmez bir imzası olduğuna inanır.
+              Casa Sefora, kokunun yalnızca bir parfüm değil, kişiliğin görünmez bir imzası olduğuna inanır.
               İtalyan estetiğinden ilham alan koleksiyonlar, modern zarafet ile zamansız karakteri bir araya getirir.
             </p>
           </div>
-          <img src={IMAGES.storyPortrait} alt="SEFORA portre" />
+          <img src={IMAGES.storyPortrait} alt="Casa Sefora portre" />
         </div>
         <div className="about-block">
           <img src={IMAGES.italyCathedral} alt="Milano katedrali" />
-          <img src={IMAGES.heroDesktop} alt="Göl kıyısında SEFORA dünyası" />
+          <img src={IMAGES.heroDesktop} alt="Göl kıyısında Casa Sefora dünyası" />
         </div>
         <div className="prose">
           <p>
@@ -30,7 +30,7 @@ export default function About() {
             vurgusudur: ışık ve gölge, çiçek ve odun, jest ve duruş.
           </p>
           <p>
-            SEFORA bilimsel ya da tıbbi bir vaatte bulunmaz. Vaadi estetiktir: seçilmiş bir şişe, özenli bir
+            Casa Sefora bilimsel ya da tıbbi bir vaatte bulunmaz. Vaadi estetiktir: seçilmiş bir şişe, özenli bir
             kutu, ve ciltte kalan zarif bir iz. Her kompozisyon, bir şehir akşamı gibi kurgulanmıştır — ölçülü,
             sıcak ve hatırlanır.
           </p>
