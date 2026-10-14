@@ -359,9 +359,9 @@ textarea:focus-visible {
   display: block;
   font-family: var(--font-sans);
   font-size: 0.58rem;
-  letter-spacing: 0.48em;
+  letter-spacing: 0.42em;
   color: var(--gold);
-  padding-left: 0.48em;
+  margin-right: -0.42em;
   margin-bottom: 0.22rem;
 }
 
@@ -369,17 +369,19 @@ textarea:focus-visible {
   display: block;
   font-family: var(--font-serif);
   font-size: clamp(1.4rem, 2vw, 1.9rem);
-  letter-spacing: 0.42em;
+  letter-spacing: 0.28em;
   font-weight: 500;
   font-style: normal;
-  padding-left: 0.42em;
+  margin-right: -0.28em;
+  line-height: 1;
 }
 
 .logo-sub {
   display: block;
   margin-top: 0.28rem;
   font-size: 0.58rem;
-  letter-spacing: 0.38em;
+  letter-spacing: 0.32em;
+  margin-right: -0.32em;
   color: var(--gold);
 }
 
@@ -1071,13 +1073,22 @@ textarea:focus-visible {
   padding-bottom: 2.4rem;
 }
 
+.brand-lockup {
+  display: inline-block;
+  text-align: center;
+}
+
 .footer-brand .logo-casa {
   color: var(--gold);
+  letter-spacing: 0.52em;
+  margin-right: -0.52em;
 }
 
 .footer-brand .logo-name {
   color: #fff;
-  letter-spacing: 0.36em;
+  letter-spacing: 0.22em;
+  margin-right: -0.22em;
+  line-height: 1;
 }
 
 .footer-brand p {
@@ -1758,8 +1769,8 @@ textarea:focus-visible {
 .menu-panel-brand .logo-name {
   color: #f6f1e8;
   font-size: 1.55rem;
-  letter-spacing: 0.38em;
-  padding-left: 0.38em;
+  letter-spacing: 0.28em;
+  margin-right: -0.28em;
 }
 
 .menu-panel-brand .logo-sub {
@@ -2111,7 +2122,7 @@ body:has(.menu-panel) .wa-float {
   .logo-name {
     font-size: 1.35rem;
     letter-spacing: 0.22em;
-    padding-left: 0.22em;
+    margin-right: -0.22em;
   }
   .logo-sub {
     display: none;

@@ -1,14 +1,16 @@
 import { Link } from 'react-router-dom'
 import { IconIg, IconPin, IconTt, IconWa } from '../ui/Icons'
 import { WHATSAPP_URL, CONTACT_PHONE } from '../../utils/contact'
+import BrandMark from '../ui/BrandMark'
 
 export default function Footer() {
   return (
     <footer className="site-footer">
       <div className="container footer-grid">
         <div className="footer-brand">
-          <div className="logo-casa">CASA</div>
-          <div className="logo-name">SEFORA</div>
+          <div className="brand-lockup">
+            <BrandMark stacked={false} />
+          </div>
           <p>İtalyan estetiğinden ilham alan premium parfüm evi. Kokunuz, sizin imzanız.</p>
           <div className="socials">
             <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
