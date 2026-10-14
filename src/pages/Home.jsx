@@ -168,7 +168,7 @@ export default function Home() {
           <div className="benefit">
             <IconTruck />
             <h3>Ücretsiz Kargo</h3>
-            <p>1.500 TL ve üzeri</p>
+            <p>2.800 TL ve üzeri</p>
           </div>
           <div className="benefit">
             <IconLock />

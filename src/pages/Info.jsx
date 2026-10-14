@@ -17,7 +17,9 @@ export default function Info({ title, children }) {
 export function Shipping() {
   return (
     <Info title="Teslimat">
-      <p>1.500 TL ve üzeri alışverişlerde kargo ücretsiz gösterilir. Süreler ve ücretler demo amaçlıdır.</p>
+      <p>
+        2.800 TL ve üzeri alışverişlerde kargo ücretsizdir. Bu tutarın altındaki siparişlerde kargo 90 TL’dir.
+      </p>
     </Info>
   )
 }

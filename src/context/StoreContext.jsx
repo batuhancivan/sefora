@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { salePrice, vatFromGross } from '../utils/promo'
+import { shippingFor } from '../utils/shipping'
 import { mergeLines } from '../utils/orders'
 import { useAuth } from './AuthContext'
 import { useCatalog } from './CatalogContext'
@@ -154,7 +155,7 @@ export function StoreProvider({ children }) {
     const listSubtotal = cartItems.reduce((sum, item) => sum + item.lineList, 0)
     const subtotal = cartItems.reduce((sum, item) => sum + item.lineSale, 0)
     const savings = listSubtotal - subtotal
-    const shipping = subtotal === 0 || subtotal >= 1500 ? 0 : 79
+    const shipping = shippingFor(subtotal)
     const total = subtotal + shipping
     const vat = vatFromGross(total)
     const net = total - vat
