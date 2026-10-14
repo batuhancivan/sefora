@@ -43,8 +43,17 @@ export default function Footer() {
           <h4>Yardım</h4>
           <Link to="/iletisim">İletişim</Link>
           <Link to="/teslimat">Teslimat</Link>
-          <Link to="/iade">İade</Link>
+          <Link to="/iade">İade ve Cayma</Link>
           <Link to="/sss">Sıkça Sorulan Sorular</Link>
+        </div>
+      </div>
+      <div className="footer-legal">
+        <div className="container">
+          <Link to="/kvkk">KVKK Aydınlatma Metni</Link>
+          <Link to="/cerez-politikasi">Çerez Politikası</Link>
+          <Link to="/mesafeli-satis-sozlesmesi">Mesafeli Satış Sözleşmesi</Link>
+          <Link to="/on-bilgilendirme">Ön Bilgilendirme</Link>
+          <Link to="/tuketici-haklari">Tüketici Hakları</Link>
         </div>
       </div>
       <div className="footer-bottom">

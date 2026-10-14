@@ -25,6 +25,7 @@ export default function Checkout() {
   const [form, setForm] = useState(empty)
   const [errors, setErrors] = useState({})
   const [order, setOrder] = useState('')
+  const [accepted, setAccepted] = useState(false)
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
 
@@ -46,6 +47,7 @@ export default function Checkout() {
       if (form.cvv.length < 3) e.cvv = 'CVV'
       if (!form.holder.trim()) e.holder = 'Kart üzerindeki isim'
     }
+    if (s === 3 && !accepted) e.legal = 'Devam etmek için sözleşmeleri onaylayın'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -56,6 +58,7 @@ export default function Checkout() {
   }
 
   const place = () => {
+    if (!validate(3)) return
     const no = `SFR-${Math.floor(240000 + Math.random() * 700000)}`
     setOrder(no)
     clearCart()
@@ -179,6 +182,16 @@ export default function Checkout() {
               <strong>Ödenecek tutar: {formatPrice(total)}</strong>
             </p>
             <p className="notice">Demo ödeme ekranıdır. Gerçek ödeme alınmaz.</p>
+            <label className="legal-check">
+              <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} />
+              <span>
+                <Link to="/on-bilgilendirme">Ön Bilgilendirme Formu</Link>,{' '}
+                <Link to="/mesafeli-satis-sozlesmesi">Mesafeli Satış Sözleşmesi</Link>,{' '}
+                <Link to="/tuketici-haklari">Tüketici Hakları</Link> ve{' '}
+                <Link to="/kvkk">KVKK Aydınlatma Metni</Link>’ni okudum, onaylıyorum.
+              </span>
+            </label>
+            {errors.legal && <p className="field-error">{errors.legal}</p>}
           </div>
         )}
 

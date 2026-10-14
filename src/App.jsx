@@ -11,6 +11,7 @@ import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
 import Collections from './pages/Collections'
 import { Contact, Faq, Returns, Shipping } from './pages/Info'
+import { ConsumerRights, Cookies, DistanceSales, Kvkk, PreInfo } from './pages/Legal'
 import NotFound from './pages/NotFound'
 
 export default function App() {
@@ -64,6 +65,11 @@ export default function App() {
         <Route path="/teslimat" element={<Shipping />} />
         <Route path="/iade" element={<Returns />} />
         <Route path="/sss" element={<Faq />} />
+        <Route path="/kvkk" element={<Kvkk />} />
+        <Route path="/cerez-politikasi" element={<Cookies />} />
+        <Route path="/mesafeli-satis-sozlesmesi" element={<DistanceSales />} />
+        <Route path="/on-bilgilendirme" element={<PreInfo />} />
+        <Route path="/tuketici-haklari" element={<ConsumerRights />} />
         <Route path="/women" element={<Navigate to="/kadin" replace />} />
         <Route path="/men" element={<Navigate to="/erkek" replace />} />
         <Route path="/product/:slug" element={<Product />} />
