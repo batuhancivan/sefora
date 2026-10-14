@@ -63,8 +63,10 @@ export function AuthProvider({ children }) {
     }
 
     const login = async (email, password) => {
-      const mail = email.trim().toLocaleLowerCase('tr')
-      const found = users.find((u) => u.email === mail)
+      const raw = email.trim()
+      const mailTr = raw.toLocaleLowerCase('tr')
+      const mailEn = raw.toLowerCase()
+      const found = users.find((u) => u.email === mailTr || u.email === mailEn)
       if (!found) throw new Error('E-posta veya şifre hatalı.')
       const passHash = await sha256(password)
       if (found.passHash !== passHash) throw new Error('E-posta veya şifre hatalı.')

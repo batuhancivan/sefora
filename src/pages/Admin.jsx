@@ -1,13 +1,61 @@
 import { useMemo, useState } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useStore } from '../context/StoreContext'
 import { formatPrice } from '../utils/assets'
 import { PRODUCTS } from '../data/products'
 import { ADMIN_EMAIL, ADMIN_PASSWORD, ORDER_STATUSES, statusLabel } from '../utils/orders'
 
+function AdminLogin({ login }) {
+  const [email, setEmail] = useState(ADMIN_EMAIL)
+  const [password, setPassword] = useState(ADMIN_PASSWORD)
+  const [err, setErr] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  const submit = async (e) => {
+    e.preventDefault()
+    setErr('')
+    setBusy(true)
+    try {
+      await login(email, password)
+    } catch (error) {
+      setErr(error.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="page auth-page">
+      <div className="container auth-wrap">
+        <div className="auth-brand">
+          <p className="pdp-brand">Yönetim</p>
+          <h1>Demo panel girişi</h1>
+          <p>
+            Adres çubuğuna <code>/yönetim</code> yazınca da bu ekran açılır. E-posta ve şifre hazır; Giriş yap yeter.
+          </p>
+        </div>
+        <form className="auth-card" onSubmit={submit}>
+          <label className="field">
+            <span>E-posta</span>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </label>
+          <label className="field">
+            <span>Şifre</span>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </label>
+          {err && <p className="field-error">{err}</p>}
+          <button className="btn btn-dark btn-full" type="submit" disabled={busy}>
+            Giriş yap
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
+
 export default function Admin() {
-  const { user, isAdmin, users, orders, updateOrderStatus, logout } = useAuth()
+  const { isAdmin, users, orders, updateOrderStatus, logout, login } = useAuth()
   const { carts } = useStore()
   const [tab, setTab] = useState('ozet')
 
@@ -32,8 +80,7 @@ export default function Admin() {
     [orders],
   )
 
-  if (!user) return <Navigate to="/giris?next=/yonetim" replace />
-  if (!isAdmin) return <Navigate to="/hesabim" replace />
+  if (!isAdmin) return <AdminLogin login={login} />
 
   const openCarts = Object.entries(carts || {})
     .map(([key, items]) => ({

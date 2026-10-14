@@ -67,6 +67,7 @@ export default function App() {
         <Route path="/hesabim" element={<Account />} />
         <Route path="/siparis-takip" element={<TrackOrder />} />
         <Route path="/yonetim" element={<Admin />} />
+        <Route path="/yönetim" element={<Admin />} />
         <Route path="/favoriler" element={<Favorites />} />
         <Route path="/hakkimizda" element={<About />} />
         <Route path="/blog" element={<Blog />} />

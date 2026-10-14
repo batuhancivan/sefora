@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Casa Sefora</title>
+    <script>
+      (function () {
+        var base = '/sefora/'
+        var path = location.pathname
+        if (path.indexOf(base) === 0) path = path.slice(base.length - 1)
+        if (!path) path = '/'
+        if (path.charAt(0) !== '/') path = '/' + path
+        location.replace(base + '#' + path + location.search)
+      })()
+    </script>
+  </head>
+  <body></body>
+</html>
