@@ -230,17 +230,21 @@ export const PRODUCTS = [
   },
 ]
 
-export const getProductBySlug = (slug) => PRODUCTS.find((p) => p.slug === slug)
+export const shopOnly = (list = PRODUCTS) => list.filter((p) => p.active !== false)
 
-export const getProductsByGender = (gender) => PRODUCTS.filter((p) => p.gender === gender)
+export const getProductBySlug = (slug, list = PRODUCTS) => list.find((p) => p.slug === slug)
 
-export const getRelated = (product, count = 4) =>
-  PRODUCTS.filter((p) => p.id !== product.id)
+export const getProductsByGender = (gender, list = PRODUCTS) => list.filter((p) => p.gender === gender)
+
+export const getRelated = (product, count = 4, list = PRODUCTS) =>
+  shopOnly(list)
+    .filter((p) => p.id !== product.id)
     .sort((a, b) => Number(b.gender === product.gender) - Number(a.gender === product.gender))
     .slice(0, count)
 
-export const getForYou = (ids = [], count = 4) => {
-  const seed = ids.map((id) => PRODUCTS.find((p) => p.id === id)).filter(Boolean)
+export const getForYou = (ids = [], count = 4, list = PRODUCTS) => {
+  const catalog = shopOnly(list)
+  const seed = ids.map((id) => catalog.find((p) => p.id === id)).filter(Boolean)
   const skip = new Set(ids)
   const genderScore = {}
   const familyScore = {}
@@ -248,7 +252,8 @@ export const getForYou = (ids = [], count = 4) => {
     genderScore[p.gender] = (genderScore[p.gender] || 0) + 1
     familyScore[p.family] = (familyScore[p.family] || 0) + 1
   })
-  const ranked = PRODUCTS.filter((p) => !skip.has(p.id))
+  const ranked = catalog
+    .filter((p) => !skip.has(p.id))
     .map((p) => ({
       p,
       score:
@@ -260,7 +265,7 @@ export const getForYou = (ids = [], count = 4) => {
     .sort((a, b) => b.score - a.score || Number(b.p.featured) - Number(a.p.featured))
   const picked = ranked.slice(0, count).map((x) => x.p)
   if (picked.length) return picked
-  return PRODUCTS.filter((p) => p.featured || p.bestSeller).slice(0, count)
+  return catalog.filter((p) => p.featured || p.bestSeller).slice(0, count)
 }
 
 export const FAMILIES = ['Floral', 'Oriental', 'Woody', 'Citrus', 'Fresh']

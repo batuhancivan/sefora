@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useStore } from '../context/StoreContext'
-import { PRODUCTS, getForYou } from '../data/products'
+import { getForYou } from '../data/products'
+import { useCatalog } from '../context/CatalogContext'
 import { formatPrice } from '../utils/assets'
 import { statusLabel } from '../utils/orders'
 import ProductCard from '../components/product/ProductCard'
@@ -30,6 +31,7 @@ const emptyForm = {
 export default function Account() {
   const { user, logout, myOrders, updateProfile, changePassword } = useAuth()
   const { favorites, viewed } = useStore()
+  const { shopProducts } = useCatalog()
   const [tab, setTab] = useState('ozet')
   const [form, setForm] = useState(emptyForm)
   const [pw, setPw] = useState({ current: '', next: '' })
@@ -54,13 +56,13 @@ export default function Account() {
     })
   }, [user])
 
-  const viewedProducts = viewed.map((id) => PRODUCTS.find((p) => p.id === id)).filter(Boolean)
-  const favProducts = PRODUCTS.filter((p) => favorites.includes(p.id))
+  const viewedProducts = viewed.map((id) => shopProducts.find((p) => p.id === id)).filter(Boolean)
+  const favProducts = shopProducts.filter((p) => favorites.includes(p.id))
   const seedIds = useMemo(
     () => [...myOrders.flatMap((o) => o.items.map((i) => i.id)), ...favorites, ...viewed],
     [myOrders, favorites, viewed],
   )
-  const forYou = useMemo(() => getForYou(seedIds, 4), [seedIds])
+  const forYou = useMemo(() => getForYou(seedIds, 4, shopProducts), [seedIds, shopProducts])
   const spend = myOrders.reduce((s, o) => s + o.total, 0)
 
   if (!user) return <Navigate to="/giris" replace />

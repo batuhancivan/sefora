@@ -1,9 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-import { PRODUCTS } from '../data/products'
 import { salePrice, vatFromGross } from '../utils/promo'
 import { mergeLines } from '../utils/orders'
 import { useAuth } from './AuthContext'
+import { useCatalog } from './CatalogContext'
 
 const StoreContext = createContext(null)
 
@@ -18,6 +18,7 @@ const readLegacy = (key, fallback) => {
 
 export function StoreProvider({ children }) {
   const { accountKey, user } = useAuth()
+  const { products } = useCatalog()
   const [carts, setCarts] = useLocalStorage('sefora-carts', () => {
     const mapped = readLegacy('sefora-carts', null)
     if (mapped && typeof mapped === 'object' && !Array.isArray(mapped)) return mapped
@@ -82,15 +83,17 @@ export function StoreProvider({ children }) {
 
   const value = useMemo(() => {
     const addToCart = (product, { size = 100, qty = 1 } = {}) => {
+      const live = products.find((p) => p.id === product.id) || product
+      const cap = live.stock?.[size] ?? 99
       setCart((prev) => {
         const i = prev.findIndex((item) => item.id === product.id && item.size === size)
         if (i >= 0) {
           const next = [...prev]
-          next[i] = { ...next[i], qty: next[i].qty + qty }
+          next[i] = { ...next[i], qty: Math.min(cap, next[i].qty + qty) }
           return next
         }
         const price = product.sizes.find((s) => s.ml === size)?.price ?? product.price
-        return [...prev, { id: product.id, size, qty, price }]
+        return [...prev, { id: product.id, size, qty: Math.min(cap, qty), price }]
       })
     }
 
@@ -123,7 +126,7 @@ export function StoreProvider({ children }) {
       const unitSale = salePrice(item.price)
       return {
         ...item,
-        product: PRODUCTS.find((p) => p.id === item.id),
+        product: products.find((p) => p.id === item.id),
         unitSale,
         lineList: item.price * item.qty,
         lineSale: unitSale * item.qty,
@@ -160,7 +163,7 @@ export function StoreProvider({ children }) {
       isFavorite,
       trackView,
     }
-  }, [cart, carts, favorites, viewed, favMap, accountKey, setFavMap, trackView])
+  }, [cart, carts, favorites, viewed, favMap, accountKey, setFavMap, trackView, products])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

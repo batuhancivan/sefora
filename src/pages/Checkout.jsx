@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useStore } from '../context/StoreContext'
 import { useAuth } from '../context/AuthContext'
+import { useCatalog } from '../context/CatalogContext'
 import { formatPrice } from '../utils/assets'
 import VatSummary from '../components/cart/VatSummary'
 
@@ -23,6 +24,7 @@ const empty = {
 export default function Checkout() {
   const { cartItems, listSubtotal, savings, shipping, vat, net, total, subtotal, clearCart } = useStore()
   const { user, guestEmail, placeOrder, continueAsGuest } = useAuth()
+  const { commitSale } = useCatalog()
   const navigate = useNavigate()
   const identified = Boolean(user || guestEmail)
   const [step, setStep] = useState(identified ? 1 : 0)
@@ -114,6 +116,7 @@ export default function Checkout() {
       total,
     })
     setOrder(created)
+    commitSale(created.items)
     clearCart()
     setStep(4)
   }

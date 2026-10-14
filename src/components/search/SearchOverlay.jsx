@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { PRODUCTS } from '../../data/products'
+import { useCatalog } from '../../context/CatalogContext'
 import PriceTag from '../ui/PriceTag'
 import { IconClose } from '../ui/Icons'
 
 export default function SearchOverlay({ open, onClose }) {
+  const { shopProducts } = useCatalog()
   const [q, setQ] = useState('')
 
   useEffect(() => {
@@ -13,14 +14,14 @@ export default function SearchOverlay({ open, onClose }) {
 
   const results = useMemo(() => {
     const s = q.trim().toLocaleLowerCase('tr')
-    if (!s) return PRODUCTS.slice(0, 6)
-    return PRODUCTS.filter((p) => {
+    if (!s) return shopProducts.slice(0, 6)
+    return shopProducts.filter((p) => {
       const bag = [p.name, p.gender === 'women' ? 'kadın' : 'erkek', p.family, p.type, p.description]
         .join(' ')
         .toLocaleLowerCase('tr')
       return bag.includes(s)
     })
-  }, [q])
+  }, [q, shopProducts])
 
   if (!open) return null
 

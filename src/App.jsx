@@ -22,6 +22,8 @@ import Admin from './pages/Admin'
 export default function App() {
   return (
     <Routes>
+      <Route path="/yonetim" element={<Admin />} />
+      <Route path="/yönetim" element={<Admin />} />
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route
@@ -66,8 +68,6 @@ export default function App() {
         <Route path="/kayit" element={<Auth mode="register" />} />
         <Route path="/hesabim" element={<Account />} />
         <Route path="/siparis-takip" element={<TrackOrder />} />
-        <Route path="/yonetim" element={<Admin />} />
-        <Route path="/yönetim" element={<Admin />} />
         <Route path="/favoriler" element={<Favorites />} />
         <Route path="/hakkimizda" element={<About />} />
         <Route path="/blog" element={<Blog />} />

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FAMILIES, PRODUCTS } from '../data/products'
+import { FAMILIES } from '../data/products'
+import { useCatalog } from '../context/CatalogContext'
 import ProductCard from '../components/product/ProductCard'
 import { IconClose } from '../components/ui/Icons'
 
@@ -66,6 +67,7 @@ function FilterFields({ family, setFamily, price, setPrice, size, setSize, id = 
 }
 
 export default function Category({ gender, extra, title, lead, crumb }) {
+  const { shopProducts } = useCatalog()
   const [family, setFamily] = useState('')
   const [price, setPrice] = useState('')
   const [size, setSize] = useState('')
@@ -73,8 +75,8 @@ export default function Category({ gender, extra, title, lead, crumb }) {
   const [sheet, setSheet] = useState(false)
 
   const items = useMemo(
-    () => applyFilters(PRODUCTS, { gender, family, price, size, sort, extra }),
-    [gender, family, price, size, sort, extra],
+    () => applyFilters(shopProducts, { gender, family, price, size, sort, extra }),
+    [shopProducts, gender, family, price, size, sort, extra],
   )
 
   return (

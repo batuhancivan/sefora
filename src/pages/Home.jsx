@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { PRODUCTS } from '../data/products'
+import { useCatalog } from '../context/CatalogContext'
 import { IMAGES } from '../utils/assets'
 import ProductCard from '../components/product/ProductCard'
 import LaunchBand from '../components/promo/LaunchBand'
@@ -15,20 +15,21 @@ const TABS = [
 ]
 
 export default function Home() {
+  const { shopProducts } = useCatalog()
   const [tab, setTab] = useState('all')
   const [email, setEmail] = useState('')
   const [ok, setOk] = useState('')
   const [err, setErr] = useState('')
 
   const products = useMemo(() => {
-    return PRODUCTS.filter((p) => {
+    return shopProducts.filter((p) => {
       if (tab === 'women') return p.gender === 'women'
       if (tab === 'men') return p.gender === 'men'
       if (tab === 'new') return p.new
       if (tab === 'best') return p.bestSeller
       return p.featured
     })
-  }, [tab])
+  }, [tab, shopProducts])
 
   const subscribe = (e) => {
     e.preventDefault()

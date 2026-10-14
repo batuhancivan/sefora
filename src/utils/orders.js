@@ -1,8 +1,9 @@
 export const ORDER_STATUSES = [
-  { id: 'alindi', label: 'Sipariş alındı' },
+  { id: 'alindi', label: 'Alındı' },
   { id: 'hazirlaniyor', label: 'Hazırlanıyor' },
   { id: 'kargoda', label: 'Kargoda' },
-  { id: 'teslim', label: 'Teslim edildi' },
+  { id: 'teslim', label: 'Teslim' },
+  { id: 'iptal', label: 'İptal' },
 ]
 
 export const statusLabel = (id) => ORDER_STATUSES.find((s) => s.id === id)?.label || id

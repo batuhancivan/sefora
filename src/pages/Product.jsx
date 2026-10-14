@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getProductBySlug, getRelated } from '../data/products'
+import { useCatalog } from '../context/CatalogContext'
 import { SALE_PERCENT } from '../utils/promo'
 import { useStore } from '../context/StoreContext'
 import ProductCard from '../components/product/ProductCard'
@@ -12,13 +13,14 @@ const SECTIONS = ['Ürün Hakkında', 'Koku Notaları', 'Kullanım', 'Teslimat &
 
 export default function Product() {
   const { slug } = useParams()
-  const product = getProductBySlug(slug)
+  const { shopProducts } = useCatalog()
+  const product = getProductBySlug(slug, shopProducts)
   const { addToCart, toggleFavorite, isFavorite, trackView } = useStore()
   const [size, setSize] = useState(100)
   const [qty, setQty] = useState(1)
   const [open, setOpen] = useState(0)
   const [active, setActive] = useState(0)
-  const related = useMemo(() => (product ? getRelated(product) : []), [product])
+  const related = useMemo(() => (product ? getRelated(product, 4, shopProducts) : []), [product, shopProducts])
 
   useEffect(() => {
     if (product?.id) trackView(product.id)
@@ -28,6 +30,7 @@ export default function Product() {
 
   const price = product.sizes.find((s) => s.ml === size)?.price ?? product.price
   const fav = isFavorite(product.id)
+  const left = product.stock?.[size] ?? 0
 
   return (
     <div className="page">
@@ -83,8 +86,9 @@ export default function Product() {
                 +
               </button>
             </div>
+            <p className="product-meta">{left > 0 ? `Stok: ${left} adet` : 'Bu boyutta stok yok'}</p>
             <div className="pdp-actions">
-              <button className="btn btn-dark" onClick={() => addToCart(product, { size, qty })}>
+              <button className="btn btn-dark" disabled={left < 1} onClick={() => addToCart(product, { size, qty: Math.min(qty, left) })}>
                 Sepete Ekle
               </button>
               <button className="btn btn-outline" onClick={() => toggleFavorite(product.id)}>
