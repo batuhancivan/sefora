@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Info from './Info'
+import { CONTACT_EMAIL } from '../utils/contact'
 
 function DemoNote() {
   return (
@@ -23,7 +24,7 @@ export function Kvkk() {
       </p>
       <h3>1. Veri sorumlusu</h3>
       <p>
-        Casa Sefora Demo Butiği · E-posta: kvkk@casasefora.demo · Adres: Via della Bellezza, Milano (kurgusal)
+        Casa Sefora Demo Butiği · E-posta: {CONTACT_EMAIL} · Adres: Via della Bellezza, Milano (kurgusal)
       </p>
       <h3>2. İşlenen kişisel veriler</h3>
       <p>
@@ -64,7 +65,7 @@ export function Kvkk() {
         etme ve kanuna aykırı işleme nedeniyle zarara uğramanız hâlinde tazminat talep etme haklarına sahipsiniz.
       </p>
       <p>
-        Başvurularınızı kvkk@casasefora.demo adresine iletebilirsiniz. Talepler, KVKK ve ilgili tebliğ uyarınca
+        Başvurularınızı {CONTACT_EMAIL} adresine iletebilirsiniz. Talepler, KVKK ve ilgili tebliğ uyarınca
         en geç otuz gün içinde sonuçlandırılır.
       </p>
       <p>
@@ -116,7 +117,7 @@ export function DistanceSales() {
       </p>
       <h3>1. Taraflar</h3>
       <p>
-        <strong>Satıcı:</strong> Casa Sefora Demo Butiği (kurgusal) · kvkk@casasefora.demo
+        <strong>Satıcı:</strong> Casa Sefora Demo Butiği (kurgusal) · {CONTACT_EMAIL}
         <br />
         <strong>Alıcı:</strong> Sipariş formunda beyan edilen ad, soyad, iletişim ve teslimat bilgileri.
       </p>
@@ -203,7 +204,7 @@ export function ConsumerRights() {
       </p>
       <h3>Şikâyet ve başvuru</h3>
       <p>
-        Öncelikle iletisim@casasefora.demo üzerinden müşteri hizmetlerine başvurulabilir. Çözülemeyen
+        Öncelikle {CONTACT_EMAIL} üzerinden müşteri hizmetlerine başvurulabilir. Çözülemeyen
         uyuşmazlıklarda tüketicinin yerleşim yerindeki Tüketici Hakem Heyeti veya Tüketici Mahkemesi
         yetkilidir. Ticaret Bakanlığı’nın tüketici şikâyet kanalları da kullanılabilir.
       </p>
