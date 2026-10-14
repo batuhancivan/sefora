@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { IconIg, IconPin, IconTt, IconWa } from '../ui/Icons'
-import { WHATSAPP_URL, CONTACT_PHONE, TIKTOK_URL } from '../../utils/contact'
+import { IconIg, IconTt, IconWa } from '../ui/Icons'
+import { WHATSAPP_URL, CONTACT_PHONE, TIKTOK_URL, INSTAGRAM_URL } from '../../utils/contact'
 import BrandMark from '../ui/BrandMark'
 
 export default function Footer() {
@@ -13,11 +13,8 @@ export default function Footer() {
           </div>
           <p>İtalyan estetiğinden ilham alan premium parfüm evi. Kokunuz, sizin imzanız.</p>
           <div className="socials">
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+            <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Instagram">
               <IconIg />
-            </a>
-            <a href="https://pinterest.com" target="_blank" rel="noreferrer" aria-label="Pinterest">
-              <IconPin />
             </a>
             <a href={TIKTOK_URL} target="_blank" rel="noreferrer" aria-label="TikTok">
               <IconTt />

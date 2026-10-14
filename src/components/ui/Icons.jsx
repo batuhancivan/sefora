@@ -77,13 +77,6 @@ export const IconIg = () => (
   </svg>
 )
 
-export const IconPin = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M8 10c0 4 4 9 4 9s4-5 4-9a4 4 0 1 0-8 0z" />
-    <circle cx="12" cy="10" r="1.4" />
-  </svg>
-)
-
 export const IconTt = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M14 6.5c1.2 1.6 2.8 2.4 4.5 2.6V12c-1.8-.1-3.4-.7-4.5-1.6V16a5 5 0 1 1-5-5c.2 0 .5 0 .7.1V13A3 3 0 1 0 13 16V4h1.5v2.5z" />
