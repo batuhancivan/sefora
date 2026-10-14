@@ -1,9 +1,9 @@
 import { Link, NavLink } from 'react-router-dom'
 import BrandMark from '../ui/BrandMark'
-import { CONTACT_PHONE, TIKTOK_URL, WHATSAPP_URL } from '../../utils/contact'
+import { CONTACT_PHONE, WHATSAPP_URL } from '../../utils/contact'
 import { useStore } from '../../context/StoreContext'
 import { useAuth } from '../../context/AuthContext'
-import { IconBag, IconClose, IconHeart, IconSearch, IconTt, IconUser, IconWa } from '../ui/Icons'
+import { IconBag, IconClose, IconHeart, IconSearch, IconUser, IconWa } from '../ui/Icons'
 
 const SHOP = [
   ['/kadin', 'Kadın'],
@@ -97,10 +97,6 @@ export default function MobileMenu({ open, onClose, onSearch }) {
           <a className="menu-panel-wa" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
             <IconWa />
             WhatsApp {CONTACT_PHONE}
-          </a>
-          <a className="menu-tt" href={TIKTOK_URL} target="_blank" rel="noreferrer">
-            <IconTt />
-            @casasefora.tr
           </a>
         </div>
       </div>
