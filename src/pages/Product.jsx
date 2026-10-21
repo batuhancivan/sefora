@@ -45,13 +45,27 @@ export default function Product() {
           <Link to="/">Ana Sayfa</Link>
           {' / '}
           <Link
-            to={product.kind === 'set' ? '/deneme-setleri' : product.gender === 'women' ? '/kadin' : '/erkek'}
+            to={
+              product.kind === 'set'
+                ? '/deneme-setleri'
+                : product.line === 'cep'
+                  ? '/cep-boy'
+                  : product.line === 'canta'
+                    ? '/canta-boy'
+                    : product.gender === 'women'
+                      ? '/kadin'
+                      : '/erkek'
+            }
           >
             {product.kind === 'set'
               ? 'Deneme Setleri'
-              : product.gender === 'women'
-                ? 'Kadın Parfümleri'
-                : 'Erkek Parfümleri'}
+              : product.line === 'cep'
+                ? 'Cep Boy'
+                : product.line === 'canta'
+                  ? 'Çanta Boy'
+                  : product.gender === 'women'
+                    ? 'Kadın Parfümleri'
+                    : 'Erkek Parfümleri'}
           </Link>
           {' / '}
           {product.name}

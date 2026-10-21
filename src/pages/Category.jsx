@@ -7,10 +7,10 @@ import { IconClose } from '../components/ui/Icons'
 
 function applyFilters(list, { gender, family, price, size, sort, extra }) {
   let items = [...list]
-  if (extra === 'set') items = items.filter((p) => p.kind === 'set')
-  else if (extra === 'cep') items = items.filter((p) => p.kind !== 'set' && p.sizes.some((s) => s.ml === 10))
-  else if (extra === 'canta') items = items.filter((p) => p.kind !== 'set' && p.sizes.some((s) => s.ml === 30))
-  else if (gender) items = items.filter((p) => p.gender === gender && p.kind !== 'set')
+  if (extra === 'set') items = items.filter((p) => p.kind === 'set' || p.line === 'set')
+  else if (extra === 'cep') items = items.filter((p) => p.line === 'cep')
+  else if (extra === 'canta') items = items.filter((p) => p.line === 'canta')
+  else if (gender) items = items.filter((p) => p.gender === gender && p.kind !== 'set' && (p.line || 'lux') === 'lux')
   if (extra === 'new') items = items.filter((p) => p.new)
   if (extra === 'best') items = items.filter((p) => p.bestSeller)
   if (family) items = items.filter((p) => p.family === family)
@@ -23,11 +23,13 @@ function applyFilters(list, { gender, family, price, size, sort, extra }) {
   return items
 }
 
-function FilterFields({ family, setFamily, price, setPrice, size, setSize, id = 'd', setMode }) {
+function FilterFields({ family, setFamily, price, setPrice, size, setSize, id = 'd', setMode, extra }) {
+  const catLabel =
+    extra === 'cep' ? 'Cep Boy 10 ml' : extra === 'canta' ? 'Çanta Boy 30 ml' : extra === 'set' ? 'Deneme Seti' : 'Eau de Parfum'
   return (
     <>
       <h3>Kategori</h3>
-      <p className="product-meta">{setMode ? 'Deneme Seti' : 'Eau de Parfum'}</p>
+      <p className="product-meta">{catLabel}</p>
       <h3>Koku Ailesi</h3>
       <label>
         <input type="radio" name={`family-${id}`} checked={family === ''} onChange={() => setFamily('')} />
@@ -120,7 +122,8 @@ export default function Category({ gender, extra, title, lead, crumb }) {
               setPrice={setPrice}
               size={size}
               setSize={setSize}
-              setMode={extra === 'set'}
+              setMode={extra === 'set' || extra === 'cep' || extra === 'canta'}
+              extra={extra}
             />
           </aside>
           <div className="product-grid">
@@ -153,7 +156,8 @@ export default function Category({ gender, extra, title, lead, crumb }) {
               setPrice={setPrice}
               size={size}
               setSize={setSize}
-              setMode={extra === 'set'}
+              setMode={extra === 'set' || extra === 'cep' || extra === 'canta'}
+              extra={extra}
             />
             <button className="btn btn-dark btn-full" style={{ marginTop: '1rem' }} onClick={() => setSheet(false)}>
               Sonuçları Gör

@@ -318,6 +318,7 @@ function Products({ products, orders, saveProduct, addProduct }) {
     name: '',
     gender: 'women',
     kind: 'perfume',
+    line: 'lux',
     setMl: 8,
     family: 'Floral',
     price10: 690,
@@ -333,6 +334,8 @@ function Products({ products, orders, saveProduct, addProduct }) {
     const s = q.trim().toLocaleLowerCase('tr')
     return products.filter((p) => {
       if (gender === 'set' && p.kind !== 'set') return false
+      if (gender === 'cep' && p.line !== 'cep') return false
+      if (gender === 'canta' && p.line !== 'canta') return false
       if ((gender === 'women' || gender === 'men') && p.gender !== gender) return false
       if (vis === 'on' && p.active === false) return false
       if (vis === 'off' && p.active !== false) return false
@@ -351,6 +354,8 @@ function Products({ products, orders, saveProduct, addProduct }) {
           <option value="">Tüm ürünler</option>
           <option value="women">Kadın</option>
           <option value="men">Erkek</option>
+          <option value="cep">Cep boy</option>
+          <option value="canta">Çanta boy</option>
           <option value="set">Deneme seti</option>
         </select>
         <select value={vis} onChange={(e) => setVis(e.target.value)}>
@@ -400,7 +405,11 @@ function Products({ products, orders, saveProduct, addProduct }) {
                       </div>
                     </td>
                     <td>
-                      {p.kind === 'set' ? 'Deneme seti' : p.gender === 'women' ? 'Kadın' : 'Erkek'}
+                      {p.kind === 'set'
+                        ? 'Deneme seti'
+                        : `${p.gender === 'women' ? 'Kadın' : 'Erkek'} · ${
+                            p.line === 'cep' ? 'Cep 10 ml' : p.line === 'canta' ? 'Çanta 30 ml' : '100 ml'
+                          }`}
                     </td>
                     <td className="num">{formatPrice(p.sizes.find((s) => s.ml === 10)?.price || 0)}</td>
                     <td className="num">{formatPrice(p.sizes.find((s) => s.ml === 30)?.price || 0)}</td>
@@ -464,6 +473,16 @@ function Products({ products, orders, saveProduct, addProduct }) {
           <label>Tür</label>
           <select value={form.kind || 'perfume'} onChange={(e) => saveProduct(form.id, { kind: e.target.value, type: e.target.value === 'set' ? 'Deneme Seti' : 'Eau de Parfum' })}>
             <option value="perfume">Parfüm</option>
+            <option value="set">Deneme seti</option>
+          </select>
+          <label>Ölçü / kategori</label>
+          <select
+            value={form.line || 'lux'}
+            onChange={(e) => saveProduct(form.id, { line: e.target.value })}
+          >
+            <option value="lux">100 ml</option>
+            <option value="cep">Cep boy 10 ml</option>
+            <option value="canta">Çanta boy 30 ml</option>
             <option value="set">Deneme seti</option>
           </select>
           <label>Aile</label>
@@ -567,10 +586,29 @@ function Products({ products, orders, saveProduct, addProduct }) {
             placeholder="Luna Night"
           />
           <label>Tür</label>
-          <select value={draft.kind} onChange={(e) => setDraft((d) => ({ ...d, kind: e.target.value }))}>
+          <select
+            value={draft.kind}
+            onChange={(e) =>
+              setDraft((d) => ({
+                ...d,
+                kind: e.target.value,
+                line: e.target.value === 'set' ? 'set' : d.line === 'set' ? 'lux' : d.line,
+              }))
+            }
+          >
             <option value="perfume">Parfüm</option>
             <option value="set">Deneme seti</option>
           </select>
+          {draft.kind !== 'set' && (
+            <>
+              <label>Ölçü / kategori</label>
+              <select value={draft.line} onChange={(e) => setDraft((d) => ({ ...d, line: e.target.value }))}>
+                <option value="lux">100 ml</option>
+                <option value="cep">Cep boy 10 ml</option>
+                <option value="canta">Çanta boy 30 ml</option>
+              </select>
+            </>
+          )}
           <label>Cinsiyet</label>
           <select value={draft.gender} onChange={(e) => setDraft((d) => ({ ...d, gender: e.target.value }))}>
             <option value="women">Kadın</option>

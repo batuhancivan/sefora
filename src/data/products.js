@@ -1,54 +1,15 @@
 import { asset } from '../utils/assets'
 
-const SIZES = [
-  { ml: 10, price: 690 },
-  { ml: 30, price: 1290 },
-  { ml: 100, price: 2490 },
-]
-
-export const productGallery = (slug) => [
-  asset(`images/products/${slug}/lux-1.jpg`),
-  asset(`images/products/${slug}/lux-2.jpg`),
-  asset(`images/products/${slug}/lux-3.jpg`),
-  asset(`images/products/${slug}/lux-4.jpg`),
-  asset(`images/products/${slug}/canta.jpg`),
-  asset(`images/products/${slug}/cep.jpg`),
-]
-
-const scent = ({ id, gender, family, featured, isNew, bestSeller, description, notes }) => {
-  const images = productGallery(id)
-  return {
-    id,
-    slug: id,
-    sku: `CS-${id.slice(0, 8).toUpperCase()}`,
-    name: id
-      .split('-')
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(' ')
-      .replace('Di ', 'di ')
-      .replace('D ', "d'"),
-    gender,
-    kind: 'perfume',
-    type: 'Eau de Parfum',
-    size: '10 / 30 / 100 ml',
-    sizes: SIZES.map((s) => ({ ...s })),
-    price: 2490,
-    image: images[0],
-    images,
-    family,
-    featured,
-    new: isNew,
-    bestSeller,
-    description,
-    notes,
-    usage:
-      'Temiz cilde, nabız noktalarına — boyun, bilek ve kulak arkasına — iki veya üç pıt uygulayın. Kokunun katmanlarını açması için ovuşturmadan bekleyin.',
-  }
+export const productGallery = (scentId, line = 'lux') => {
+  if (line === 'cep') return [asset(`images/products/${scentId}/cep.jpg`)]
+  if (line === 'canta') return [asset(`images/products/${scentId}/canta.jpg`)]
+  return [1, 2, 3, 4].map((n) => asset(`images/products/${scentId}/lux-${n}.jpg`))
 }
 
-export const PRODUCTS = [
-  scent({
+const SCENTS = [
+  {
     id: 'fiore-di-pesca',
+    name: 'Fiore di Pesca',
     gender: 'women',
     family: 'Floral',
     featured: true,
@@ -61,9 +22,10 @@ export const PRODUCTS = [
       heart: ['Beyaz çiçek', 'Gül', 'Osmanthus'],
       base: ['Misk', 'Sandal', 'Vanilya'],
     },
-  }),
-  scent({
+  },
+  {
     id: 'giardino-segreto',
+    name: 'Giardino Segreto',
     gender: 'women',
     family: 'Floral',
     featured: true,
@@ -76,9 +38,10 @@ export const PRODUCTS = [
       heart: ['Yasemin', 'Sümbül', 'Nergis'],
       base: ['Sedir', 'Misk', 'Yosun'],
     },
-  }),
-  scent({
+  },
+  {
     id: 'rosa-velluto',
+    name: 'Rosa Velluto',
     gender: 'women',
     family: 'Oriental',
     featured: true,
@@ -91,9 +54,10 @@ export const PRODUCTS = [
       heart: ['Şam gülü', 'Peony', 'İris'],
       base: ['Amber', 'Paçuli', 'Benzoin'],
     },
-  }),
-  scent({
+  },
+  {
     id: 'cipresso-di-siena',
+    name: 'Cipresso di Siena',
     gender: 'men',
     family: 'Woody',
     featured: true,
@@ -106,9 +70,10 @@ export const PRODUCTS = [
       heart: ['Lavanta', 'Adaçayı', 'Ardıç'],
       base: ['Sedir', 'Vetiver', 'Misk'],
     },
-  }),
-  scent({
+  },
+  {
     id: 'legno-imperiale',
+    name: 'Legno Imperiale',
     gender: 'men',
     family: 'Woody',
     featured: true,
@@ -121,9 +86,10 @@ export const PRODUCTS = [
       heart: ['Sedir', 'Tütün yaprağı', 'Iris'],
       base: ['Sandal', 'Amber', 'Oud akoru'],
     },
-  }),
-  scent({
+  },
+  {
     id: 'vento-d-amalfi',
+    name: "Vento d'Amalfi",
     gender: 'men',
     family: 'Fresh',
     featured: true,
@@ -136,17 +102,54 @@ export const PRODUCTS = [
       heart: ['Biberiye', 'Nane', 'Neroli'],
       base: ['Amberwood', 'Misk', 'Tuzlu odun'],
     },
-  }),
+  },
 ]
 
-PRODUCTS.forEach((p) => {
-  if (p.id === 'fiore-di-pesca') p.name = 'Fiore di Pesca'
-  if (p.id === 'giardino-segreto') p.name = 'Giardino Segreto'
-  if (p.id === 'rosa-velluto') p.name = 'Rosa Velluto'
-  if (p.id === 'cipresso-di-siena') p.name = 'Cipresso di Siena'
-  if (p.id === 'legno-imperiale') p.name = 'Legno Imperiale'
-  if (p.id === 'vento-d-amalfi') p.name = "Vento d'Amalfi"
-})
+const LINES = [
+  { line: 'lux', ml: 100, price: 2490, suffix: '', label: '100 ml' },
+  { line: 'cep', ml: 10, price: 690, suffix: ' Cep Boy', label: 'Cep boy 10 ml' },
+  { line: 'canta', ml: 30, price: 1290, suffix: ' Çanta Boy', label: 'Çanta boy 30 ml' },
+]
+
+const skuOf = (scentId, line) => {
+  const tag = scentId.replace(/[^a-z]/g, '').slice(0, 6).toUpperCase()
+  const L = line === 'cep' ? '10' : line === 'canta' ? '30' : '100'
+  return `CS-${tag}${L}`
+}
+
+export const PRODUCTS = SCENTS.flatMap((scent) =>
+  LINES.map(({ line, ml, price, suffix, label }) => {
+    const images = productGallery(scent.id, line)
+    const id = line === 'lux' ? scent.id : `${scent.id}-${line}`
+    return {
+      id,
+      scentId: scent.id,
+      slug: id,
+      sku: skuOf(scent.id, line),
+      name: `${scent.name}${suffix}`,
+      gender: scent.gender,
+      kind: 'perfume',
+      line,
+      type: 'Eau de Parfum',
+      size: label,
+      sizes: [{ ml, price }],
+      price,
+      image: images[0],
+      images,
+      family: scent.family,
+      featured: line === 'lux' && scent.featured,
+      new: scent.isNew || line !== 'lux',
+      bestSeller: line === 'lux' && scent.bestSeller,
+      description:
+        line === 'lux'
+          ? scent.description
+          : `${scent.description} ${label} ölçüsü, aynı imzayı yanınızda taşımak için hazırlandı.`,
+      notes: scent.notes,
+      usage:
+        'Temiz cilde, nabız noktalarına — boyun, bilek ve kulak arkasına — iki veya üç pıt uygulayın. Kokunun katmanlarını açması için ovuşturmadan bekleyin.',
+    }
+  }),
+)
 
 export const shopOnly = (list = PRODUCTS) => list.filter((p) => p.active !== false)
 
@@ -159,6 +162,7 @@ export const getRelated = (product, count = 4, list = PRODUCTS) =>
     .filter((p) => p.id !== product.id)
     .sort(
       (a, b) =>
+        Number(b.scentId === product.scentId) - Number(a.scentId === product.scentId) ||
         Number((b.kind || 'perfume') === (product.kind || 'perfume')) -
           Number((a.kind || 'perfume') === (product.kind || 'perfume')) ||
         Number(b.gender === product.gender) - Number(a.gender === product.gender),

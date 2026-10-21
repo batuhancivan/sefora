@@ -10,6 +10,8 @@ const TABS = [
   { id: 'all', label: 'Tümü' },
   { id: 'women', label: 'Kadın' },
   { id: 'men', label: 'Erkek' },
+  { id: 'cep', label: 'Cep Boy' },
+  { id: 'canta', label: 'Çanta Boy' },
   { id: 'set', label: 'Deneme Setleri' },
   { id: 'new', label: 'Yeni' },
   { id: 'best', label: 'En Çok Satanlar' },
@@ -26,6 +28,8 @@ export default function Home() {
     return shopProducts.filter((p) => {
       if (tab === 'women') return p.gender === 'women' && p.kind !== 'set'
       if (tab === 'men') return p.gender === 'men' && p.kind !== 'set'
+      if (tab === 'cep') return p.line === 'cep'
+      if (tab === 'canta') return p.line === 'canta'
       if (tab === 'set') return p.kind === 'set'
       if (tab === 'new') return p.new
       if (tab === 'best') return p.bestSeller
@@ -92,6 +96,12 @@ export default function Home() {
             </Link>
             <Link className="collection-card" to="/erkek">
               <img src={IMAGES.collectionMen} alt="Erkek Parfümleri — Keşfet" />
+            </Link>
+            <Link className="collection-card" to="/cep-boy">
+              <img src={IMAGES.productWomen} alt="Cep Boy 10 ml — Keşfet" />
+            </Link>
+            <Link className="collection-card" to="/canta-boy">
+              <img src={IMAGES.productMen} alt="Çanta Boy 30 ml — Keşfet" />
             </Link>
             <Link className="collection-card" to="/deneme-setleri">
               <img src={IMAGES.italyVista} alt="Deneme Setleri — Keşfet" />
