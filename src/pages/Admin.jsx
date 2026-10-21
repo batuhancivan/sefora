@@ -66,7 +66,7 @@ function AdminLogin({ loginAdmin }) {
   )
 }
 
-const stockOf = (p) => (p.stock?.[50] || 0) + (p.stock?.[100] || 0)
+const stockOf = (p) => Object.values(p.stock || {}).reduce((s, n) => s + Number(n || 0), 0)
 
 function soldMap(orders) {
   const map = {}
@@ -315,6 +315,8 @@ function Products({ products, orders, saveProduct, addProduct }) {
   const [draft, setDraft] = useState({
     name: '',
     gender: 'women',
+    kind: 'perfume',
+    setMl: 8,
     family: 'Floral',
     price50: 1890,
     price100: 2490,
@@ -326,7 +328,8 @@ function Products({ products, orders, saveProduct, addProduct }) {
   const rows = useMemo(() => {
     const s = q.trim().toLocaleLowerCase('tr')
     return products.filter((p) => {
-      if (gender && p.gender !== gender) return false
+      if (gender === 'set' && p.kind !== 'set') return false
+      if ((gender === 'women' || gender === 'men') && p.gender !== gender) return false
       if (vis === 'on' && p.active === false) return false
       if (vis === 'off' && p.active !== false) return false
       if (!s) return true
@@ -341,9 +344,10 @@ function Products({ products, orders, saveProduct, addProduct }) {
       <div className="ops-toolbar">
         <input type="search" placeholder="Ürün, SKU, aile…" value={q} onChange={(e) => setQ(e.target.value)} />
         <select value={gender} onChange={(e) => setGender(e.target.value)}>
-          <option value="">Kadın + erkek</option>
+          <option value="">Tüm ürünler</option>
           <option value="women">Kadın</option>
           <option value="men">Erkek</option>
+          <option value="set">Deneme seti</option>
         </select>
         <select value={vis} onChange={(e) => setVis(e.target.value)}>
           <option value="">Satışta + gizli</option>
@@ -389,7 +393,9 @@ function Products({ products, orders, saveProduct, addProduct }) {
                         </div>
                       </div>
                     </td>
-                    <td>{p.gender === 'women' ? 'Kadın' : 'Erkek'}</td>
+                    <td>
+                      {p.kind === 'set' ? 'Deneme seti' : p.gender === 'women' ? 'Kadın' : 'Erkek'}
+                    </td>
                     <td className="num">{formatPrice(p.sizes.find((s) => s.ml === 50)?.price || 0)}</td>
                     <td className="num">{formatPrice(p.price)}</td>
                     <td className="num">
@@ -439,6 +445,11 @@ function Products({ products, orders, saveProduct, addProduct }) {
           <h2>{form.name}</h2>
           <label>Ad</label>
           <input value={form.name} onChange={(e) => saveProduct(form.id, { name: e.target.value })} />
+          <label>Tür</label>
+          <select value={form.kind || 'perfume'} onChange={(e) => saveProduct(form.id, { kind: e.target.value, type: e.target.value === 'set' ? 'Deneme Seti' : 'Eau de Parfum' })}>
+            <option value="perfume">Parfüm</option>
+            <option value="set">Deneme seti</option>
+          </select>
           <label>Aile</label>
           <select value={form.family} onChange={(e) => saveProduct(form.id, { family: e.target.value })}>
             {FAMILIES.map((f) => (
@@ -504,6 +515,11 @@ function Products({ products, orders, saveProduct, addProduct }) {
             onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
             placeholder="Luna Night"
           />
+          <label>Tür</label>
+          <select value={draft.kind} onChange={(e) => setDraft((d) => ({ ...d, kind: e.target.value }))}>
+            <option value="perfume">Parfüm</option>
+            <option value="set">Deneme seti</option>
+          </select>
           <label>Cinsiyet</label>
           <select value={draft.gender} onChange={(e) => setDraft((d) => ({ ...d, gender: e.target.value }))}>
             <option value="women">Kadın</option>
@@ -515,15 +531,28 @@ function Products({ products, orders, saveProduct, addProduct }) {
               <option key={f}>{f}</option>
             ))}
           </select>
-          <label>50 ml fiyat</label>
-          <input type="number" value={draft.price50} onChange={(e) => setDraft((d) => ({ ...d, price50: e.target.value }))} />
-          <label>100 ml fiyat</label>
-          <input type="number" value={draft.price100} onChange={(e) => setDraft((d) => ({ ...d, price100: e.target.value }))} />
-          <label>Stok 50 / 100</label>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <input type="number" value={draft.stock50} onChange={(e) => setDraft((d) => ({ ...d, stock50: e.target.value }))} />
-            <input type="number" value={draft.stock100} onChange={(e) => setDraft((d) => ({ ...d, stock100: e.target.value }))} />
-          </div>
+          {draft.kind === 'set' ? (
+            <>
+              <label>Set ölçüsü (ml)</label>
+              <input type="number" value={draft.setMl} onChange={(e) => setDraft((d) => ({ ...d, setMl: e.target.value }))} />
+              <label>Set fiyatı (TL)</label>
+              <input type="number" value={draft.price100} onChange={(e) => setDraft((d) => ({ ...d, price100: e.target.value }))} />
+              <label>Stok</label>
+              <input type="number" value={draft.stock100} onChange={(e) => setDraft((d) => ({ ...d, stock100: e.target.value }))} />
+            </>
+          ) : (
+            <>
+              <label>50 ml fiyat</label>
+              <input type="number" value={draft.price50} onChange={(e) => setDraft((d) => ({ ...d, price50: e.target.value }))} />
+              <label>100 ml fiyat</label>
+              <input type="number" value={draft.price100} onChange={(e) => setDraft((d) => ({ ...d, price100: e.target.value }))} />
+              <label>Stok 50 / 100</label>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input type="number" value={draft.stock50} onChange={(e) => setDraft((d) => ({ ...d, stock50: e.target.value }))} />
+                <input type="number" value={draft.stock100} onChange={(e) => setDraft((d) => ({ ...d, stock100: e.target.value }))} />
+              </div>
+            </>
+          )}
           <label>Açıklama</label>
           <textarea value={draft.description} onChange={(e) => setDraft((d) => ({ ...d, description: e.target.value }))} />
           <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>

@@ -239,7 +239,12 @@ export const getProductsByGender = (gender, list = PRODUCTS) => list.filter((p) 
 export const getRelated = (product, count = 4, list = PRODUCTS) =>
   shopOnly(list)
     .filter((p) => p.id !== product.id)
-    .sort((a, b) => Number(b.gender === product.gender) - Number(a.gender === product.gender))
+    .sort(
+      (a, b) =>
+        Number((b.kind || 'perfume') === (product.kind || 'perfume')) -
+          Number((a.kind || 'perfume') === (product.kind || 'perfume')) ||
+        Number(b.gender === product.gender) - Number(a.gender === product.gender),
+    )
     .slice(0, count)
 
 export const getForYou = (ids = [], count = 4, list = PRODUCTS) => {

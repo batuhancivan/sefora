@@ -10,6 +10,7 @@ const TABS = [
   { id: 'all', label: 'Tümü' },
   { id: 'women', label: 'Kadın' },
   { id: 'men', label: 'Erkek' },
+  { id: 'set', label: 'Deneme Setleri' },
   { id: 'new', label: 'Yeni' },
   { id: 'best', label: 'En Çok Satanlar' },
 ]
@@ -23,8 +24,9 @@ export default function Home() {
 
   const products = useMemo(() => {
     return shopProducts.filter((p) => {
-      if (tab === 'women') return p.gender === 'women'
-      if (tab === 'men') return p.gender === 'men'
+      if (tab === 'women') return p.gender === 'women' && p.kind !== 'set'
+      if (tab === 'men') return p.gender === 'men' && p.kind !== 'set'
+      if (tab === 'set') return p.kind === 'set'
       if (tab === 'new') return p.new
       if (tab === 'best') return p.bestSeller
       return p.featured
@@ -90,6 +92,9 @@ export default function Home() {
             </Link>
             <Link className="collection-card" to="/erkek">
               <img src={IMAGES.collectionMen} alt="Erkek Parfümleri — Keşfet" />
+            </Link>
+            <Link className="collection-card" to="/deneme-setleri">
+              <img src={IMAGES.italyVista} alt="Deneme Setleri — Keşfet" />
             </Link>
           </div>
         </div>

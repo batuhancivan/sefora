@@ -13,6 +13,7 @@ import { SALE_PERCENT } from '../../utils/promo'
 const NAV = [
   ['/kadin', 'Kadın'],
   ['/erkek', 'Erkek'],
+  ['/deneme-setleri', 'Deneme Setleri'],
   ['/koleksiyonlar', 'Koleksiyonlar'],
   ['/hakkimizda', 'Hakkımızda'],
   ['/blog', 'Blog'],

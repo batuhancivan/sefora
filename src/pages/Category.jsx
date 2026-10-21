@@ -7,7 +7,8 @@ import { IconClose } from '../components/ui/Icons'
 
 function applyFilters(list, { gender, family, price, size, sort, extra }) {
   let items = [...list]
-  if (gender) items = items.filter((p) => p.gender === gender)
+  if (extra === 'set') items = items.filter((p) => p.kind === 'set')
+  else if (gender) items = items.filter((p) => p.gender === gender && p.kind !== 'set')
   if (extra === 'new') items = items.filter((p) => p.new)
   if (extra === 'best') items = items.filter((p) => p.bestSeller)
   if (family) items = items.filter((p) => p.family === family)
@@ -20,11 +21,11 @@ function applyFilters(list, { gender, family, price, size, sort, extra }) {
   return items
 }
 
-function FilterFields({ family, setFamily, price, setPrice, size, setSize, id = 'd' }) {
+function FilterFields({ family, setFamily, price, setPrice, size, setSize, id = 'd', setMode }) {
   return (
     <>
       <h3>Kategori</h3>
-      <p className="product-meta">Eau de Parfum</p>
+      <p className="product-meta">{setMode ? 'Deneme Seti' : 'Eau de Parfum'}</p>
       <h3>Koku Ailesi</h3>
       <label>
         <input type="radio" name={`family-${id}`} checked={family === ''} onChange={() => setFamily('')} />
@@ -49,19 +50,23 @@ function FilterFields({ family, setFamily, price, setPrice, size, setSize, id = 
         <input type="radio" name={`price-${id}`} checked={price === 'over'} onChange={() => setPrice('over')} />
         2.300 TL ve üzeri
       </label>
-      <h3>Boyut</h3>
-      <label>
-        <input type="radio" name={`size-${id}`} checked={size === ''} onChange={() => setSize('')} />
-        Tümü
-      </label>
-      <label>
-        <input type="radio" name={`size-${id}`} checked={size === '50'} onChange={() => setSize('50')} />
-        50 ml
-      </label>
-      <label>
-        <input type="radio" name={`size-${id}`} checked={size === '100'} onChange={() => setSize('100')} />
-        100 ml
-      </label>
+      {!setMode && (
+        <>
+          <h3>Boyut</h3>
+          <label>
+            <input type="radio" name={`size-${id}`} checked={size === ''} onChange={() => setSize('')} />
+            Tümü
+          </label>
+          <label>
+            <input type="radio" name={`size-${id}`} checked={size === '50'} onChange={() => setSize('50')} />
+            50 ml
+          </label>
+          <label>
+            <input type="radio" name={`size-${id}`} checked={size === '100'} onChange={() => setSize('100')} />
+            100 ml
+          </label>
+        </>
+      )}
     </>
   )
 }
@@ -101,9 +106,23 @@ export default function Category({ gender, extra, title, lead, crumb }) {
         </div>
         <div className="filter-layout">
           <aside className="filters">
-            <FilterFields id="d" family={family} setFamily={setFamily} price={price} setPrice={setPrice} size={size} setSize={setSize} />
+            <FilterFields
+              id="d"
+              family={family}
+              setFamily={setFamily}
+              price={price}
+              setPrice={setPrice}
+              size={size}
+              setSize={setSize}
+              setMode={extra === 'set'}
+            />
           </aside>
           <div className="product-grid">
+            {items.length === 0 && (
+              <p className="page-lead" style={{ gridColumn: '1 / -1' }}>
+                Bu kategoride henüz ürün yok.
+              </p>
+            )}
             {items.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
@@ -120,7 +139,16 @@ export default function Category({ gender, extra, title, lead, crumb }) {
                 <IconClose />
               </button>
             </div>
-            <FilterFields id="m" family={family} setFamily={setFamily} price={price} setPrice={setPrice} size={size} setSize={setSize} />
+            <FilterFields
+              id="m"
+              family={family}
+              setFamily={setFamily}
+              price={price}
+              setPrice={setPrice}
+              size={size}
+              setSize={setSize}
+              setMode={extra === 'set'}
+            />
             <button className="btn btn-dark btn-full" style={{ marginTop: '1rem' }} onClick={() => setSheet(false)}>
               Sonuçları Gör
             </button>

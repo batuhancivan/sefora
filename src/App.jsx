@@ -60,6 +60,17 @@ export default function App() {
             <Category extra="best" title="Çok Satanlar" crumb="Çok Satanlar" lead="En çok tercih edilen Casa Sefora kokuları." />
           }
         />
+        <Route
+          path="/deneme-setleri"
+          element={
+            <Category
+              extra="set"
+              title="Deneme Setleri"
+              crumb="Deneme Setleri"
+              lead="İmzanızı bulmadan önce kokuları keşfedin. Mini ölçüler, tam Casa Sefora karakteri."
+            />
+          }
+        />
         <Route path="/koleksiyonlar" element={<Collections />} />
         <Route path="/urun/:slug" element={<Product />} />
         <Route path="/sepet" element={<Cart />} />

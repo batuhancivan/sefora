@@ -17,6 +17,9 @@ export default function Collections() {
           <Link className="collection-card" to="/erkek">
             <img src={IMAGES.collectionMen} alt="Erkek Parfümleri" />
           </Link>
+          <Link className="collection-card" to="/deneme-setleri">
+            <img src={IMAGES.italyVista} alt="Deneme Setleri" />
+          </Link>
         </div>
       </div>
     </div>

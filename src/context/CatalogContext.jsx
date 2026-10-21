@@ -13,15 +13,20 @@ const seedStock = (id, i) => {
 }
 
 const withDefaults = (p, i = 0) => {
+  const kind = p.kind === 'set' ? 'set' : 'perfume'
   const sizes = (p.sizes || []).map((s) => ({ ...s }))
-  const price100 = sizes.find((s) => s.ml === 100)?.price ?? p.price
+  const price100 = sizes.find((s) => s.ml === 100)?.price ?? sizes[0]?.price ?? p.price
+  const seeded = seedStock(p.id, i)
   return {
     ...p,
+    kind,
+    type: kind === 'set' ? p.type || 'Deneme Seti' : p.type || 'Eau de Parfum',
     sku: p.sku || `CS-${String(p.id).toUpperCase().slice(0, 8)}`,
     active: p.active !== false,
     stock: {
-      50: Number(p.stock?.[50] ?? seedStock(p.id, i)[50]),
-      100: Number(p.stock?.[100] ?? seedStock(p.id, i)[100]),
+      50: Number(p.stock?.[50] ?? (kind === 'set' ? 0 : seeded[50])),
+      100: Number(p.stock?.[100] ?? (kind === 'set' ? 0 : seeded[100])),
+      ...(p.stock || {}),
     },
     sizes,
     price: price100,
@@ -100,20 +105,25 @@ export function CatalogProvider({ children }) {
       const gallery = gender === 'men' ? [IMAGES.productMen, IMAGES.collectionMen, IMAGES.manPortrait] : [IMAGES.productWomen, IMAGES.collectionWomen, IMAGES.womanPortrait]
       const name = draft.name.trim()
       const slug = `sefora-${id}`
+      const isSet = draft.kind === 'set'
+      const setMl = Number(draft.setMl) || 8
       const p50 = Number(draft.price50) || 1690
-      const p100 = Number(draft.price100) || 2290
+      const p100 = Number(draft.price100) || (isSet ? 890 : 2290)
       const product = withDefaults({
         id,
         sku: `CS-${id.slice(-6).toUpperCase()}`,
         slug,
         name: name.startsWith('SEFORA') ? name : `SEFORA ${name}`,
         gender,
-        type: 'Eau de Parfum',
-        size: '100 ml',
-        sizes: [
-          { ml: 50, price: p50 },
-          { ml: 100, price: p100 },
-        ],
+        kind: isSet ? 'set' : 'perfume',
+        type: isSet ? 'Deneme Seti' : 'Eau de Parfum',
+        size: isSet ? `${setMl} ml` : '100 ml',
+        sizes: isSet
+          ? [{ ml: setMl, price: p100 }]
+          : [
+              { ml: 50, price: p50 },
+              { ml: 100, price: p100 },
+            ],
         price: p100,
         image: img,
         images: gallery,
@@ -122,7 +132,9 @@ export function CatalogProvider({ children }) {
         new: true,
         bestSeller: false,
         active: true,
-        stock: { 50: Number(draft.stock50) || 12, 100: Number(draft.stock100) || 12 },
+        stock: isSet
+          ? { 50: 0, 100: 0, [setMl]: Number(draft.stock100) || 12 }
+          : { 50: Number(draft.stock50) || 12, 100: Number(draft.stock100) || 12 },
         description: draft.description?.trim() || `${name} Casa Sefora koleksiyonuna eklendi.`,
         notes: {
           top: ['Bergamot'],

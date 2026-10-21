@@ -18,7 +18,13 @@ export default function SearchOverlay({ open, onClose }) {
     const s = q.trim().toLocaleLowerCase('tr')
     if (!s) return shopProducts.slice(0, 6)
     return shopProducts.filter((p) => {
-      const bag = [p.name, p.gender === 'women' ? 'kadın' : 'erkek', p.family, p.type, p.description]
+      const bag = [
+        p.name,
+        p.kind === 'set' ? 'deneme seti set' : p.gender === 'women' ? 'kadın' : 'erkek',
+        p.family,
+        p.type,
+        p.description,
+      ]
         .join(' ')
         .toLocaleLowerCase('tr')
       return bag.includes(s)
@@ -39,7 +45,7 @@ export default function SearchOverlay({ open, onClose }) {
         autoFocus
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Luna, Noir, Kadın, Erkek..."
+        placeholder="Luna, Noir, Kadın, Erkek, Set..."
         aria-label="Ürün ara"
       />
       <div className="search-results">
@@ -57,7 +63,9 @@ export default function SearchOverlay({ open, onClose }) {
             <img src={p.image} alt="" />
             <div>
               <strong>{p.name}</strong>
-              <p className="product-meta">{p.gender === 'women' ? 'Kadın' : 'Erkek'} · {p.family}</p>
+              <p className="product-meta">
+                {p.kind === 'set' ? 'Deneme seti' : p.gender === 'women' ? 'Kadın' : 'Erkek'} · {p.family}
+              </p>
               <PriceTag amount={p.price} size="sm" />
             </div>
           </Link>

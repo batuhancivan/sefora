@@ -26,7 +26,9 @@ export default function ProductCard({ product, onAdd }) {
           <h3>{product.name}</h3>
         </Link>
         <p className="product-meta">
-          {product.gender === 'women' ? 'Kadın' : 'Erkek'} · EDP {product.size}
+          {product.kind === 'set'
+            ? `Deneme seti · ${product.size}`
+            : `${product.gender === 'women' ? 'Kadın' : 'Erkek'} · EDP ${product.size}`}
         </p>
         <p className="product-price">
           <PriceTag amount={product.price} />
@@ -34,7 +36,8 @@ export default function ProductCard({ product, onAdd }) {
         <button
           className="btn btn-outline btn-full"
           onClick={() => {
-            addToCart(product, { size: 100, qty: 1 })
+            const size = product.sizes?.[0]?.ml ?? 100
+            addToCart(product, { size, qty: 1 })
             onAdd?.()
           }}
         >

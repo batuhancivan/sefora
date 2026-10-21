@@ -26,6 +26,10 @@ export default function Product() {
     if (product?.id) trackView(product.id)
   }, [product?.id, trackView])
 
+  useEffect(() => {
+    if (product?.sizes?.length) setSize(product.sizes[0].ml)
+  }, [product?.id])
+
   if (!product) return <NotFound />
 
   const price = product.sizes.find((s) => s.ml === size)?.price ?? product.price
@@ -38,8 +42,14 @@ export default function Product() {
         <p className="breadcrumb">
           <Link to="/">Ana Sayfa</Link>
           {' / '}
-          <Link to={product.gender === 'women' ? '/kadin' : '/erkek'}>
-            {product.gender === 'women' ? 'Kadın Parfümleri' : 'Erkek Parfümleri'}
+          <Link
+            to={product.kind === 'set' ? '/deneme-setleri' : product.gender === 'women' ? '/kadin' : '/erkek'}
+          >
+            {product.kind === 'set'
+              ? 'Deneme Setleri'
+              : product.gender === 'women'
+                ? 'Kadın Parfümleri'
+                : 'Erkek Parfümleri'}
           </Link>
           {' / '}
           {product.name}
@@ -61,7 +71,7 @@ export default function Product() {
           <div>
             <p className="pdp-brand">CASA SEFORA</p>
             <h1>{product.name.replace('SEFORA ', '')}</h1>
-            <p className="pdp-type">Eau de Parfum</p>
+            <p className="pdp-type">{product.kind === 'set' ? 'Deneme Seti' : 'Eau de Parfum'}</p>
             <p className="pdp-price">
               <PriceTag amount={price} size="lg" />
             </p>

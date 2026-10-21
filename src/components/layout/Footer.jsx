@@ -41,6 +41,7 @@ export default function Footer() {
           <Link to="/hakkimizda">Hakkımızda</Link>
           <Link to="/hakkimizda">Hikayemiz</Link>
           <Link to="/koleksiyonlar">Koleksiyonlarımız</Link>
+          <Link to="/deneme-setleri">Deneme Setleri</Link>
           <Link to="/blog">Blog</Link>
         </div>
         <div>
