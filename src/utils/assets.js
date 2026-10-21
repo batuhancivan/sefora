@@ -9,10 +9,10 @@ export const IMAGES = {
   italyCathedral: asset('images/italy-cathedral.png'),
   italyVista: asset('images/italy-vista.png'),
   storyPortrait: asset('images/story-portrait.png'),
-  productWomen: asset('images/product-women.png'),
-  productMen: asset('images/product-men.png'),
-  womanPortrait: asset('images/woman-portrait.png'),
-  manPortrait: asset('images/man-portrait.png'),
+  productWomen: asset('images/products/fiore-di-pesca/lux-1.jpg'),
+  productMen: asset('images/products/cipresso-di-siena/lux-1.jpg'),
+  womanPortrait: asset('images/collection-women.png'),
+  manPortrait: asset('images/collection-men.png'),
 }
 
 export const formatPrice = (value) =>

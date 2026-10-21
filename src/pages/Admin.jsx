@@ -168,16 +168,18 @@ function Dashboard({ orders, members, products, openCarts, setPage }) {
                 <thead>
                   <tr>
                     <th>Ürün</th>
-                    <th className="num">50 ml</th>
-                    <th className="num">100 ml</th>
+                    <th className="num">10</th>
+                    <th className="num">30</th>
+                    <th className="num">100</th>
                   </tr>
                 </thead>
                 <tbody>
                   {low.map((p) => (
                     <tr key={p.id}>
                       <td>{p.name}</td>
-                      <td className="num">{p.stock[50]}</td>
-                      <td className="num">{p.stock[100]}</td>
+                      <td className="num">{p.stock[10] ?? '—'}</td>
+                      <td className="num">{p.stock[30] ?? '—'}</td>
+                      <td className="num">{p.stock[100] ?? '—'}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -318,9 +320,11 @@ function Products({ products, orders, saveProduct, addProduct }) {
     kind: 'perfume',
     setMl: 8,
     family: 'Floral',
-    price50: 1890,
+    price10: 690,
+    price30: 1290,
     price100: 2490,
-    stock50: 12,
+    stock10: 12,
+    stock30: 12,
     stock100: 12,
     description: '',
   })
@@ -367,9 +371,11 @@ function Products({ products, orders, saveProduct, addProduct }) {
                 <th>SKU</th>
                 <th>Ürün</th>
                 <th>Cinsiyet</th>
-                <th className="num">50 ml</th>
+                <th className="num">10 ml</th>
+                <th className="num">30 ml</th>
                 <th className="num">100 ml</th>
-                <th className="num">Stok 50</th>
+                <th className="num">Stok 10</th>
+                <th className="num">Stok 30</th>
                 <th className="num">Stok 100</th>
                 <th className="num">Satılan</th>
                 <th>Durum</th>
@@ -396,15 +402,16 @@ function Products({ products, orders, saveProduct, addProduct }) {
                     <td>
                       {p.kind === 'set' ? 'Deneme seti' : p.gender === 'women' ? 'Kadın' : 'Erkek'}
                     </td>
-                    <td className="num">{formatPrice(p.sizes.find((s) => s.ml === 50)?.price || 0)}</td>
+                    <td className="num">{formatPrice(p.sizes.find((s) => s.ml === 10)?.price || 0)}</td>
+                    <td className="num">{formatPrice(p.sizes.find((s) => s.ml === 30)?.price || 0)}</td>
                     <td className="num">{formatPrice(p.price)}</td>
                     <td className="num">
                       <input
                         className="ops-stock"
                         type="number"
                         min="0"
-                        value={p.stock[50]}
-                        onChange={(e) => saveProduct(p.id, { stock50: e.target.value })}
+                        value={p.stock[10] ?? 0}
+                        onChange={(e) => saveProduct(p.id, { stock10: e.target.value })}
                       />
                     </td>
                     <td className="num">
@@ -412,7 +419,16 @@ function Products({ products, orders, saveProduct, addProduct }) {
                         className="ops-stock"
                         type="number"
                         min="0"
-                        value={p.stock[100]}
+                        value={p.stock[30] ?? 0}
+                        onChange={(e) => saveProduct(p.id, { stock30: e.target.value })}
+                      />
+                    </td>
+                    <td className="num">
+                      <input
+                        className="ops-stock"
+                        type="number"
+                        min="0"
+                        value={p.stock[100] ?? 0}
                         onChange={(e) => saveProduct(p.id, { stock100: e.target.value })}
                       />
                     </td>
@@ -456,11 +472,46 @@ function Products({ products, orders, saveProduct, addProduct }) {
               <option key={f}>{f}</option>
             ))}
           </select>
-          <label>50 ml fiyat (TL)</label>
+          <label>Kapak görseli</label>
+          <p className="ops-hint">Mağazada ilk görünen fotoğraf. “Kapak yap” ile değiştirin.</p>
+          <div className="ops-gallery">
+            {(form.images || []).map((src, i) => (
+              <div key={src + i} className={i === 0 ? 'cover' : ''}>
+                <img src={src} alt="" />
+                {i === 0 ? (
+                  <span>Kapak</span>
+                ) : (
+                  <button type="button" onClick={() => saveProduct(form.id, { coverIndex: i })}>
+                    Kapak yap
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+          <label>Görsel ekle</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              e.target.value = ''
+              if (!file) return
+              const reader = new FileReader()
+              reader.onload = () => saveProduct(form.id, { addImage: reader.result })
+              reader.readAsDataURL(file)
+            }}
+          />
+          <label>10 ml fiyat (TL)</label>
           <input
             type="number"
-            value={form.sizes.find((s) => s.ml === 50)?.price || 0}
-            onChange={(e) => saveProduct(form.id, { price50: e.target.value })}
+            value={form.sizes.find((s) => s.ml === 10)?.price || 0}
+            onChange={(e) => saveProduct(form.id, { price10: e.target.value })}
+          />
+          <label>30 ml fiyat (TL)</label>
+          <input
+            type="number"
+            value={form.sizes.find((s) => s.ml === 30)?.price || 0}
+            onChange={(e) => saveProduct(form.id, { price30: e.target.value })}
           />
           <label>100 ml fiyat (TL)</label>
           <input type="number" value={form.price} onChange={(e) => saveProduct(form.id, { price100: e.target.value })} />
@@ -542,13 +593,16 @@ function Products({ products, orders, saveProduct, addProduct }) {
             </>
           ) : (
             <>
-              <label>50 ml fiyat</label>
-              <input type="number" value={draft.price50} onChange={(e) => setDraft((d) => ({ ...d, price50: e.target.value }))} />
-              <label>100 ml fiyat</label>
-              <input type="number" value={draft.price100} onChange={(e) => setDraft((d) => ({ ...d, price100: e.target.value }))} />
-              <label>Stok 50 / 100</label>
+              <label>10 / 30 / 100 ml fiyat</label>
               <div style={{ display: 'flex', gap: 8 }}>
-                <input type="number" value={draft.stock50} onChange={(e) => setDraft((d) => ({ ...d, stock50: e.target.value }))} />
+                <input type="number" value={draft.price10} onChange={(e) => setDraft((d) => ({ ...d, price10: e.target.value }))} />
+                <input type="number" value={draft.price30} onChange={(e) => setDraft((d) => ({ ...d, price30: e.target.value }))} />
+                <input type="number" value={draft.price100} onChange={(e) => setDraft((d) => ({ ...d, price100: e.target.value }))} />
+              </div>
+              <label>Stok 10 / 30 / 100</label>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input type="number" value={draft.stock10} onChange={(e) => setDraft((d) => ({ ...d, stock10: e.target.value }))} />
+                <input type="number" value={draft.stock30} onChange={(e) => setDraft((d) => ({ ...d, stock30: e.target.value }))} />
                 <input type="number" value={draft.stock100} onChange={(e) => setDraft((d) => ({ ...d, stock100: e.target.value }))} />
               </div>
             </>

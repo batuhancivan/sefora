@@ -13,10 +13,11 @@ import { SALE_PERCENT } from '../../utils/promo'
 const NAV = [
   ['/kadin', 'Kadın'],
   ['/erkek', 'Erkek'],
+  ['/cep-boy', 'Cep Boy'],
+  ['/canta-boy', 'Çanta Boy'],
   ['/deneme-setleri', 'Deneme Setleri'],
   ['/koleksiyonlar', 'Koleksiyonlar'],
   ['/hakkimizda', 'Hakkımızda'],
-  ['/blog', 'Blog'],
 ]
 
 export default function Header() {

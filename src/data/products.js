@@ -1,234 +1,152 @@
-import { IMAGES } from '../utils/assets'
+import { asset } from '../utils/assets'
 
-const womenGallery = [IMAGES.productWomen, IMAGES.collectionWomen, IMAGES.womanPortrait]
-const menGallery = [IMAGES.productMen, IMAGES.collectionMen, IMAGES.manPortrait]
+const SIZES = [
+  { ml: 10, price: 690 },
+  { ml: 30, price: 1290 },
+  { ml: 100, price: 2490 },
+]
 
-export const PRODUCTS = [
-  {
-    id: 'luna',
-    slug: 'sefora-luna',
-    name: 'SEFORA Luna',
-    gender: 'women',
+export const productGallery = (slug) => [
+  asset(`images/products/${slug}/lux-1.jpg`),
+  asset(`images/products/${slug}/lux-2.jpg`),
+  asset(`images/products/${slug}/lux-3.jpg`),
+  asset(`images/products/${slug}/lux-4.jpg`),
+  asset(`images/products/${slug}/canta.jpg`),
+  asset(`images/products/${slug}/cep.jpg`),
+]
+
+const scent = ({ id, gender, family, featured, isNew, bestSeller, description, notes }) => {
+  const images = productGallery(id)
+  return {
+    id,
+    slug: id,
+    sku: `CS-${id.slice(0, 8).toUpperCase()}`,
+    name: id
+      .split('-')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ')
+      .replace('Di ', 'di ')
+      .replace('D ', "d'"),
+    gender,
+    kind: 'perfume',
     type: 'Eau de Parfum',
-    size: '100 ml',
-    sizes: [
-      { ml: 50, price: 1890 },
-      { ml: 100, price: 2490 },
-    ],
+    size: '10 / 30 / 100 ml',
+    sizes: SIZES.map((s) => ({ ...s })),
     price: 2490,
-    image: IMAGES.productWomen,
-    images: womenGallery,
-    family: 'Floral',
-    featured: true,
-    new: true,
-    bestSeller: true,
-    description:
-      'Luna, gece ışığının sessiz parıltısından ilham alır. Yumuşak çiçek dokusu, ılık amber ve temiz musk ile birleşerek modern bir feminen imza bırakır. Casa Sefora’nın en çok tercih edilen kadın kokularından biridir.',
-    notes: {
-      top: ['Bergamot', 'Pembe biber', 'Armut'],
-      heart: ['Yasemin', 'Gül', 'Şakayık'],
-      base: ['Misk', 'Amber', 'Sandal ağacı'],
-    },
+    image: images[0],
+    images,
+    family,
+    featured,
+    new: isNew,
+    bestSeller,
+    description,
+    notes,
     usage:
       'Temiz cilde, nabız noktalarına — boyun, bilek ve kulak arkasına — iki veya üç pıt uygulayın. Kokunun katmanlarını açması için ovuşturmadan bekleyin.',
-  },
-  {
-    id: 'bella',
-    slug: 'sefora-bella',
-    name: 'SEFORA Bella',
+  }
+}
+
+export const PRODUCTS = [
+  scent({
+    id: 'fiore-di-pesca',
     gender: 'women',
-    type: 'Eau de Parfum',
-    size: '100 ml',
-    sizes: [
-      { ml: 50, price: 1890 },
-      { ml: 100, price: 2490 },
-    ],
-    price: 2490,
-    image: IMAGES.productWomen,
-    images: womenGallery,
-    family: 'Oriental',
-    featured: true,
-    new: false,
-    bestSeller: true,
-    description:
-      'Bella, İtalyan akşamlarının sıcaklığını taşır. Vanilya ve kehribarin yumuşak ışıltısı, zarif çiçek kalbiyle birleşerek gizemli ve davetkâr bir karakter oluşturur.',
-    notes: {
-      top: ['Mandarin', 'Safran', 'Bergamot'],
-      heart: ['Turuncu çiçeği', 'Ylang-ylang', 'Gül'],
-      base: ['Vanilya', 'Kehribar', 'Paçuli'],
-    },
-    usage:
-      'Akşam kullanımına uygundur. Giysi üzerine değil, cilde uygulayın. Katmanlı bir iz bırakması için bilek ve dekolteye hafifçe püskürtün.',
-  },
-  {
-    id: 'rosa',
-    slug: 'sefora-rosa',
-    name: 'SEFORA Rosa',
-    gender: 'women',
-    type: 'Eau de Parfum',
-    size: '100 ml',
-    sizes: [
-      { ml: 50, price: 1890 },
-      { ml: 100, price: 2490 },
-    ],
-    price: 2490,
-    image: IMAGES.productWomen,
-    images: womenGallery,
     family: 'Floral',
     featured: true,
-    new: true,
-    bestSeller: false,
-    description:
-      'Rosa, bahçelerin ilk ışığında açan çiçeklerden esinlenir. Taze, ışıklı ve zarif bir gül kompozisyonu; gündüzden geceye uzanan ince bir imza bırakır.',
-    notes: {
-      top: ['Limon', 'Frenk üzümü', 'Pembe biber'],
-      heart: ['Şam gülü', 'Peony', 'Lilyum'],
-      base: ['Sedir', 'Beyaz misk', 'Ambergris akoru'],
-    },
-    usage:
-      'Sabah ritüelinize ekleyin. Saç diplerine doğrudan uygulamayın; tarak veya fırça üzerinden hafif bir iz bırakabilirsiniz.',
-  },
-  {
-    id: 'alba',
-    slug: 'sefora-alba',
-    name: 'SEFORA Alba',
-    gender: 'women',
-    type: 'Eau de Parfum',
-    size: '100 ml',
-    sizes: [
-      { ml: 50, price: 1690 },
-      { ml: 100, price: 2290 },
-    ],
-    price: 2290,
-    image: IMAGES.productWomen,
-    images: womenGallery,
-    family: 'Citrus',
-    featured: false,
-    new: true,
-    bestSeller: false,
-    description:
-      'Alba, Akdeniz sabahının ferahlığını taşır. Parlak narenciye notaları, beyaz çiçek ve temiz odunsu bir dip ile gün boyu ışıklı bir iz bırakır.',
-    notes: {
-      top: ['Sicilya limonu', 'Bergamot', 'Yeşil mandalin'],
-      heart: ['Neroli', 'Zambak', 'Su notası'],
-      base: ['Beyaz çay', 'Misk', 'Sedir'],
-    },
-    usage:
-      'Sıcak havalarda ve gündüz kullanımında öne çıkar. İzinin tazeliğini korumak için öğleden sonra nabız noktalarını yenileyebilirsiniz.',
-  },
-  {
-    id: 'noir',
-    slug: 'sefora-noir',
-    name: 'SEFORA Noir',
-    gender: 'men',
-    type: 'Eau de Parfum',
-    size: '100 ml',
-    sizes: [
-      { ml: 50, price: 1890 },
-      { ml: 100, price: 2490 },
-    ],
-    price: 2490,
-    image: IMAGES.productMen,
-    images: menGallery,
-    family: 'Woody',
-    featured: true,
-    new: false,
+    isNew: true,
     bestSeller: true,
     description:
-      'Noir, gece kentinin gölgelerinden doğar. Derin odunsu doku, baharat ve deri akoruyla modern, kararlı ve karizmatik bir erkek imzası sunar.',
+      'Fiore di Pesca, şeftali çiçeğinin ilk açışını taşır. Işıklı, sulu ve feminen bir imza; bahar sabahlarının yumuşak ışıltısını gün boyu ciltte bırakır.',
     notes: {
-      top: ['Bergamot', 'Karabiber', 'Elemi'],
-      heart: ['Lavanta', 'Geranium', 'Iris'],
-      base: ['Vetiver', 'Deri', 'Oud akoru'],
+      top: ['Şeftali çiçeği', 'Bergamot', 'Armut'],
+      heart: ['Beyaz çiçek', 'Gül', 'Osmanthus'],
+      base: ['Misk', 'Sandal', 'Vanilya'],
     },
-    usage:
-      'Tıraş sonrası temiz cilde uygulayın. Yaka ve göğüs bölgesine iki pıt yeterlidir; fazla uygulama kokunun dengesini bozabilir.',
-  },
-  {
-    id: 'uomo',
-    slug: 'sefora-uomo',
-    name: 'SEFORA Uomo',
-    gender: 'men',
-    type: 'Eau de Parfum',
-    size: '100 ml',
-    sizes: [
-      { ml: 50, price: 1890 },
-      { ml: 100, price: 2490 },
-    ],
-    price: 2490,
-    image: IMAGES.productMen,
-    images: menGallery,
+  }),
+  scent({
+    id: 'giardino-segreto',
+    gender: 'women',
+    family: 'Floral',
+    featured: true,
+    isNew: true,
+    bestSeller: false,
+    description:
+      'Giardino Segreto, gizli bir İtalyan bahçesinin serin gölgesinden doğar. Yeşil yaprak, çiçek ve hafif odun; sakin, zarif ve keşfe açık bir karakter sunar.',
+    notes: {
+      top: ['Yeşil yaprak', 'Bergamot', 'Frenk üzümü'],
+      heart: ['Yasemin', 'Sümbül', 'Nergis'],
+      base: ['Sedir', 'Misk', 'Yosun'],
+    },
+  }),
+  scent({
+    id: 'rosa-velluto',
+    gender: 'women',
     family: 'Oriental',
     featured: true,
-    new: true,
+    isNew: false,
     bestSeller: true,
     description:
-      'Uomo, İtalyan erkeğinin zamansız zarafetini yorumlar. Sıcak baharat, tütün yaprağı ve amber; güçlü fakat ölçülü bir karakter taşır.',
+      'Rosa Velluto, kadife dokunuşlu bir gül yorumudur. Yoğun, sıcak ve davetkâr; akşam ışığında açılan kadife yaprakların izini taşır.',
     notes: {
-      top: ['Cardamom', 'Portakal kabuğu', 'Nane'],
-      heart: ['Tütün yaprağı', 'Adaçayı', 'Lavanta'],
-      base: ['Tonka', 'Amber', 'Sandal'],
+      top: ['Pembe biber', 'Limon', 'Ahududu'],
+      heart: ['Şam gülü', 'Peony', 'İris'],
+      base: ['Amber', 'Paçuli', 'Benzoin'],
     },
-    usage:
-      'Akşam ve özel davetler için tasarlanmıştır. Ceket astarına değil, cilde uygulayın; kumaş kokunun kimyasını değiştirebilir.',
-  },
-  {
-    id: 'dolce',
-    slug: 'sefora-dolce',
-    name: 'SEFORA Dolce',
+  }),
+  scent({
+    id: 'cipresso-di-siena',
     gender: 'men',
-    type: 'Eau de Parfum',
-    size: '100 ml',
-    sizes: [
-      { ml: 50, price: 1890 },
-      { ml: 100, price: 2490 },
-    ],
-    price: 2490,
-    image: IMAGES.productMen,
-    images: menGallery,
+    family: 'Woody',
+    featured: true,
+    isNew: true,
+    bestSeller: true,
+    description:
+      'Cipresso di Siena, Toskana servilerinin kuru gölgesinden ilham alır. Odunsu, aromatik ve net; modern bir erkek imzası çizer.',
+    notes: {
+      top: ['Servi', 'Bergamot', 'Karabiber'],
+      heart: ['Lavanta', 'Adaçayı', 'Ardıç'],
+      base: ['Sedir', 'Vetiver', 'Misk'],
+    },
+  }),
+  scent({
+    id: 'legno-imperiale',
+    gender: 'men',
+    family: 'Woody',
+    featured: true,
+    isNew: false,
+    bestSeller: true,
+    description:
+      'Legno Imperiale, derin ve kararlı bir odun kompozisyonudur. Sıcak baharat, kuru odun ve amber; ölçülü bir güç hissi bırakır.',
+    notes: {
+      top: ['Cardamom', 'Portakal kabuğu', 'Elemi'],
+      heart: ['Sedir', 'Tütün yaprağı', 'Iris'],
+      base: ['Sandal', 'Amber', 'Oud akoru'],
+    },
+  }),
+  scent({
+    id: 'vento-d-amalfi',
+    gender: 'men',
     family: 'Fresh',
     featured: true,
-    new: false,
+    isNew: true,
     bestSeller: false,
     description:
-      'Dolce, sahil kasabalarının tuzlu rüzgârını ve güneş ısınmış taşları hatırlatır. Ferah, güneşli ve çağdaş bir erkek kokusudur.',
+      'Vento d’Amalfi, kıyı rüzgârının tuzlu ferahlığını taşır. Narenciye, deniz ve güneş ısınmış taş; gündüz ve yaz ritmine uygun çağdaş bir izdir.',
     notes: {
-      top: ['Deniz notası', 'Greyfurt', 'Limon'],
-      heart: ['Biberiye', 'Fener çiçeği', 'Sümbülteber'],
+      top: ['Limon', 'Greyfurt', 'Deniz notası'],
+      heart: ['Biberiye', 'Nane', 'Neroli'],
       base: ['Amberwood', 'Misk', 'Tuzlu odun'],
     },
-    usage:
-      'Gündüz ve yaz kullanımına uygundur. Duş sonrası nemli cilde uygulandığında daha açık bir iz bırakır.',
-  },
-  {
-    id: 'forte',
-    slug: 'sefora-forte',
-    name: 'SEFORA Forte',
-    gender: 'men',
-    type: 'Eau de Parfum',
-    size: '100 ml',
-    sizes: [
-      { ml: 50, price: 1690 },
-      { ml: 100, price: 2290 },
-    ],
-    price: 2290,
-    image: IMAGES.productMen,
-    images: menGallery,
-    family: 'Woody',
-    featured: false,
-    new: true,
-    bestSeller: false,
-    description:
-      'Forte, kararlı bir karakterin sade ifadesidir. Kuru odun, dumanlı vetiver ve baharat; abartısız, net ve modern bir iz çizer.',
-    notes: {
-      top: ['Karabiber', 'Bergamot', 'Ardıç'],
-      heart: ['Sedir', 'Kekik', 'Lavanta'],
-      base: ['Vetiver', 'Labdanum', 'Misk'],
-    },
-    usage:
-      'Günlük kullanıma uygundur. Ofis ve şehir ritmi için iki pıt yeterlidir.',
-  },
+  }),
 ]
+
+PRODUCTS.forEach((p) => {
+  if (p.id === 'fiore-di-pesca') p.name = 'Fiore di Pesca'
+  if (p.id === 'giardino-segreto') p.name = 'Giardino Segreto'
+  if (p.id === 'rosa-velluto') p.name = 'Rosa Velluto'
+  if (p.id === 'cipresso-di-siena') p.name = 'Cipresso di Siena'
+  if (p.id === 'legno-imperiale') p.name = 'Legno Imperiale'
+  if (p.id === 'vento-d-amalfi') p.name = "Vento d'Amalfi"
+})
 
 export const shopOnly = (list = PRODUCTS) => list.filter((p) => p.active !== false)
 

@@ -375,6 +375,56 @@
   resize: vertical;
 }
 
+.ops-hint {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.ops-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.45rem;
+  margin: 0.35rem 0 0.6rem;
+}
+
+.ops-gallery div {
+  position: relative;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #f9fafb;
+}
+
+.ops-gallery div.cover {
+  outline: 2px solid #111827;
+}
+
+.ops-gallery img {
+  display: block;
+  width: 100%;
+  height: 88px;
+  object-fit: cover;
+}
+
+.ops-gallery button,
+.ops-gallery span {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: #111827;
+  color: #fff;
+  font-size: 0.68rem;
+  padding: 0.28rem 0.2rem;
+  cursor: pointer;
+}
+
+.ops-gallery span {
+  background: #166534;
+  text-align: center;
+  cursor: default;
+}
+
 .ops-checks {
   display: flex;
   flex-wrap: wrap;

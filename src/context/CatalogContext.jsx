@@ -1,35 +1,36 @@
 import { createContext, useCallback, useContext, useMemo } from 'react'
-import { PRODUCTS, FAMILIES } from '../data/products'
+import { PRODUCTS, FAMILIES, productGallery } from '../data/products'
 import { IMAGES } from '../utils/assets'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useAuth } from './AuthContext'
 
 const CatalogContext = createContext(null)
 
-const seedStock = (id, i) => {
-  if (id === 'alba' || id === 'forte') return { 50: 3, 100: 4 }
-  if (id === 'rosa') return { 50: 6, 100: 7 }
-  return { 50: 16 + (i % 8), 100: 20 + (i % 10) }
-}
+const PRICE_KEYS = { price10: 10, price30: 30, price50: 50, price100: 100 }
+const STOCK_KEYS = { stock10: 10, stock30: 30, stock50: 50, stock100: 100 }
+
+const seedStock = () => ({ 10: 18, 30: 14, 100: 12 })
 
 const withDefaults = (p, i = 0) => {
   const kind = p.kind === 'set' ? 'set' : 'perfume'
   const sizes = (p.sizes || []).map((s) => ({ ...s }))
   const price100 = sizes.find((s) => s.ml === 100)?.price ?? sizes[0]?.price ?? p.price
   const seeded = seedStock(p.id, i)
+  const stock = { ...(kind === 'set' ? {} : seeded), ...(p.stock || {}) }
+  Object.keys(stock).forEach((k) => {
+    stock[k] = Number(stock[k] || 0)
+  })
   return {
     ...p,
     kind,
     type: kind === 'set' ? p.type || 'Deneme Seti' : p.type || 'Eau de Parfum',
     sku: p.sku || `CS-${String(p.id).toUpperCase().slice(0, 8)}`,
     active: p.active !== false,
-    stock: {
-      50: Number(p.stock?.[50] ?? (kind === 'set' ? 0 : seeded[50])),
-      100: Number(p.stock?.[100] ?? (kind === 'set' ? 0 : seeded[100])),
-      ...(p.stock || {}),
-    },
+    stock,
     sizes,
     price: price100,
+    image: p.image || p.images?.[0],
+    images: p.images?.length ? p.images : p.image ? [p.image] : [],
   }
 }
 
@@ -42,8 +43,8 @@ const hydrate = (saved) => {
       {
         ...p,
         ...(over || {}),
-        image: p.image,
-        images: p.images,
+        image: over?.image || p.image,
+        images: over?.images?.length ? over.images : p.images,
         notes: over?.notes || p.notes,
       },
       i,
@@ -53,9 +54,45 @@ const hydrate = (saved) => {
   return [...seeded, ...extra]
 }
 
+const applyPriceStock = (next, patch, prev) => {
+  const sizePatch = Object.entries(PRICE_KEYS).filter(([k]) => patch[k] != null)
+  if (sizePatch.length) {
+    const map = Object.fromEntries(sizePatch.map(([k, ml]) => [ml, Number(patch[k])]))
+    const mls = new Set([...next.sizes.map((s) => s.ml), ...Object.keys(map).map(Number)])
+    next.sizes = [...mls]
+      .sort((a, b) => a - b)
+      .map((ml) => ({
+        ml,
+        price: map[ml] ?? next.sizes.find((s) => s.ml === ml)?.price ?? prev.sizes.find((s) => s.ml === ml)?.price ?? 0,
+      }))
+    next.price = next.sizes.find((s) => s.ml === 100)?.price ?? next.sizes.at(-1)?.price ?? next.price
+  }
+  const stockPatch = Object.entries(STOCK_KEYS).filter(([k]) => patch[k] != null)
+  if (stockPatch.length) {
+    next.stock = { ...next.stock }
+    stockPatch.forEach(([k, ml]) => {
+      next.stock[ml] = Math.max(0, Number(patch[k]))
+    })
+  }
+  if (patch.coverIndex != null) {
+    const imgs = [...(prev.images || [])]
+    const i = Number(patch.coverIndex)
+    if (imgs[i]) {
+      const [picked] = imgs.splice(i, 1)
+      next.images = [picked, ...imgs]
+      next.image = picked
+    }
+  }
+  if (patch.addImage) {
+    next.images = [...(next.images || prev.images || []), patch.addImage]
+    if (!prev.images?.length) next.image = patch.addImage
+  }
+  return next
+}
+
 export function CatalogProvider({ children }) {
   const { isAdmin } = useAuth()
-  const [raw, setRaw] = useLocalStorage('sefora-catalog', [])
+  const [raw, setRaw] = useLocalStorage('sefora-catalog-v2', [])
   const products = useMemo(() => hydrate(raw), [raw])
   const shopProducts = useMemo(() => products.filter((p) => p.active !== false), [products])
 
@@ -74,22 +111,26 @@ export function CatalogProvider({ children }) {
         const current = hydrate(prev)
         return current.map((p) => {
           if (p.id !== id) return p
-          const next = withDefaults({ ...p, ...patch })
-          if (patch.price50 != null || patch.price100 != null) {
-            next.sizes = next.sizes.map((s) => {
-              if (s.ml === 50 && patch.price50 != null) return { ...s, price: Number(patch.price50) }
-              if (s.ml === 100 && patch.price100 != null) return { ...s, price: Number(patch.price100) }
-              return s
-            })
-            next.price = next.sizes.find((s) => s.ml === 100)?.price ?? next.price
-          }
-          if (patch.stock50 != null || patch.stock100 != null) {
-            next.stock = {
-              50: patch.stock50 != null ? Math.max(0, Number(patch.stock50)) : next.stock[50],
-              100: patch.stock100 != null ? Math.max(0, Number(patch.stock100)) : next.stock[100],
-            }
-          }
-          return next
+          const {
+            price10,
+            price30,
+            price50,
+            price100,
+            stock10,
+            stock30,
+            stock50,
+            stock100,
+            coverIndex,
+            addImage,
+            ...rest
+          } = patch
+          const next = withDefaults({
+            ...p,
+            ...rest,
+            images: rest.images || p.images,
+            image: rest.image || p.image,
+          })
+          return applyPriceStock(next, patch, p)
         })
       })
     },
@@ -101,31 +142,38 @@ export function CatalogProvider({ children }) {
       if (!isAdmin) return null
       const id = `cs-${Date.now()}`
       const gender = draft.gender === 'men' ? 'men' : 'women'
-      const img = gender === 'men' ? IMAGES.productMen : IMAGES.productWomen
-      const gallery = gender === 'men' ? [IMAGES.productMen, IMAGES.collectionMen, IMAGES.manPortrait] : [IMAGES.productWomen, IMAGES.collectionWomen, IMAGES.womanPortrait]
+      const fallback = gender === 'men' ? IMAGES.collectionMen : IMAGES.collectionWomen
+      const known = PRODUCTS.find((p) => p.gender === gender)
+      const gallery = known ? productGallery(known.id) : [fallback]
       const name = draft.name.trim()
-      const slug = `sefora-${id}`
+      const slug = name
+        .toLocaleLowerCase('tr')
+        .replace(/[^a-z0-9ğüşöçıàèéìòù' ]/gi, '')
+        .trim()
+        .replace(/\s+/g, '-')
       const isSet = draft.kind === 'set'
       const setMl = Number(draft.setMl) || 8
-      const p50 = Number(draft.price50) || 1690
-      const p100 = Number(draft.price100) || (isSet ? 890 : 2290)
+      const p10 = Number(draft.price10) || 690
+      const p30 = Number(draft.price30) || 1290
+      const p100 = Number(draft.price100) || (isSet ? 890 : 2490)
       const product = withDefaults({
         id,
         sku: `CS-${id.slice(-6).toUpperCase()}`,
-        slug,
-        name: name.startsWith('SEFORA') ? name : `SEFORA ${name}`,
+        slug: slug || id,
+        name,
         gender,
         kind: isSet ? 'set' : 'perfume',
         type: isSet ? 'Deneme Seti' : 'Eau de Parfum',
-        size: isSet ? `${setMl} ml` : '100 ml',
+        size: isSet ? `${setMl} ml` : '10 / 30 / 100 ml',
         sizes: isSet
           ? [{ ml: setMl, price: p100 }]
           : [
-              { ml: 50, price: p50 },
+              { ml: 10, price: p10 },
+              { ml: 30, price: p30 },
               { ml: 100, price: p100 },
             ],
         price: p100,
-        image: img,
+        image: gallery[0],
         images: gallery,
         family: draft.family || 'Floral',
         featured: Boolean(draft.featured),
@@ -133,8 +181,12 @@ export function CatalogProvider({ children }) {
         bestSeller: false,
         active: true,
         stock: isSet
-          ? { 50: 0, 100: 0, [setMl]: Number(draft.stock100) || 12 }
-          : { 50: Number(draft.stock50) || 12, 100: Number(draft.stock100) || 12 },
+          ? { [setMl]: Number(draft.stock100) || 12 }
+          : {
+              10: Number(draft.stock10) || 12,
+              30: Number(draft.stock30) || 12,
+              100: Number(draft.stock100) || 12,
+            },
         description: draft.description?.trim() || `${name} Casa Sefora koleksiyonuna eklendi.`,
         notes: {
           top: ['Bergamot'],

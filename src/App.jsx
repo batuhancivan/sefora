@@ -61,6 +61,28 @@ export default function App() {
           }
         />
         <Route
+          path="/cep-boy"
+          element={
+            <Category
+              extra="cep"
+              title="Cep Boy 10 ml"
+              crumb="Cep Boy"
+              lead="Cebinizde taşınan Casa Sefora imzası. 10 ml Eau de Parfum."
+            />
+          }
+        />
+        <Route
+          path="/canta-boy"
+          element={
+            <Category
+              extra="canta"
+              title="Çanta Boy 30 ml"
+              crumb="Çanta Boy"
+              lead="Çantaya uygun 30 ml ölçü. Aynı koku, günlük ritim."
+            />
+          }
+        />
+        <Route
           path="/deneme-setleri"
           element={
             <Category

@@ -8,12 +8,14 @@ import { IconClose } from '../components/ui/Icons'
 function applyFilters(list, { gender, family, price, size, sort, extra }) {
   let items = [...list]
   if (extra === 'set') items = items.filter((p) => p.kind === 'set')
+  else if (extra === 'cep') items = items.filter((p) => p.kind !== 'set' && p.sizes.some((s) => s.ml === 10))
+  else if (extra === 'canta') items = items.filter((p) => p.kind !== 'set' && p.sizes.some((s) => s.ml === 30))
   else if (gender) items = items.filter((p) => p.gender === gender && p.kind !== 'set')
   if (extra === 'new') items = items.filter((p) => p.new)
   if (extra === 'best') items = items.filter((p) => p.bestSeller)
   if (family) items = items.filter((p) => p.family === family)
-  if (price === 'under') items = items.filter((p) => p.price < 2300)
-  if (price === 'over') items = items.filter((p) => p.price >= 2300)
+  if (price === 'under') items = items.filter((p) => p.sizes.some((s) => s.price < 1500))
+  if (price === 'over') items = items.filter((p) => p.sizes.some((s) => s.price >= 1500))
   if (size) items = items.filter((p) => p.sizes.some((s) => String(s.ml) === size))
   if (sort === 'asc') items.sort((a, b) => a.price - b.price)
   if (sort === 'desc') items.sort((a, b) => b.price - a.price)
@@ -44,11 +46,11 @@ function FilterFields({ family, setFamily, price, setPrice, size, setSize, id = 
       </label>
       <label>
         <input type="radio" name={`price-${id}`} checked={price === 'under'} onChange={() => setPrice('under')} />
-        2.300 TL altı
+        1.500 TL altı
       </label>
       <label>
         <input type="radio" name={`price-${id}`} checked={price === 'over'} onChange={() => setPrice('over')} />
-        2.300 TL ve üzeri
+        1.500 TL ve üzeri
       </label>
       {!setMode && (
         <>
@@ -58,8 +60,12 @@ function FilterFields({ family, setFamily, price, setPrice, size, setSize, id = 
             Tümü
           </label>
           <label>
-            <input type="radio" name={`size-${id}`} checked={size === '50'} onChange={() => setSize('50')} />
-            50 ml
+            <input type="radio" name={`size-${id}`} checked={size === '10'} onChange={() => setSize('10')} />
+            10 ml · Cep boy
+          </label>
+          <label>
+            <input type="radio" name={`size-${id}`} checked={size === '30'} onChange={() => setSize('30')} />
+            30 ml · Çanta boy
           </label>
           <label>
             <input type="radio" name={`size-${id}`} checked={size === '100'} onChange={() => setSize('100')} />

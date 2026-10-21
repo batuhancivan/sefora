@@ -27,8 +27,10 @@ export default function Product() {
   }, [product?.id, trackView])
 
   useEffect(() => {
-    if (product?.sizes?.length) setSize(product.sizes[0].ml)
-  }, [product?.id])
+    if (product?.sizes?.find((s) => s.ml === 100)) setSize(100)
+    else if (product?.sizes?.length) setSize(product.sizes[0].ml)
+    setActive(0)
+  }, [product?.id, product?.image])
 
   if (!product) return <NotFound />
 
@@ -70,7 +72,7 @@ export default function Product() {
           </div>
           <div>
             <p className="pdp-brand">CASA SEFORA</p>
-            <h1>{product.name.replace('SEFORA ', '')}</h1>
+            <h1>{product.name.replace(/^SEFORA\s+/i, '')}</h1>
             <p className="pdp-type">{product.kind === 'set' ? 'Deneme Seti' : 'Eau de Parfum'}</p>
             <p className="pdp-price">
               <PriceTag amount={price} size="lg" />
