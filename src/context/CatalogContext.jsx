@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useMemo } from 'react'
 import { PRODUCTS, FAMILIES } from '../data/products'
 import { IMAGES } from '../utils/assets'
 import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useAuth } from './AuthContext'
 
 const CatalogContext = createContext(null)
 
@@ -48,14 +49,22 @@ const hydrate = (saved) => {
 }
 
 export function CatalogProvider({ children }) {
+  const { isAdmin } = useAuth()
   const [raw, setRaw] = useLocalStorage('sefora-catalog', [])
   const products = useMemo(() => hydrate(raw), [raw])
   const shopProducts = useMemo(() => products.filter((p) => p.active !== false), [products])
 
-  const persist = useCallback((list) => setRaw(list.map((p) => withDefaults(p))), [setRaw])
+  const persist = useCallback(
+    (list) => {
+      if (!isAdmin) return
+      setRaw(list.map((p) => withDefaults(p)))
+    },
+    [isAdmin, setRaw],
+  )
 
   const saveProduct = useCallback(
     (id, patch) => {
+      if (!isAdmin) return
       setRaw((prev) => {
         const current = hydrate(prev)
         return current.map((p) => {
@@ -79,11 +88,12 @@ export function CatalogProvider({ children }) {
         })
       })
     },
-    [setRaw],
+    [isAdmin, setRaw],
   )
 
   const addProduct = useCallback(
     (draft) => {
+      if (!isAdmin) return null
       const id = `cs-${Date.now()}`
       const gender = draft.gender === 'men' ? 'men' : 'women'
       const img = gender === 'men' ? IMAGES.productMen : IMAGES.productWomen
@@ -124,7 +134,7 @@ export function CatalogProvider({ children }) {
       setRaw((prev) => [...hydrate(prev), product])
       return product
     },
-    [setRaw],
+    [isAdmin, setRaw],
   )
 
   const commitSale = useCallback(

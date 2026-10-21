@@ -1,17 +1,17 @@
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useStore } from '../context/StoreContext'
 import { useCatalog } from '../context/CatalogContext'
 import { formatPrice } from '../utils/assets'
-import { ADMIN_EMAIL, ADMIN_PASSWORD, ORDER_STATUSES, statusLabel } from '../utils/orders'
+import { ORDER_STATUSES, statusLabel } from '../utils/orders'
 import { FAMILIES } from '../data/products'
 import Reports from './admin/Reports'
 import './admin/ops.css'
 
-function AdminLogin({ login }) {
-  const [email, setEmail] = useState(ADMIN_EMAIL)
-  const [password, setPassword] = useState(ADMIN_PASSWORD)
+function AdminLogin({ loginAdmin }) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [err, setErr] = useState('')
   const [busy, setBusy] = useState(false)
 
@@ -20,9 +20,10 @@ function AdminLogin({ login }) {
     setErr('')
     setBusy(true)
     try {
-      await login(email, password)
+      await loginAdmin(email, password)
     } catch (error) {
       setErr(error.message)
+      setPassword('')
     } finally {
       setBusy(false)
     }
@@ -30,21 +31,36 @@ function AdminLogin({ login }) {
 
   return (
     <div className="ops-login">
-      <form onSubmit={submit}>
+      <form onSubmit={submit} autoComplete="off">
         <h1>Yönetim girişi</h1>
-        <p>Sipariş, stok ve ürün işlemleri bu panelde.</p>
+        <p>Bu alana yalnızca yetkili hesapla girilir. Şifre sitede yazılmaz.</p>
         <label className="field">
           <span>E-posta</span>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="username"
+            required
+          />
         </label>
         <label className="field">
           <span>Şifre</span>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            required
+          />
         </label>
         {err && <p className="field-error">{err}</p>}
         <button className="ops-btn primary" type="submit" disabled={busy} style={{ width: '100%', marginTop: '0.7rem' }}>
           Giriş
         </button>
+        <p style={{ marginTop: '0.9rem' }}>
+          <Link to="/">Mağazaya dön</Link>
+        </p>
       </form>
     </div>
   )
@@ -516,6 +532,7 @@ function Products({ products, orders, saveProduct, addProduct }) {
               onClick={() => {
                 if (!draft.name.trim()) return
                 const p = addProduct(draft)
+                if (!p) return
                 setCreating(false)
                 setEdit(p.id)
               }}
@@ -676,27 +693,10 @@ const NAV = [
 
 export default function Admin() {
   const navigate = useNavigate()
-  const { isAdmin, users, orders, updateOrderStatus, logout, login } = useAuth()
+  const { isAdmin, users, orders, updateOrderStatus, logout, loginAdmin } = useAuth()
   const { carts, stats } = useStore()
   const { products, saveProduct, addProduct } = useCatalog()
   const [page, setPage] = useState('ozet')
-  const [unlocking, setUnlocking] = useState(!isAdmin)
-
-  useEffect(() => {
-    if (isAdmin) {
-      setUnlocking(false)
-      return
-    }
-    let on = true
-    login(ADMIN_EMAIL, ADMIN_PASSWORD)
-      .catch(() => {})
-      .finally(() => {
-        if (on) setUnlocking(false)
-      })
-    return () => {
-      on = false
-    }
-  }, [isAdmin, login])
 
   const members = users.filter((u) => u.role !== 'admin')
   const openCarts = Object.entries(carts || {})
@@ -707,16 +707,7 @@ export default function Admin() {
     }))
     .filter((c) => c.items.length > 0)
 
-  if (!isAdmin) {
-    if (unlocking) {
-      return (
-        <div className="ops-login">
-          <p>Panel açılıyor…</p>
-        </div>
-      )
-    }
-    return <AdminLogin login={login} />
-  }
+  if (!isAdmin) return <AdminLogin loginAdmin={loginAdmin} />
 
   const titles = {
     ozet: ['Özet', 'Bugünkü iş listesi, ciro ve kritik stok'],

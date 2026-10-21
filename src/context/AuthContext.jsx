@@ -43,8 +43,13 @@ export function AuthProvider({ children }) {
   const accountKey = user?.id || 'guest'
 
   const value = useMemo(() => {
+    const isAdminMail = (mail) => mail === ADMIN_EMAIL || mail.toLowerCase() === ADMIN_EMAIL.toLowerCase()
+
     const register = async ({ first, last, email, password }) => {
       const mail = email.trim().toLocaleLowerCase('tr')
+      if (isAdminMail(mail) || isAdminMail(email.trim().toLowerCase())) {
+        throw new Error('Bu e-posta ile kayıt açılamaz.')
+      }
       if (users.some((u) => u.email === mail)) throw new Error('Bu e-posta ile kayıt zaten var.')
       const passHash = await sha256(password)
       const profile = {
@@ -62,14 +67,46 @@ export function AuthProvider({ children }) {
       return profile
     }
 
-    const login = async (email, password) => {
+    const findByEmail = (email) => {
       const raw = email.trim()
       const mailTr = raw.toLocaleLowerCase('tr')
       const mailEn = raw.toLowerCase()
-      const found = users.find((u) => u.email === mailTr || u.email === mailEn)
+      return users.find((u) => u.email === mailTr || u.email === mailEn) || null
+    }
+
+    const login = async (email, password) => {
+      const found = findByEmail(email)
       if (!found) throw new Error('E-posta veya şifre hatalı.')
       const passHash = await sha256(password)
       if (found.passHash !== passHash) throw new Error('E-posta veya şifre hatalı.')
+      setSession({ userId: found.id })
+      return found
+    }
+
+    const loginAdmin = async (email, password) => {
+      const lockRaw = sessionStorage.getItem('sefora-admin-lock')
+      let lock = { fails: 0, until: 0 }
+      try {
+        if (lockRaw) lock = JSON.parse(lockRaw)
+      } catch {
+        lock = { fails: 0, until: 0 }
+      }
+      if (lock.until && Date.now() < lock.until) {
+        const min = Math.ceil((lock.until - Date.now()) / 60000)
+        throw new Error(`Çok fazla deneme. ${min} dakika sonra tekrar deneyin.`)
+      }
+      const fail = () => {
+        const fails = (lock.fails || 0) + 1
+        const until = fails >= 5 ? Date.now() + 3 * 60 * 1000 : 0
+        sessionStorage.setItem('sefora-admin-lock', JSON.stringify({ fails, until }))
+        if (until) throw new Error('Çok fazla deneme. 3 dakika sonra tekrar deneyin.')
+        throw new Error('E-posta veya şifre hatalı.')
+      }
+      const found = findByEmail(email)
+      if (!found || found.role !== 'admin') fail()
+      const passHash = await sha256(password)
+      if (found.passHash !== passHash) fail()
+      sessionStorage.removeItem('sefora-admin-lock')
       setSession({ userId: found.id })
       return found
     }
@@ -85,8 +122,12 @@ export function AuthProvider({ children }) {
 
     const updateProfile = (patch) => {
       if (!user) throw new Error('Önce giriş yapın.')
+      if (user.role === 'admin') throw new Error('Yönetim hesabı mağaza profilinden değiştirilemez.')
       const mail = patch.email.trim().toLocaleLowerCase('tr')
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) throw new Error('Geçerli bir e-posta girin.')
+      if (mail === ADMIN_EMAIL || mail.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+        throw new Error('Bu e-posta kullanılamaz.')
+      }
       if (users.some((u) => u.email === mail && u.id !== user.id)) {
         throw new Error('Bu e-posta başka bir hesapta kayıtlı.')
       }
@@ -145,6 +186,7 @@ export function AuthProvider({ children }) {
     }
 
     const updateOrderStatus = (no, status) => {
+      if (user?.role !== 'admin') return
       setOrders((prev) => prev.map((o) => (o.no === no ? { ...o, status } : o)))
     }
 
@@ -165,9 +207,10 @@ export function AuthProvider({ children }) {
       user,
       guestEmail,
       accountKey,
-      isAdmin: user?.role === 'admin' || user?.email === ADMIN_EMAIL,
+      isAdmin: user?.role === 'admin',
       register,
       login,
+      loginAdmin,
       continueAsGuest,
       logout,
       updateProfile,
