@@ -574,7 +574,7 @@ textarea:focus-visible {
 
 .collections {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 1.15rem;
 }
 
