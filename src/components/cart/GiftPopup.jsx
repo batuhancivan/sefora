@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useCatalog } from '../../context/CatalogContext'
 import { useStore } from '../../context/StoreContext'
 import { IconClose } from '../ui/Icons'
@@ -6,6 +6,7 @@ import { IconClose } from '../ui/Icons'
 export default function GiftPopup() {
   const { giftPrompt, skipGift, addToCart } = useStore()
   const { giftProducts } = useCatalog()
+  const [openId, setOpenId] = useState(null)
 
   const picks = useMemo(() => {
     if (!giftPrompt) return []
@@ -13,7 +14,20 @@ export default function GiftPopup() {
     return same.length ? same : giftProducts
   }, [giftProducts, giftPrompt])
 
+  useEffect(() => {
+    setOpenId(null)
+  }, [giftPrompt])
+
   if (!giftPrompt) return null
+
+  const choose = (p, from) => {
+    addToCart(p, {
+      size: p.sizes?.[0]?.ml || 10,
+      qty: 1,
+      gift: true,
+      from,
+    })
+  }
 
   return (
     <div className="gift-layer" role="dialog" aria-modal="true" aria-labelledby="gift-title">
@@ -22,34 +36,67 @@ export default function GiftPopup() {
         <button className="gift-x icon-btn" aria-label="Kapat" onClick={skipGift}>
           <IconClose />
         </button>
-        <p className="gift-kicker">Hediye seçimi</p>
-        <h2 id="gift-title">Cep boy hediyenizi seçin</h2>
+        <p className="gift-kicker">Hediye · 10 ml cep boy</p>
+        <h2 id="gift-title">Kokunu seç, hediye gitsin</h2>
         <p className="gift-lead">
-          <strong>{giftPrompt.hostName}</strong> sepete eklendi. Yanına bir cep boy (10 ml) hediye olarak ekleyebilirsiniz —
-          görseldeki kokulardan birini seçin.
+          <strong>{giftPrompt.hostName}</strong> sepete eklendi. Özelliklere bakıp notaları oku; ardından hediye olarak
+          ekle — ya da istemiyorsan geç.
         </p>
         <div className="gift-picks">
-          {picks.map((p) => (
-            <button
-              key={p.id}
-              type="button"
-              className="gift-pick"
-              onClick={(e) =>
-                addToCart(p, {
-                  size: p.sizes?.[0]?.ml || 10,
-                  qty: 1,
-                  gift: true,
-                  from: e.currentTarget.querySelector('img'),
-                })
-              }
-            >
-              <img src={p.image} alt={p.name} />
-              <span>
-                <b>{p.name.replace(' Cep Boy', '')}</b>
-                <small>10 ml · Hediye</small>
-              </span>
-            </button>
-          ))}
+          {picks.map((p) => {
+            const open = openId === p.id
+            const title = p.name.replace(' Cep Boy', '')
+            return (
+              <article key={p.id} className={`gift-pick${open ? ' is-open' : ''}`}>
+                <div className="gift-pick-top">
+                  <img src={p.image} alt={title} />
+                  <div className="gift-pick-copy">
+                    <b>{title}</b>
+                    <small>{p.typeLabel || 'Eau de Parfum'} · 10 ml</small>
+                    {p.character && <em>{p.character}</em>}
+                    <div className="gift-pick-actions">
+                      <button
+                        type="button"
+                        className="gift-feat"
+                        aria-expanded={open}
+                        onClick={() => setOpenId(open ? null : p.id)}
+                      >
+                        Özellikler
+                      </button>
+                      <button
+                        type="button"
+                        className="gift-take"
+                        onClick={(e) => choose(p, e.currentTarget.closest('.gift-pick')?.querySelector('img'))}
+                      >
+                        Hediye seç
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                {open && (
+                  <div className="gift-details">
+                    {p.description && <p>{p.description}</p>}
+                    {p.notes && (
+                      <ul>
+                        <li>
+                          <span>Üst</span>
+                          {p.notes.top.join(', ')}
+                        </li>
+                        <li>
+                          <span>Kalp</span>
+                          {p.notes.heart.join(', ')}
+                        </li>
+                        <li>
+                          <span>Dip</span>
+                          {p.notes.base.join(', ')}
+                        </li>
+                      </ul>
+                    )}
+                  </div>
+                )}
+              </article>
+            )
+          })}
         </div>
         <button type="button" className="gift-skip" onClick={skipGift}>
           İstemiyorum
