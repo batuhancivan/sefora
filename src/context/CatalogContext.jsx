@@ -8,6 +8,7 @@ const CatalogContext = createContext(null)
 
 const PRICE_KEYS = { price10: 10, price30: 30, price50: 50, price100: 100 }
 const STOCK_KEYS = { stock10: 10, stock30: 30, stock50: 50, stock100: 100 }
+const MIN_STOCK = 4000
 
 const withDefaults = (p) => {
   const kind = p.kind === 'set' ? 'set' : 'perfume'
@@ -16,10 +17,12 @@ const withDefaults = (p) => {
   const primary = sizes.find((s) => s.ml === 100)?.price ?? sizes[0]?.price ?? p.price
   const stock = { ...(p.stock || {}) }
   sizes.forEach((s) => {
-    if (stock[s.ml] == null) stock[s.ml] = 16
+    const n = Number(stock[s.ml])
+    stock[s.ml] = !n || n <= 16 ? MIN_STOCK : n
   })
   Object.keys(stock).forEach((k) => {
-    stock[k] = Number(stock[k] || 0)
+    const n = Number(stock[k])
+    stock[k] = !n || n <= 16 ? MIN_STOCK : n
   })
   return {
     ...p,
@@ -180,7 +183,7 @@ export function CatalogProvider({ children }) {
       const setMl = Number(draft.setMl) || 8
       const ml = isSet ? setMl : line === 'cep' ? 10 : line === 'canta' ? 30 : 100
       const price = Number(isSet ? draft.price100 : line === 'cep' ? draft.price10 : line === 'canta' ? draft.price30 : draft.price100) || (isSet ? 890 : line === 'cep' ? 690 : line === 'canta' ? 1290 : 2490)
-      const stockN = Number(draft.stock100 || draft.stock10 || draft.stock30) || 12
+      const stockN = Math.max(MIN_STOCK, Number(draft.stock100 || draft.stock10 || draft.stock30) || MIN_STOCK)
       const product = withDefaults({
         id,
         sku: `CS-${id.slice(-6).toUpperCase()}`,
@@ -209,7 +212,7 @@ export function CatalogProvider({ children }) {
         stock:
           isSet || line === 'cep' || line === 'canta'
             ? { [ml]: stockN }
-            : { 50: Number(draft.stock50) || 12, 100: stockN },
+            : { 50: Math.max(MIN_STOCK, Number(draft.stock50) || MIN_STOCK), 100: stockN },
         description: draft.description?.trim() || `${name} Casa Sefora koleksiyonuna eklendi.`,
         notes: {
           top: ['Bergamot'],

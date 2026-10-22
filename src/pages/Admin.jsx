@@ -329,10 +329,10 @@ function Products({ products, orders, saveProduct, addProduct }) {
     price30: 1290,
     price50: 1890,
     price100: 2490,
-    stock10: 12,
-    stock30: 12,
-    stock50: 12,
-    stock100: 12,
+    stock10: 4000,
+    stock30: 4000,
+    stock50: 4000,
+    stock100: 4000,
     description: '',
   })
 
