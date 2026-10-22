@@ -5,12 +5,13 @@ import { useCatalog } from '../context/CatalogContext'
 import ProductCard from '../components/product/ProductCard'
 import { IconClose } from '../components/ui/Icons'
 
-function applyFilters(list, { gender, family, price, size, sort, extra }) {
+function applyFilters(list, { gender, genderPick, family, price, size, sort, extra }) {
   let items = [...list]
   if (extra === 'set') items = items.filter((p) => p.kind === 'set' || p.line === 'set')
   else if (extra === 'cep') items = items.filter((p) => p.line === 'cep')
   else if (extra === 'canta') items = items.filter((p) => p.line === 'canta')
   else if (gender) items = items.filter((p) => p.gender === gender && p.kind !== 'set' && (p.line || 'lux') === 'lux')
+  if (genderPick) items = items.filter((p) => p.gender === genderPick)
   if (extra === 'new') items = items.filter((p) => p.new)
   if (extra === 'best') items = items.filter((p) => p.bestSeller)
   if (family) items = items.filter((p) => p.family === family)
@@ -23,13 +24,52 @@ function applyFilters(list, { gender, family, price, size, sort, extra }) {
   return items
 }
 
-function FilterFields({ family, setFamily, price, setPrice, size, setSize, id = 'd', setMode, extra }) {
+function FilterFields({
+  family,
+  setFamily,
+  price,
+  setPrice,
+  size,
+  setSize,
+  id = 'd',
+  setMode,
+  extra,
+  genderPick,
+  setGenderPick,
+}) {
   const catLabel =
     extra === 'cep' ? 'Cep Boy 10 ml' : extra === 'canta' ? 'Çanta Boy 30 ml' : extra === 'set' ? 'Deneme Seti' : 'Eau de Parfum'
   return (
     <>
       <h3>Kategori</h3>
       <p className="product-meta">{catLabel}</p>
+      {setGenderPick && (
+        <>
+          <h3>Cinsiyet</h3>
+          <label>
+            <input type="radio" name={`gender-${id}`} checked={genderPick === ''} onChange={() => setGenderPick('')} />
+            Tümü
+          </label>
+          <label>
+            <input
+              type="radio"
+              name={`gender-${id}`}
+              checked={genderPick === 'women'}
+              onChange={() => setGenderPick('women')}
+            />
+            Kadın
+          </label>
+          <label>
+            <input
+              type="radio"
+              name={`gender-${id}`}
+              checked={genderPick === 'men'}
+              onChange={() => setGenderPick('men')}
+            />
+            Erkek
+          </label>
+        </>
+      )}
       <h3>Koku Ailesi</h3>
       <label>
         <input type="radio" name={`family-${id}`} checked={family === ''} onChange={() => setFamily('')} />
@@ -88,12 +128,14 @@ export default function Category({ gender, extra, title, lead, crumb }) {
   const [family, setFamily] = useState('')
   const [price, setPrice] = useState('')
   const [size, setSize] = useState('')
+  const [genderPick, setGenderPick] = useState('')
   const [sort, setSort] = useState('featured')
   const [sheet, setSheet] = useState(false)
+  const mixed = extra === 'canta'
 
   const items = useMemo(
-    () => applyFilters(shopProducts, { gender, family, price, size, sort, extra }),
-    [shopProducts, gender, family, price, size, sort, extra],
+    () => applyFilters(shopProducts, { gender, genderPick, family, price, size, sort, extra }),
+    [shopProducts, gender, genderPick, family, price, size, sort, extra],
   )
 
   return (
@@ -128,6 +170,8 @@ export default function Category({ gender, extra, title, lead, crumb }) {
               setSize={setSize}
               setMode={extra === 'set' || extra === 'cep' || extra === 'canta'}
               extra={extra}
+              genderPick={genderPick}
+              setGenderPick={mixed ? setGenderPick : null}
             />
           </aside>
           <div className="product-grid">
@@ -162,6 +206,8 @@ export default function Category({ gender, extra, title, lead, crumb }) {
               setSize={setSize}
               setMode={extra === 'set' || extra === 'cep' || extra === 'canta'}
               extra={extra}
+              genderPick={genderPick}
+              setGenderPick={mixed ? setGenderPick : null}
             />
             <button className="btn btn-dark btn-full" style={{ marginTop: '1rem' }} onClick={() => setSheet(false)}>
               Sonuçları Gör
