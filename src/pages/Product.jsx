@@ -87,7 +87,14 @@ export default function Product() {
           <div>
             <p className="pdp-brand">CASA SEFORA</p>
             <h1>{product.name.replace(/^SEFORA\s+/i, '')}</h1>
-            <p className="pdp-type">{product.kind === 'set' ? 'Deneme Seti' : 'Eau de Parfum'}</p>
+            <p className="pdp-type">
+              {product.kind === 'set'
+                ? 'Deneme Seti'
+                : product.typeLabel
+                  ? `Eau de Parfum · ${product.typeLabel}`
+                  : 'Eau de Parfum'}
+            </p>
+            {product.character && <p className="product-meta">{product.character}</p>}
             <p className="pdp-price">
               <PriceTag amount={price} size="lg" />
             </p>

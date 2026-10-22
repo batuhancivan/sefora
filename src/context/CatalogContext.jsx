@@ -60,6 +60,9 @@ const hydrate = (saved) => {
         image: over?.image || p.image,
         images: over?.images?.length ? over.images : p.images,
         notes: over?.notes || p.notes,
+        description: over?.description || p.description,
+        character: over?.character || p.character,
+        typeLabel: over?.typeLabel || p.typeLabel,
       },
       i,
     )
@@ -106,7 +109,7 @@ const applyPriceStock = (next, patch, prev) => {
 
 export function CatalogProvider({ children }) {
   const { isAdmin } = useAuth()
-  const [raw, setRaw] = useLocalStorage('sefora-catalog-v4', [])
+  const [raw, setRaw] = useLocalStorage('sefora-catalog-v5', [])
   const products = useMemo(() => hydrate(raw), [raw])
   const shopProducts = useMemo(
     () => products.filter((p) => p.active !== false && p.line !== 'cep'),

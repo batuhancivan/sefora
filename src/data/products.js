@@ -15,12 +15,14 @@ const SCENTS = [
     featured: true,
     isNew: true,
     bestSeller: true,
+    character: 'Kadifemsi, ışıltılı, neşeli ve bahar tazeliğinde.',
+    typeLabel: 'Taze Çiçeksi — Meyvemsi',
     description:
-      'Fiore di Pesca, şeftali çiçeğinin ilk açışını taşır. Işıklı, sulu ve feminen bir imza; bahar sabahlarının yumuşak ışıltısını gün boyu ciltte bırakır.',
+      'Güneşin ilk ışıklarıyla uyanan bir İtalyan bahçesi... Beyaz şeftalinin sulu ve tatlı dokunuşu, pembe şakayıkların kadifemsi yapraklarıyla dans ediyor. Fiore di Pesca: Teninizde baharın neşesi, İtalyan meyvelerinin en zarif uyanışı.',
     notes: {
-      top: ['Şeftali çiçeği', 'Bergamot', 'Armut'],
-      heart: ['Beyaz çiçek', 'Gül', 'Osmanthus'],
-      base: ['Misk', 'Sandal', 'Vanilya'],
+      top: ['Beyaz Şeftali', 'Kayısı Nektarı'],
+      heart: ['Şeftali Çiçeği', 'Pembe Şakayık', 'Frezya'],
+      base: ['Kaşmir Ağacı', 'Duru Amber'],
     },
   },
   {
@@ -31,12 +33,14 @@ const SCENTS = [
     featured: true,
     isNew: true,
     bestSeller: false,
+    character: 'Romantik, merak uyandırıcı, taze ve masalsı.',
+    typeLabel: 'Meyvemsi — Çiçeksi',
     description:
-      'Giardino Segreto, gizli bir İtalyan bahçesinin serin gölgesinden doğar. Yeşil yaprak, çiçek ve hafif odun; sakin, zarif ve keşfe açık bir karakter sunar.',
+      'Taş kemerlerin ardında gizlenen, zamandan bağımsız bir İtalyan avlusu... Sabah çiğiyle yıkanmış sulu armut ve tatlı frenk üzümü, kadifemsi Şam gülleri ve taze manolyaların dansına karışıyor. Giardino Segreto: Saklı kalmış bir bahçenin en zarif sırrı.',
     notes: {
-      top: ['Yeşil yaprak', 'Bergamot', 'Frenk üzümü'],
-      heart: ['Yasemin', 'Sümbül', 'Nergis'],
-      base: ['Sedir', 'Misk', 'Yosun'],
+      top: ['Sulu İtalyan Armudu', 'Frenk Üzümü'],
+      heart: ['Şam Gülü', 'Manolya', 'Yasemin'],
+      base: ['Beyaz Misk', 'Açık Sandal Ağacı'],
     },
   },
   {
@@ -47,12 +51,14 @@ const SCENTS = [
     featured: true,
     isNew: false,
     bestSeller: true,
+    character: 'Cüretkar, lüks, tensel ve geceye yakışır derinlikte.',
+    typeLabel: 'Çiçeksi — Kehribarlı',
     description:
-      'Rosa Velluto, kadife dokunuşlu bir gül yorumudur. Yoğun, sıcak ve davetkâr; akşam ışığında açılan kadife yaprakların izini taşır.',
+      'Aşırılıktan uzak, kusursuz bir doku. Rosa Velluto, İtalyan ipeğinin ten üzerindeki ağırlıksız akışından ilham alıyor. Sabah toplanan nemli gül yaprakları, sıcak kehribarın sakin ve derin tonlarıyla sarılıyor. Bağırmayan ama odaya girdiğiniz an fark edilen bir asalet.',
     notes: {
-      top: ['Pembe biber', 'Limon', 'Ahududu'],
-      heart: ['Şam gülü', 'Peony', 'İris'],
-      base: ['Amber', 'Paçuli', 'Benzoin'],
+      top: ['Pembe Biber', 'Kırmızı Meyveler'],
+      heart: ['Koyu Şam Gülü', 'İris'],
+      base: ['Madagaskar Vanilyası', 'Paçuli', 'Sıcak Kehribar'],
     },
   },
   {
@@ -63,12 +69,14 @@ const SCENTS = [
     featured: true,
     isNew: true,
     bestSeller: true,
+    character: 'Dingin, yeşil, entelektüel ve sofistike.',
+    typeLabel: 'Aromatik — Ormansı',
     description:
-      'Cipresso di Siena, Toskana servilerinin kuru gölgesinden ilham alır. Odunsu, aromatik ve net; modern bir erkek imzası çizer.',
+      'Toskana tepelerinden yükselen asil servilerin gölgesinde, zaman yavaşlar. Güneşte ısınmış ardıç meyveleri ve yabani kekik esintisi, topraksı vetiverin sakin gücüyle birleşiyor. Cipresso di Siena: Doğanın zarafetiyle işlenmiş yeşil ve aromatik bir İtalyan uyanışı.',
     notes: {
-      top: ['Servi', 'Bergamot', 'Karabiber'],
-      heart: ['Lavanta', 'Adaçayı', 'Ardıç'],
-      base: ['Sedir', 'Vetiver', 'Misk'],
+      top: ['Ardıç Meyvesi', 'Yabani Kekik'],
+      heart: ['Toskana Servisi', 'Çam İğneleri'],
+      base: ['Topraksı Vetiver', 'Meşe Yosunu'],
     },
   },
   {
@@ -79,28 +87,32 @@ const SCENTS = [
     featured: true,
     isNew: false,
     bestSeller: true,
+    character: 'Heykelsi, zamansız, karizmatik ve otoriter.',
+    typeLabel: 'Odunsu — Baharatlı',
     description:
-      'Legno Imperiale, derin ve kararlı bir odun kompozisyonudur. Sıcak baharat, kuru odun ve amber; ölçülü bir güç hissi bırakır.',
+      'Roma sütunlarının zamansız gücü, modern erkeğin sessiz otoritesiyle buluşuyor. Kakule ve bergamotun asil tazeliği, sedir ve sandal ağacının heykelsi sıcaklığına teslim oluyor. Legno Imperiale: Zamana direnen imza.',
     notes: {
-      top: ['Cardamom', 'Portakal kabuğu', 'Elemi'],
-      heart: ['Sedir', 'Tütün yaprağı', 'Iris'],
-      base: ['Sandal', 'Amber', 'Oud akoru'],
+      top: ['Kakule', 'Calabria Bergamotu'],
+      heart: ['Atlas Sedir Ağacı', 'Adaçayı'],
+      base: ['Sandal Ağacı', 'Vetiver', 'Ambroxan'],
     },
   },
   {
     id: 'vento-d-amalfi',
     name: "Vento d'Amalfi",
     gender: 'men',
-    family: 'Fresh',
+    family: 'Citrus',
     featured: true,
     isNew: true,
     bestSeller: false,
+    character: 'Enerjik, okyanusal, ferahlatıcı ve cüretkar.',
+    typeLabel: 'Narenciye — Akuatik',
     description:
-      'Vento d’Amalfi, kıyı rüzgârının tuzlu ferahlığını taşır. Narenciye, deniz ve güneş ısınmış taş; gündüz ve yaz ritmine uygun çağdaş bir izdir.',
+      'Uçurumlara çarpan Akdeniz dalgaları ve yamaçları saran narenciye bahçeleri... Calabria bergamotunun canlı kıvılcımı, iyotlu deniz tuzu ve kıyı biberiyesinin ferahlığıyla teninize çarpıyor. Vento d’Amalfi: Güneşin, denizin ve sınırsız özgürlüğün teninizdeki esintisi.',
     notes: {
-      top: ['Limon', 'Greyfurt', 'Deniz notası'],
-      heart: ['Biberiye', 'Nane', 'Neroli'],
-      base: ['Amberwood', 'Misk', 'Tuzlu odun'],
+      top: ['Calabria Bergamotu', 'Yeşil Mandalina'],
+      heart: ['İyotlu Deniz Tuzu', 'Kıyı Biberiyesi'],
+      base: ['Mineral Akorlar', 'Beyaz Sedir'],
     },
   },
 ]
@@ -131,6 +143,8 @@ export const PRODUCTS = SCENTS.flatMap((scent) =>
       kind: 'perfume',
       line,
       type: 'Eau de Parfum',
+      typeLabel: scent.typeLabel,
+      character: scent.character,
       size: line === 'lux' ? '50 / 100 ml' : label,
       sizes:
         line === 'lux'
