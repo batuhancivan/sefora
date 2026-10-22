@@ -7,7 +7,13 @@ import { IconHeart } from '../ui/Icons'
 export default function ProductCard({ product, onAdd }) {
   const { isFavorite, toggleFavorite, addToCart, trackEvent } = useStore()
   const fav = isFavorite(product.id)
-  const title = product.name.replace(/ Çanta Boy$/, '').replace(/ Cep Boy$/, '')
+  const title = product.name.replace(/\s+(Çanta|Cep)\s+Boy$/i, '')
+  const volume =
+    product.kind === 'set'
+      ? product.size
+      : product.line === 'lux'
+        ? '50 / 100 ml'
+        : `${product.sizes?.[0]?.ml || 30} ml`
 
   return (
     <article className="product-card">
@@ -28,8 +34,8 @@ export default function ProductCard({ product, onAdd }) {
         </Link>
         <p className="product-meta">
           {product.kind === 'set'
-            ? `Deneme seti · ${product.size}`
-            : `${product.gender === 'women' ? 'Kadın' : 'Erkek'} · EDP ${product.size}`}
+            ? `Deneme seti · ${volume}`
+            : `${product.gender === 'women' ? 'Kadın' : 'Erkek'} · ${volume}`}
         </p>
         <p className="product-price">
           <PriceTag amount={product.price} />

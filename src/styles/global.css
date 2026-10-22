@@ -663,8 +663,9 @@ textarea:focus-visible {
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.6rem 1.2rem;
+  align-items: stretch;
 }
 
 .product-card {
@@ -672,20 +673,23 @@ textarea:focus-visible {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  height: 100%;
 }
 
 .product-media {
   position: relative;
+  display: block;
+  width: 100%;
   background: var(--ivory-2);
   overflow: hidden;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 5;
 }
 
 .product-media img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: center;
+  object-fit: cover;
+  object-position: center center;
   transition: transform 0.8s var(--ease);
 }
 
@@ -720,18 +724,25 @@ textarea:focus-visible {
 .product-body {
   padding: 0.95rem 0.15rem 0;
   text-align: center;
-  flex: 1;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
 }
 
+.product-body > a {
+  display: block;
+  min-height: 2.6em;
+}
+
 .product-body h3 {
   font-family: var(--font-serif);
-  font-size: clamp(0.95rem, 2.6vw, 1.2rem);
+  font-size: clamp(0.95rem, 2.6vw, 1.15rem);
   font-weight: 500;
-  line-height: 1.25;
-  min-height: 2.5em;
-  overflow-wrap: break-word;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .product-card .btn {
@@ -747,11 +758,14 @@ textarea:focus-visible {
   color: var(--muted);
   font-size: 0.78rem;
   margin: 0.2rem 0 0.35rem;
+  min-height: 1.2em;
+  white-space: nowrap;
 }
 
 .product-price {
   font-size: 0.9rem;
   margin-bottom: 0.75rem;
+  min-height: 1.55em;
 }
 
 .sale-flag {
