@@ -85,7 +85,10 @@ export default function Product() {
             </div>
           </div>
           <div>
-            <p className="pdp-brand">CASA SEFORA</p>
+            <p className="pdp-brand">
+              <span className="logo-casa">CASA</span>
+              <span className="logo-name">SEFORA</span>
+            </p>
             <h1>{product.name.replace(/^SEFORA\s+/i, '')}</h1>
             <p className="pdp-type">
               {product.kind === 'set'

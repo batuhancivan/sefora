@@ -17,6 +17,8 @@
   --announce-h: 2.05rem;
   --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
   --font-sans: 'Outfit', system-ui, sans-serif;
+  --font-casa: 'Times New Roman', Times, Tinos, serif;
+  --font-sefora: Gotham, 'Gotham Light', Montserrat, 'Helvetica Neue', Arial, sans-serif;
   --max: 1240px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -387,22 +389,23 @@ textarea:focus-visible {
 
 .logo-casa {
   display: block;
-  font-family: var(--font-sans);
-  font-size: 0.58rem;
-  letter-spacing: 0.42em;
+  font-family: var(--font-casa);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.46em;
   color: var(--gold);
-  margin-right: -0.42em;
-  margin-bottom: 0.22rem;
+  margin-right: -0.46em;
+  margin-bottom: 0.18rem;
 }
 
 .logo-name {
   display: block;
-  font-family: var(--font-serif);
-  font-size: clamp(1.4rem, 2vw, 1.9rem);
-  letter-spacing: 0.28em;
-  font-weight: 500;
+  font-family: var(--font-sefora);
+  font-size: clamp(1.28rem, 1.9vw, 1.72rem);
+  letter-spacing: 0.34em;
+  font-weight: 200;
   font-style: normal;
-  margin-right: -0.28em;
+  margin-right: -0.34em;
   line-height: 1;
 }
 
@@ -491,7 +494,9 @@ textarea:focus-visible {
 }
 
 .hero-house {
-  font-size: clamp(0.78rem, 1.5vw, 1rem);
+  font-family: var(--font-casa);
+  font-size: clamp(0.9rem, 1.7vw, 1.15rem);
+  font-weight: 400;
   letter-spacing: 0.52em;
   color: #e8d09a;
   padding-left: 0.52em;
@@ -500,12 +505,13 @@ textarea:focus-visible {
 }
 
 .hero-copy h1 {
+  font-family: var(--font-sefora);
   font-size: clamp(3.1rem, 8.5vw, 6.6rem);
-  letter-spacing: 0.28em;
-  font-weight: 500;
+  letter-spacing: 0.32em;
+  font-weight: 200;
   font-style: normal;
   line-height: 0.9;
-  padding-left: 0.28em;
+  padding-left: 0.32em;
   color: #fff;
   text-shadow: 0 6px 32px rgba(0, 0, 0, 0.72), 0 1px 10px rgba(0, 0, 0, 0.9);
 }
@@ -565,6 +571,7 @@ textarea:focus-visible {
   display: grid;
   place-items: center;
   text-align: center;
+  font-family: var(--font-casa);
   font-size: 0.52rem;
   letter-spacing: 0.18em;
   color: var(--gold);
@@ -574,10 +581,10 @@ textarea:focus-visible {
 
 .seal b {
   display: block;
-  font-family: var(--font-serif);
+  font-family: var(--font-sefora);
   font-size: 0.95rem;
   letter-spacing: 0.22em;
-  font-weight: 500;
+  font-weight: 200;
 }
 
 /* Sections */
@@ -1377,6 +1384,26 @@ textarea:focus-visible {
   letter-spacing: 0.32em;
   font-size: 0.72rem;
   color: var(--gold);
+}
+
+.pdp-brand .logo-casa,
+.pdp-brand .logo-name {
+  display: inline;
+  font-size: inherit;
+  letter-spacing: inherit;
+  margin: 0;
+  color: inherit;
+}
+
+.pdp-brand .logo-casa {
+  font-family: var(--font-casa);
+  font-weight: 400;
+  margin-right: 0.45em;
+}
+
+.pdp-brand .logo-name {
+  font-family: var(--font-sefora);
+  font-weight: 300;
 }
 
 .pdp h1 {
