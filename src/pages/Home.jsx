@@ -12,7 +12,6 @@ const TABS = [
   { id: 'men', label: 'Erkek' },
   { id: 'cep', label: 'Cep Boy' },
   { id: 'canta', label: 'Çanta Boy' },
-  { id: 'set', label: 'Deneme Setleri' },
   { id: 'new', label: 'Yeni' },
   { id: 'best', label: 'En Çok Satanlar' },
 ]

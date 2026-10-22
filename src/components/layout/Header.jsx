@@ -16,7 +16,6 @@ const NAV = [
   ['/erkek', 'Erkek'],
   ['/cep-boy', 'Cep Boy'],
   ['/canta-boy', 'Çanta Boy'],
-  ['/deneme-setleri', 'Deneme Setleri'],
   ['/koleksiyonlar', 'Koleksiyonlar'],
   ['/hakkimizda', 'Hakkımızda'],
 ]
