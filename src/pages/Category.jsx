@@ -70,6 +70,10 @@ function FilterFields({ family, setFamily, price, setPrice, size, setSize, id = 
             30 ml · Çanta boy
           </label>
           <label>
+            <input type="radio" name={`size-${id}`} checked={size === '50'} onChange={() => setSize('50')} />
+            50 ml
+          </label>
+          <label>
             <input type="radio" name={`size-${id}`} checked={size === '100'} onChange={() => setSize('100')} />
             100 ml
           </label>

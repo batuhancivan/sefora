@@ -170,6 +170,7 @@ function Dashboard({ orders, members, products, openCarts, setPage }) {
                     <th>Ürün</th>
                     <th className="num">10</th>
                     <th className="num">30</th>
+                    <th className="num">50</th>
                     <th className="num">100</th>
                   </tr>
                 </thead>
@@ -179,6 +180,7 @@ function Dashboard({ orders, members, products, openCarts, setPage }) {
                       <td>{p.name}</td>
                       <td className="num">{p.stock[10] ?? '—'}</td>
                       <td className="num">{p.stock[30] ?? '—'}</td>
+                      <td className="num">{p.stock[50] ?? '—'}</td>
                       <td className="num">{p.stock[100] ?? '—'}</td>
                     </tr>
                   ))}
@@ -323,9 +325,11 @@ function Products({ products, orders, saveProduct, addProduct }) {
     family: 'Floral',
     price10: 690,
     price30: 1290,
+    price50: 1890,
     price100: 2490,
     stock10: 12,
     stock30: 12,
+    stock50: 12,
     stock100: 12,
     description: '',
   })
@@ -378,9 +382,11 @@ function Products({ products, orders, saveProduct, addProduct }) {
                 <th>Cinsiyet</th>
                 <th className="num">10 ml</th>
                 <th className="num">30 ml</th>
+                <th className="num">50 ml</th>
                 <th className="num">100 ml</th>
                 <th className="num">Stok 10</th>
                 <th className="num">Stok 30</th>
+                <th className="num">Stok 50</th>
                 <th className="num">Stok 100</th>
                 <th className="num">Satılan</th>
                 <th>Durum</th>
@@ -413,6 +419,7 @@ function Products({ products, orders, saveProduct, addProduct }) {
                     </td>
                     <td className="num">{formatPrice(p.sizes.find((s) => s.ml === 10)?.price || 0)}</td>
                     <td className="num">{formatPrice(p.sizes.find((s) => s.ml === 30)?.price || 0)}</td>
+                    <td className="num">{formatPrice(p.sizes.find((s) => s.ml === 50)?.price || 0)}</td>
                     <td className="num">{formatPrice(p.price)}</td>
                     <td className="num">
                       <input
@@ -430,6 +437,15 @@ function Products({ products, orders, saveProduct, addProduct }) {
                         min="0"
                         value={p.stock[30] ?? 0}
                         onChange={(e) => saveProduct(p.id, { stock30: e.target.value })}
+                      />
+                    </td>
+                    <td className="num">
+                      <input
+                        className="ops-stock"
+                        type="number"
+                        min="0"
+                        value={p.stock[50] ?? 0}
+                        onChange={(e) => saveProduct(p.id, { stock50: e.target.value })}
                       />
                     </td>
                     <td className="num">
@@ -531,6 +547,12 @@ function Products({ products, orders, saveProduct, addProduct }) {
             type="number"
             value={form.sizes.find((s) => s.ml === 30)?.price || 0}
             onChange={(e) => saveProduct(form.id, { price30: e.target.value })}
+          />
+          <label>50 ml fiyat (TL)</label>
+          <input
+            type="number"
+            value={form.sizes.find((s) => s.ml === 50)?.price || 0}
+            onChange={(e) => saveProduct(form.id, { price50: e.target.value })}
           />
           <label>100 ml fiyat (TL)</label>
           <input type="number" value={form.price} onChange={(e) => saveProduct(form.id, { price100: e.target.value })} />

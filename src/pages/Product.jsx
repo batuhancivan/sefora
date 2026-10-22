@@ -114,7 +114,17 @@ export default function Product() {
             </div>
             <p className="product-meta">{left > 0 ? `Stok: ${left} adet` : 'Bu boyutta stok yok'}</p>
             <div className="pdp-actions">
-              <button className="btn btn-dark" disabled={left < 1} onClick={() => addToCart(product, { size, qty: Math.min(qty, left) })}>
+              <button
+                className="btn btn-dark"
+                disabled={left < 1}
+                onClick={(e) =>
+                  addToCart(product, {
+                    size,
+                    qty: Math.min(qty, left),
+                    from: e.currentTarget.closest('.pdp')?.querySelector('.gallery-main img'),
+                  })
+                }
+              >
                 Sepete Ekle
               </button>
               <button className="btn btn-outline" onClick={() => toggleFavorite(product.id)}>

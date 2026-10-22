@@ -35,9 +35,10 @@ export default function ProductCard({ product, onAdd }) {
         </p>
         <button
           className="btn btn-outline btn-full"
-          onClick={() => {
-            const size = product.sizes?.[0]?.ml ?? 100
-            addToCart(product, { size, qty: 1 })
+          onClick={(e) => {
+            const size = product.sizes?.find((s) => s.ml === 100)?.ml ?? product.sizes?.[0]?.ml ?? 100
+            const from = e.currentTarget.closest('.product-card')?.querySelector('.product-media img')
+            addToCart(product, { size, qty: 1, from })
             onAdd?.()
           }}
         >

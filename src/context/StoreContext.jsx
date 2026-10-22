@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { salePrice, vatFromGross } from '../utils/promo'
 import { shippingFor } from '../utils/shipping'
@@ -33,6 +33,34 @@ export function StoreProvider({ children }) {
   })
   const [viewMap, setViewMap] = useLocalStorage('sefora-views', { guest: [] })
   const [stats, setStats] = useLocalStorage('sefora-stats', { events: [] })
+  const [flies, setFlies] = useState([])
+  const [cartPulse, setCartPulse] = useState(0)
+
+  const endFly = useCallback((id) => {
+    setFlies((prev) => prev.filter((f) => f.id !== id))
+  }, [])
+
+  const spawnFly = useCallback((product, fromEl) => {
+    const node = fromEl?.nodeType ? fromEl : null
+    const img = node?.tagName === 'IMG' ? node : node?.querySelector?.('img')
+    const from = img?.getBoundingClientRect?.()
+    const bag = document.getElementById('nav-cart')?.getBoundingClientRect()
+    setCartPulse((n) => n + 1)
+    if (!from || !bag) return
+    setFlies((prev) => [
+      ...prev,
+      {
+        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        src: img?.currentSrc || img?.src || product.image,
+        w: Math.min(from.width, 180),
+        h: Math.min(from.height, 180),
+        x0: from.left,
+        y0: from.top,
+        x1: bag.left + bag.width / 2 - 16,
+        y1: bag.top + bag.height / 2 - 16,
+      },
+    ])
+  }, [])
 
   useEffect(() => {
     if (!user) return
@@ -100,7 +128,7 @@ export function StoreProvider({ children }) {
   }
 
   const value = useMemo(() => {
-    const addToCart = (product, { size = 100, qty = 1 } = {}) => {
+    const addToCart = (product, { size = 100, qty = 1, from } = {}) => {
       const live = products.find((p) => p.id === product.id) || product
       const cap = live.stock?.[size] ?? 99
       setCart((prev) => {
@@ -113,6 +141,7 @@ export function StoreProvider({ children }) {
         const price = product.sizes.find((s) => s.ml === size)?.price ?? product.price
         return [...prev, { id: product.id, size, qty: Math.min(cap, qty), price }]
       })
+      spawnFly(live, from)
       trackEvent('cart', product.id)
     }
 
@@ -184,8 +213,11 @@ export function StoreProvider({ children }) {
       trackView,
       trackEvent,
       stats,
+      flies,
+      endFly,
+      cartPulse,
     }
-  }, [cart, carts, favorites, viewed, favMap, accountKey, setFavMap, trackView, trackEvent, stats, products])
+  }, [cart, carts, favorites, viewed, favMap, accountKey, setFavMap, trackView, trackEvent, stats, products, spawnFly, flies, endFly, cartPulse])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

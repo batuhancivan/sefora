@@ -131,9 +131,15 @@ export const PRODUCTS = SCENTS.flatMap((scent) =>
       kind: 'perfume',
       line,
       type: 'Eau de Parfum',
-      size: label,
-      sizes: [{ ml, price }],
-      price,
+      size: line === 'lux' ? '50 / 100 ml' : label,
+      sizes:
+        line === 'lux'
+          ? [
+              { ml: 50, price: 1890 },
+              { ml: 100, price },
+            ]
+          : [{ ml, price }],
+      price: line === 'lux' ? 2490 : price,
       image: images[0],
       images,
       family: scent.family,

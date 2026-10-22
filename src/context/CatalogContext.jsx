@@ -36,6 +36,17 @@ const withDefaults = (p) => {
   }
 }
 
+const mergeSizes = (seed, over) => {
+  const base = seed?.length ? seed : over || []
+  const extra = over || []
+  const byMl = Object.fromEntries(extra.map((s) => [s.ml, s]))
+  const mls = [...new Set([...base.map((s) => s.ml), ...extra.map((s) => s.ml)])].sort((a, b) => a - b)
+  return mls.map((ml) => ({
+    ml,
+    price: byMl[ml]?.price ?? base.find((s) => s.ml === ml)?.price ?? 0,
+  }))
+}
+
 const hydrate = (saved) => {
   const prev = Array.isArray(saved) ? saved : []
   const byId = Object.fromEntries(prev.map((p) => [p.id, p]))
@@ -45,6 +56,7 @@ const hydrate = (saved) => {
       {
         ...p,
         ...(over || {}),
+        sizes: mergeSizes(p.sizes, over?.sizes),
         image: over?.image || p.image,
         images: over?.images?.length ? over.images : p.images,
         notes: over?.notes || p.notes,
@@ -94,7 +106,7 @@ const applyPriceStock = (next, patch, prev) => {
 
 export function CatalogProvider({ children }) {
   const { isAdmin } = useAuth()
-  const [raw, setRaw] = useLocalStorage('sefora-catalog-v3', [])
+  const [raw, setRaw] = useLocalStorage('sefora-catalog-v4', [])
   const products = useMemo(() => hydrate(raw), [raw])
   const shopProducts = useMemo(() => products.filter((p) => p.active !== false), [products])
 
@@ -168,8 +180,14 @@ export function CatalogProvider({ children }) {
         kind: isSet ? 'set' : 'perfume',
         line,
         type: isSet ? 'Deneme Seti' : 'Eau de Parfum',
-        size: isSet ? `${setMl} ml` : line === 'cep' ? 'Cep boy 10 ml' : line === 'canta' ? 'Çanta boy 30 ml' : '100 ml',
-        sizes: [{ ml, price }],
+        size: isSet ? `${setMl} ml` : line === 'cep' ? 'Cep boy 10 ml' : line === 'canta' ? 'Çanta boy 30 ml' : '50 / 100 ml',
+        sizes:
+          isSet || line === 'cep' || line === 'canta'
+            ? [{ ml, price }]
+            : [
+                { ml: 50, price: Number(draft.price50) || 1890 },
+                { ml: 100, price },
+              ],
         price,
         image: gallery[0],
         images: gallery,
@@ -178,7 +196,10 @@ export function CatalogProvider({ children }) {
         new: true,
         bestSeller: false,
         active: true,
-        stock: { [ml]: stockN },
+        stock:
+          isSet || line === 'cep' || line === 'canta'
+            ? { [ml]: stockN }
+            : { 50: Number(draft.stock50) || 12, 100: stockN },
         description: draft.description?.trim() || `${name} Casa Sefora koleksiyonuna eklendi.`,
         notes: {
           top: ['Bergamot'],

@@ -6,6 +6,7 @@ import { IconBag, IconHeart, IconMenu, IconSearch, IconUser } from '../ui/Icons'
 import BrandMark from '../ui/BrandMark'
 import SearchOverlay from '../search/SearchOverlay'
 import CartDrawer from '../cart/CartDrawer'
+import CartFly from '../cart/CartFly'
 import MobileMenu from '../nav/MobileMenu'
 import Countdown from '../promo/Countdown'
 import { SALE_PERCENT } from '../../utils/promo'
@@ -22,7 +23,7 @@ const NAV = [
 
 export default function Header() {
   const { pathname } = useLocation()
-  const { cartCount, favorites } = useStore()
+  const { cartCount, favorites, cartPulse } = useStore()
   const { user } = useAuth()
   const [scrolled, setScrolled] = useState(false)
   const [search, setSearch] = useState(false)
@@ -107,13 +108,20 @@ export default function Header() {
               <IconHeart />
               {favorites.length > 0 && <span className="badge">{favorites.length}</span>}
             </Link>
-            <button className="icon-btn" aria-label="Sepet" onClick={() => setCart(true)}>
+            <button
+              id="nav-cart"
+              className={`icon-btn${cartPulse ? ' is-catch' : ''}`}
+              key={`cart-${cartPulse}`}
+              aria-label="Sepet"
+              onClick={() => setCart(true)}
+            >
               <IconBag />
               {cartCount > 0 && <span className="badge">{cartCount}</span>}
             </button>
           </div>
         </div>
       </header>
+      <CartFly />
       <SearchOverlay open={search} onClose={() => setSearch(false)} />
       <CartDrawer open={cart} onClose={() => setCart(false)} />
       <MobileMenu
