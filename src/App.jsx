@@ -60,17 +60,7 @@ export default function App() {
             <Category extra="best" title="Çok Satanlar" crumb="Çok Satanlar" lead="En çok tercih edilen Casa Sefora kokuları." />
           }
         />
-        <Route
-          path="/cep-boy"
-          element={
-            <Category
-              extra="cep"
-              title="Cep Boy 10 ml"
-              crumb="Cep Boy"
-              lead="Cebinizde taşınan Casa Sefora imzası. 10 ml Eau de Parfum."
-            />
-          }
-        />
+        <Route path="/cep-boy" element={<Navigate to="/kadin" replace />} />
         <Route
           path="/canta-boy"
           element={

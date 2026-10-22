@@ -10,7 +10,6 @@ const TABS = [
   { id: 'all', label: 'Tümü' },
   { id: 'women', label: 'Kadın' },
   { id: 'men', label: 'Erkek' },
-  { id: 'cep', label: 'Cep Boy' },
   { id: 'canta', label: 'Çanta Boy' },
   { id: 'new', label: 'Yeni' },
   { id: 'best', label: 'En Çok Satanlar' },
@@ -27,7 +26,6 @@ export default function Home() {
     return shopProducts.filter((p) => {
       if (tab === 'women') return p.gender === 'women' && p.kind !== 'set'
       if (tab === 'men') return p.gender === 'men' && p.kind !== 'set'
-      if (tab === 'cep') return p.line === 'cep'
       if (tab === 'canta') return p.line === 'canta'
       if (tab === 'set') return p.kind === 'set'
       if (tab === 'new') return p.new

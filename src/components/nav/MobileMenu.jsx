@@ -8,7 +8,6 @@ import { IconBag, IconClose, IconHeart, IconSearch, IconUser, IconWa } from '../
 const SHOP = [
   ['/kadin', 'Kadın'],
   ['/erkek', 'Erkek'],
-  ['/cep-boy', 'Cep boy 10 ml'],
   ['/canta-boy', 'Çanta boy 30 ml'],
   ['/yeni', 'Yeni gelenler'],
   ['/cok-satanlar', 'Çok satanlar'],

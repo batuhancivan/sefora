@@ -27,8 +27,8 @@ export default function Footer() {
         <div>
           <h4>Kadın</h4>
           <Link to="/kadin">Kadın Parfümleri</Link>
-          <Link to="/cep-boy">Cep Boy 10 ml</Link>
           <Link to="/canta-boy">Çanta Boy 30 ml</Link>
+          <Link to="/yeni">Yeni Gelenler</Link>
         </div>
         <div>
           <h4>Erkek</h4>

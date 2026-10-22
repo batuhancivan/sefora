@@ -108,7 +108,14 @@ export function CatalogProvider({ children }) {
   const { isAdmin } = useAuth()
   const [raw, setRaw] = useLocalStorage('sefora-catalog-v4', [])
   const products = useMemo(() => hydrate(raw), [raw])
-  const shopProducts = useMemo(() => products.filter((p) => p.active !== false), [products])
+  const shopProducts = useMemo(
+    () => products.filter((p) => p.active !== false && p.line !== 'cep'),
+    [products],
+  )
+  const giftProducts = useMemo(
+    () => products.filter((p) => p.active !== false && p.line === 'cep'),
+    [products],
+  )
 
   const persist = useCallback(
     (list) => {
@@ -237,13 +244,14 @@ export function CatalogProvider({ children }) {
     () => ({
       products,
       shopProducts,
+      giftProducts,
       families: FAMILIES,
       saveProduct,
       addProduct,
       commitSale,
       persist,
     }),
-    [products, shopProducts, saveProduct, addProduct, commitSale, persist],
+    [products, shopProducts, giftProducts, saveProduct, addProduct, commitSale, persist],
   )
 
   return <CatalogContext.Provider value={value}>{children}</CatalogContext.Provider>

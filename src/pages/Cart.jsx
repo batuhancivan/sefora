@@ -28,26 +28,32 @@ export default function Cart() {
         <div>
           <h1 className="page-title">Sepet</h1>
           {cartItems.map((item) => (
-            <div className="cart-row" key={`${item.id}-${item.size}`}>
+            <div className="cart-row" key={`${item.id}-${item.size}-${item.gift ? 'g' : 'p'}`}>
               <img src={item.product?.image} alt="" />
               <div>
                 <Link to={`/urun/${item.product?.slug}`}>
                   <strong>{item.product?.name}</strong>
                 </Link>
-                <p className="product-meta">EDP {item.size} ml · KDV dahil</p>
-                <div className="qty">
-                  <button aria-label="Azalt" onClick={() => updateQty(item.id, item.size, item.qty - 1)}>
-                    −
-                  </button>
-                  <span>{item.qty}</span>
-                  <button aria-label="Artır" onClick={() => updateQty(item.id, item.size, item.qty + 1)}>
-                    +
-                  </button>
-                </div>
-                <button onClick={() => removeFromCart(item.id, item.size)}>Kaldır</button>
+                <p className="product-meta">{item.gift ? 'Hediye cep boy · 10 ml' : `EDP ${item.size} ml · KDV dahil`}</p>
+                {item.gift ? (
+                  <button onClick={() => removeFromCart(item.id, item.size)}>Kaldır</button>
+                ) : (
+                  <>
+                    <div className="qty">
+                      <button aria-label="Azalt" onClick={() => updateQty(item.id, item.size, item.qty - 1)}>
+                        −
+                      </button>
+                      <span>{item.qty}</span>
+                      <button aria-label="Artır" onClick={() => updateQty(item.id, item.size, item.qty + 1)}>
+                        +
+                      </button>
+                    </div>
+                    <button onClick={() => removeFromCart(item.id, item.size)}>Kaldır</button>
+                  </>
+                )}
               </div>
               <div className="row-actions">
-                <PriceTag amount={item.price} qty={item.qty} size="sm" showBadge={false} />
+                {item.gift ? <span className="gift-flag">Hediye</span> : <PriceTag amount={item.price} qty={item.qty} size="sm" showBadge={false} />}
               </div>
             </div>
           ))}

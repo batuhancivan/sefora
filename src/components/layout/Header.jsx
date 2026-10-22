@@ -7,6 +7,7 @@ import BrandMark from '../ui/BrandMark'
 import SearchOverlay from '../search/SearchOverlay'
 import CartDrawer from '../cart/CartDrawer'
 import CartFly from '../cart/CartFly'
+import GiftPopup from '../cart/GiftPopup'
 import MobileMenu from '../nav/MobileMenu'
 import Countdown from '../promo/Countdown'
 import { SALE_PERCENT } from '../../utils/promo'
@@ -14,7 +15,6 @@ import { SALE_PERCENT } from '../../utils/promo'
 const NAV = [
   ['/kadin', 'Kadın'],
   ['/erkek', 'Erkek'],
-  ['/cep-boy', 'Cep Boy'],
   ['/canta-boy', 'Çanta Boy'],
   ['/koleksiyonlar', 'Koleksiyonlar'],
   ['/hakkimizda', 'Hakkımızda'],
@@ -22,7 +22,7 @@ const NAV = [
 
 export default function Header() {
   const { pathname } = useLocation()
-  const { cartCount, favorites, cartPulse } = useStore()
+  const { cartCount, favorites, cartPulse, giftPrompt } = useStore()
   const { user } = useAuth()
   const [scrolled, setScrolled] = useState(false)
   const [search, setSearch] = useState(false)
@@ -45,11 +45,11 @@ export default function Header() {
   }, [pathname])
 
   useEffect(() => {
-    document.body.style.overflow = search || cart || menu ? 'hidden' : ''
+    document.body.style.overflow = search || cart || menu || giftPrompt ? 'hidden' : ''
     return () => {
       document.body.style.overflow = ''
     }
-  }, [search, cart, menu])
+  }, [search, cart, menu, giftPrompt])
 
   const headerClass = [
     'site-header',
@@ -121,6 +121,7 @@ export default function Header() {
         </div>
       </header>
       <CartFly />
+      <GiftPopup />
       <SearchOverlay open={search} onClose={() => setSearch(false)} />
       <CartDrawer open={cart} onClose={() => setCart(false)} />
       <MobileMenu

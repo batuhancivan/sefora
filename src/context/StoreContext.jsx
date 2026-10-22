@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { salePrice, vatFromGross } from '../utils/promo'
 import { shippingFor } from '../utils/shipping'
@@ -35,6 +35,8 @@ export function StoreProvider({ children }) {
   const [stats, setStats] = useLocalStorage('sefora-stats', { events: [] })
   const [flies, setFlies] = useState([])
   const [cartPulse, setCartPulse] = useState(0)
+  const [giftPrompt, setGiftPrompt] = useState(null)
+  const giftTimer = useRef(null)
 
   const endFly = useCallback((id) => {
     setFlies((prev) => prev.filter((f) => f.id !== id))
@@ -128,11 +130,21 @@ export function StoreProvider({ children }) {
   }
 
   const value = useMemo(() => {
-    const addToCart = (product, { size = 100, qty = 1, from } = {}) => {
+    const addToCart = (product, { size = 100, qty = 1, from, gift = false } = {}) => {
       const live = products.find((p) => p.id === product.id) || product
       const cap = live.stock?.[size] ?? 99
+      if (gift) {
+        setCart((prev) => {
+          const rest = prev.filter((item) => !item.gift)
+          return [...rest, { id: live.id, size: Number(size) || 10, qty: 1, price: 0, gift: true }]
+        })
+        spawnFly(live, from)
+        setGiftPrompt(null)
+        trackEvent('cart', live.id)
+        return
+      }
       setCart((prev) => {
-        const i = prev.findIndex((item) => item.id === product.id && item.size === size)
+        const i = prev.findIndex((item) => item.id === product.id && item.size === size && !item.gift)
         if (i >= 0) {
           const next = [...prev]
           next[i] = { ...next[i], qty: Math.min(cap, next[i].qty + qty) }
@@ -143,6 +155,17 @@ export function StoreProvider({ children }) {
       })
       spawnFly(live, from)
       trackEvent('cart', product.id)
+      if (live.line !== 'cep' && live.kind !== 'set') {
+        window.clearTimeout(giftTimer.current)
+        giftTimer.current = window.setTimeout(() => {
+          setGiftPrompt({ gender: live.gender, hostName: live.name })
+        }, 480)
+      }
+    }
+
+    const skipGift = () => {
+      window.clearTimeout(giftTimer.current)
+      setGiftPrompt(null)
     }
 
     const updateQty = (id, size, qty) => {
@@ -216,8 +239,10 @@ export function StoreProvider({ children }) {
       flies,
       endFly,
       cartPulse,
+      giftPrompt,
+      skipGift,
     }
-  }, [cart, carts, favorites, viewed, favMap, accountKey, setFavMap, trackView, trackEvent, stats, products, spawnFly, flies, endFly, cartPulse])
+  }, [cart, carts, favorites, viewed, favMap, accountKey, setFavMap, trackView, trackEvent, stats, products, spawnFly, flies, endFly, cartPulse, giftPrompt])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }
