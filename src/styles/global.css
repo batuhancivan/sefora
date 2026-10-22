@@ -684,8 +684,8 @@ textarea:focus-visible {
 .product-media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 70% center;
+  object-fit: contain;
+  object-position: center;
   transition: transform 0.8s var(--ease);
 }
 
@@ -720,6 +720,9 @@ textarea:focus-visible {
 .product-body {
   padding: 0.95rem 0.15rem 0;
   text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-body h3 {
@@ -727,6 +730,7 @@ textarea:focus-visible {
   font-size: clamp(0.95rem, 2.6vw, 1.2rem);
   font-weight: 500;
   line-height: 1.25;
+  min-height: 2.5em;
   overflow-wrap: break-word;
 }
 
@@ -736,6 +740,7 @@ textarea:focus-visible {
   letter-spacing: 0.1em;
   padding-inline: 0.5rem;
   white-space: nowrap;
+  margin-top: auto;
 }
 
 .product-meta {

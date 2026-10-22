@@ -7,6 +7,7 @@ import { IconHeart } from '../ui/Icons'
 export default function ProductCard({ product, onAdd }) {
   const { isFavorite, toggleFavorite, addToCart, trackEvent } = useStore()
   const fav = isFavorite(product.id)
+  const title = product.name.replace(/ Çanta Boy$/, '').replace(/ Cep Boy$/, '')
 
   return (
     <article className="product-card">
@@ -23,7 +24,7 @@ export default function ProductCard({ product, onAdd }) {
       </button>
       <div className="product-body">
         <Link to={`/urun/${product.slug}`} onClick={() => trackEvent('click', product.id)}>
-          <h3>{product.name}</h3>
+          <h3>{title}</h3>
         </Link>
         <p className="product-meta">
           {product.kind === 'set'
