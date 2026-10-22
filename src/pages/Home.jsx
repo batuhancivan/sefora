@@ -191,6 +191,15 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="quiz-invite container">
+        <p className="quiz-kicker">Koku analizi</p>
+        <h2>Sana en uygun parfümü bulalım</h2>
+        <p>Altı soru, koleksiyonun notaları ve karakteriyle eşleşir. Rastgele öneri yok.</p>
+        <Link className="btn btn-dark" to="/koku-bul">
+          Bana en uygun parfümü bul
+        </Link>
+      </section>
+
       <section className="newsletter container">
         <h2>Casa Sefora Dünyasına Katılın</h2>
         <p>Özel koleksiyonlar, yeni lansmanlar ve size özel haberlerden ilk siz haberdar olun.</p>

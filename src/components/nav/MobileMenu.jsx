@@ -12,6 +12,7 @@ const SHOP = [
   ['/yeni', 'Yeni gelenler'],
   ['/cok-satanlar', 'Çok satanlar'],
   ['/koleksiyonlar', 'Koleksiyonlar'],
+  ['/koku-bul', 'Koku analizi'],
 ]
 
 const HOUSE = [

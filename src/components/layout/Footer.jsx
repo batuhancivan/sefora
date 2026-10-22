@@ -40,6 +40,7 @@ export default function Footer() {
           <h4>Casa Sefora</h4>
           <Link to="/hakkimizda">Hakkımızda</Link>
           <Link to="/hakkimizda">Hikayemiz</Link>
+          <Link to="/koku-bul">Koku analizi</Link>
           <Link to="/koleksiyonlar">Koleksiyonlarımız</Link>
           <Link to="/deneme-setleri">Deneme Setleri</Link>
           <Link to="/blog">Blog</Link>

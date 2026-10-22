@@ -18,6 +18,7 @@ import Auth from './pages/Auth'
 import Account from './pages/Account'
 import TrackOrder from './pages/TrackOrder'
 import Admin from './pages/Admin'
+import Quiz from './pages/Quiz'
 
 export default function App() {
   return (
@@ -84,6 +85,7 @@ export default function App() {
           }
         />
         <Route path="/koleksiyonlar" element={<Collections />} />
+        <Route path="/koku-bul" element={<Quiz />} />
         <Route path="/urun/:slug" element={<Product />} />
         <Route path="/sepet" element={<Cart />} />
         <Route path="/odeme" element={<Checkout />} />
