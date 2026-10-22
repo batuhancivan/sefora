@@ -66,7 +66,6 @@ export default function Account() {
   const spend = myOrders.reduce((s, o) => s + o.total, 0)
 
   if (!user) return <Navigate to="/giris" replace />
-  if (user.role === 'admin') return <Navigate to="/yonetim" replace />
 
   const set = (k) => (e) => {
     const value = k === 'newsletter' ? e.target.checked : e.target.value

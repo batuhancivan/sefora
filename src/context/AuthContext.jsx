@@ -1,14 +1,38 @@
-import { createContext, useContext, useEffect, useMemo } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { sha256 } from '../utils/hash'
 import { ADMIN_EMAIL, ADMIN_PASSWORD, nextOrderNo } from '../utils/orders'
 
 const AuthContext = createContext(null)
+const ADMIN_GATE = 'sefora-admin-ok'
+
+const readAdminGate = () => {
+  try {
+    return sessionStorage.getItem(ADMIN_GATE) === '1'
+  } catch {
+    return false
+  }
+}
+
+const writeAdminGate = (on) => {
+  try {
+    if (on) sessionStorage.setItem(ADMIN_GATE, '1')
+    else sessionStorage.removeItem(ADMIN_GATE)
+  } catch {
+    /* ignore */
+  }
+}
+
+const adminAliases = (raw) => {
+  const id = raw.trim().toLowerCase()
+  return id === 'yonetim' || id === 'yönetim' || id === 'admin' || id === ADMIN_EMAIL.toLowerCase()
+}
 
 export function AuthProvider({ children }) {
   const [users, setUsers] = useLocalStorage('sefora-users', [])
   const [session, setSession] = useLocalStorage('sefora-session', null)
   const [orders, setOrders] = useLocalStorage('sefora-orders', [])
+  const [adminUnlocked, setAdminUnlocked] = useState(readAdminGate)
 
   useEffect(() => {
     let cancelled = false
@@ -37,6 +61,11 @@ export function AuthProvider({ children }) {
       cancelled = true
     }
   }, [users, setUsers])
+
+  useEffect(() => {
+    const u = users.find((x) => x.id === session?.userId)
+    if (u?.role === 'admin') setSession(null)
+  }, [users, session?.userId, setSession])
 
   const user = users.find((u) => u.id === session?.userId) || null
   const guestEmail = session?.guestEmail || ''
@@ -77,6 +106,7 @@ export function AuthProvider({ children }) {
     const login = async (email, password) => {
       const found = findByEmail(email)
       if (!found) throw new Error('E-posta veya şifre hatalı.')
+      if (found.role === 'admin') throw new Error('Yönetim girişi ayrı ekrandan yapılır.')
       const passHash = await sha256(password)
       if (found.passHash !== passHash) throw new Error('E-posta veya şifre hatalı.')
       setSession({ userId: found.id })
@@ -100,15 +130,22 @@ export function AuthProvider({ children }) {
         const until = fails >= 5 ? Date.now() + 3 * 60 * 1000 : 0
         sessionStorage.setItem('sefora-admin-lock', JSON.stringify({ fails, until }))
         if (until) throw new Error('Çok fazla deneme. 3 dakika sonra tekrar deneyin.')
-        throw new Error('E-posta veya şifre hatalı.')
+        throw new Error('Kullanıcı adı veya şifre hatalı.')
       }
-      const found = findByEmail(email)
-      if (!found || found.role !== 'admin') fail()
+      if (!adminAliases(email)) fail()
+      const found = users.find((u) => u.role === 'admin')
       const passHash = await sha256(password)
-      if (found.passHash !== passHash) fail()
+      const expected = found?.passHash || (await sha256(ADMIN_PASSWORD))
+      if (passHash !== expected) fail()
       sessionStorage.removeItem('sefora-admin-lock')
-      setSession({ userId: found.id })
-      return found
+      writeAdminGate(true)
+      setAdminUnlocked(true)
+      return found || { id: 'admin', role: 'admin', email: ADMIN_EMAIL }
+    }
+
+    const logoutAdmin = () => {
+      writeAdminGate(false)
+      setAdminUnlocked(false)
     }
 
     const continueAsGuest = (email) => {
@@ -186,7 +223,7 @@ export function AuthProvider({ children }) {
     }
 
     const updateOrderStatus = (no, status) => {
-      if (user?.role !== 'admin') return
+      if (!adminUnlocked) return
       setOrders((prev) => prev.map((o) => (o.no === no ? { ...o, status } : o)))
     }
 
@@ -207,10 +244,11 @@ export function AuthProvider({ children }) {
       user,
       guestEmail,
       accountKey,
-      isAdmin: user?.role === 'admin',
+      isAdmin: Boolean(adminUnlocked),
       register,
       login,
       loginAdmin,
+      logoutAdmin,
       continueAsGuest,
       logout,
       updateProfile,
@@ -220,7 +258,7 @@ export function AuthProvider({ children }) {
       myOrders,
       findOrder,
     }
-  }, [users, orders, user, guestEmail, accountKey, setUsers, setOrders, setSession])
+  }, [users, orders, user, guestEmail, accountKey, adminUnlocked, setUsers, setOrders, setSession])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

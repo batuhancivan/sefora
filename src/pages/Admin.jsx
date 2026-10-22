@@ -32,15 +32,17 @@ function AdminLogin({ loginAdmin }) {
   return (
     <div className="ops-login">
       <form onSubmit={submit} autoComplete="off">
+        <p className="ops-login-kicker">Casa Sefora</p>
         <h1>Yönetim girişi</h1>
-        <p>Bu alana yalnızca yetkili hesapla girilir. Şifre sitede yazılmaz.</p>
+        <p>Panele ulaşmak için kullanıcı adı ve şifrenizi girin.</p>
         <label className="field">
-          <span>E-posta</span>
+          <span>Kullanıcı adı</span>
           <input
-            type="email"
+            type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="username"
+            autoFocus
             required
           />
         </label>
@@ -56,7 +58,7 @@ function AdminLogin({ loginAdmin }) {
         </label>
         {err && <p className="field-error">{err}</p>}
         <button className="ops-btn primary" type="submit" disabled={busy} style={{ width: '100%', marginTop: '0.7rem' }}>
-          Giriş
+          {busy ? 'Kontrol ediliyor…' : 'Giriş yap'}
         </button>
         <p style={{ marginTop: '0.9rem' }}>
           <Link to="/">Mağazaya dön</Link>
@@ -836,7 +838,7 @@ const NAV = [
 
 export default function Admin() {
   const navigate = useNavigate()
-  const { isAdmin, users, orders, updateOrderStatus, logout, loginAdmin } = useAuth()
+  const { isAdmin, users, orders, updateOrderStatus, logoutAdmin, loginAdmin } = useAuth()
   const { carts, stats } = useStore()
   const { products, saveProduct, addProduct } = useCatalog()
   const [page, setPage] = useState('ozet')
@@ -887,8 +889,8 @@ export default function Admin() {
             <button
               className="ops-btn"
               onClick={() => {
-                logout()
-                navigate('/')
+                logoutAdmin()
+                navigate('/yonetim')
               }}
             >
               Çıkış

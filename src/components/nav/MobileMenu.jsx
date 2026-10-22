@@ -26,7 +26,7 @@ export default function MobileMenu({ open, onClose, onSearch }) {
   const { user } = useAuth()
   if (!open) return null
 
-  const accountTo = user ? (user.role === 'admin' ? '/yonetim' : '/hesabim') : '/giris'
+  const accountTo = user ? '/hesabim' : '/giris'
 
   return (
     <aside className="menu-panel" role="dialog" aria-modal="true" aria-label="Menü">

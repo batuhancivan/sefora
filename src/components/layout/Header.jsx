@@ -98,7 +98,7 @@ export default function Header() {
             </button>
             <Link
               className="icon-btn"
-              to={user ? (user.role === 'admin' ? '/yonetim' : '/hesabim') : '/giris'}
+              to={user ? '/hesabim' : '/giris'}
               aria-label={user ? 'Hesabım' : 'Giriş'}
             >
               <IconUser />

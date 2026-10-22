@@ -437,22 +437,42 @@
   min-height: 100vh;
   display: grid;
   place-items: center;
-  background: #f3f4f6;
+  background: #111827;
   padding: 1.5rem;
 }
 
 .ops-login form {
-  width: min(360px, 100%);
+  width: min(380px, 100%);
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1.2rem;
+  border-radius: 10px;
+  padding: 1.6rem 1.4rem 1.35rem;
+}
+
+.ops-login-kicker {
+  font-size: 0.68rem !important;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #9ca3af !important;
+  margin-bottom: 0.35rem !important;
 }
 
 .ops-login h1 {
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   margin-bottom: 0.35rem;
   font-family: var(--font-sans);
+}
+
+.ops-login .field {
+  margin-bottom: 0.75rem;
+}
+
+.ops-login input {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+  background: #fff;
 }
 
 .ops-login p {

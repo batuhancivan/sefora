@@ -19,7 +19,6 @@ export default function Auth({ mode = 'login' }) {
   const [busy, setBusy] = useState(false)
 
   if (user) {
-    if (user.role === 'admin') return <Navigate to="/yonetim" replace />
     const dest = next === '/yonetim' || next === '/yönetim' ? '/hesabim' : next
     return <Navigate to={dest} replace />
   }
@@ -37,11 +36,8 @@ export default function Auth({ mode = 'login' }) {
         if (password.length < 6) throw new Error('Şifre en az 6 karakter olsun.')
         logged = await register({ first, last, email, password })
       }
-      if (logged?.role === 'admin') go('/yonetim')
-      else {
-        const blocked = next === '/yonetim' || next === '/yönetim'
-        go(blocked ? '/hesabim' : next)
-      }
+      const blocked = next === '/yonetim' || next === '/yönetim'
+      go(blocked ? '/hesabim' : next)
     } catch (error) {
       setErr(error.message)
     } finally {
