@@ -10,6 +10,7 @@ const GROUPS = [
 
 export default function Collections() {
   const { shopProducts } = useCatalog()
+  const canta = shopProducts.filter((p) => p.line === 'canta')
 
   return (
     <div className="page">
@@ -46,6 +47,19 @@ export default function Collections() {
             </section>
           )
         })}
+        {canta.length > 0 && (
+          <section className="section" style={{ paddingTop: '2.5rem' }}>
+            <div className="section-head">
+              <h2>Çanta Boy 30 ml</h2>
+              <Link to="/canta-boy">Tümünü gör</Link>
+            </div>
+            <div className="product-grid">
+              {canta.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   )
