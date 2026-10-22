@@ -107,14 +107,10 @@ export default function Header() {
               <IconHeart />
               {favorites.length > 0 && <span className="badge">{favorites.length}</span>}
             </Link>
-            <button
-              id="nav-cart"
-              className={`icon-btn${cartPulse ? ' is-catch' : ''}`}
-              key={`cart-${cartPulse}`}
-              aria-label="Sepet"
-              onClick={() => setCart(true)}
-            >
-              <IconBag />
+            <button id="nav-cart" className="icon-btn" aria-label="Sepet" onClick={() => setCart(true)}>
+              <span key={cartPulse} className={cartPulse ? 'is-catch' : undefined}>
+                <IconBag />
+              </span>
               {cartCount > 0 && <span className="badge">{cartCount}</span>}
             </button>
           </div>

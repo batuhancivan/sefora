@@ -237,29 +237,17 @@ textarea:focus-visible {
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 90;
+  z-index: 96;
   pointer-events: none;
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 12px 30px rgba(20, 16, 10, 0.28);
-  animation: cart-fly 0.72s cubic-bezier(0.22, 0.82, 0.2, 1) forwards;
+  will-change: transform, opacity;
 }
 
-@keyframes cart-fly {
-  0% {
-    transform: translate(var(--x0), var(--y0)) scale(1);
-    opacity: 1;
-  }
-  70% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate(var(--x1), var(--y1)) scale(0.12);
-    opacity: 0.2;
-  }
-}
-
-.icon-btn.is-catch {
+.icon-btn .is-catch {
+  display: grid;
+  place-items: center;
   animation: cart-catch 0.55s var(--ease);
 }
 
