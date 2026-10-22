@@ -2674,6 +2674,14 @@ body:has(.menu-panel) .wa-float {
   margin: 1.2rem 0 0.35rem;
 }
 
+.gift-group {
+  margin: 0.2rem 0 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-2);
+}
+
 .gift-pick {
   border: 1px solid var(--line);
   background: #fff;
