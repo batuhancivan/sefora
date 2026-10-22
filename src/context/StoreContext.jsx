@@ -136,7 +136,17 @@ export function StoreProvider({ children }) {
       if (gift) {
         setCart((prev) => {
           const rest = prev.filter((item) => !item.gift)
-          return [...rest, { id: live.id, size: Number(size) || 10, qty: 1, price: 0, gift: true }]
+          return [
+            ...rest,
+            {
+              id: live.id,
+              size: Number(size) || 10,
+              qty: 1,
+              price: 0,
+              gift: true,
+              giftFor: giftPrompt?.hostId || null,
+            },
+          ]
         })
         spawnFly(live, from)
         setGiftPrompt(null)
@@ -158,7 +168,7 @@ export function StoreProvider({ children }) {
       if (live.line !== 'cep' && live.kind !== 'set') {
         window.clearTimeout(giftTimer.current)
         giftTimer.current = window.setTimeout(() => {
-          setGiftPrompt({ gender: live.gender, hostName: live.name })
+          setGiftPrompt({ gender: live.gender, hostName: live.name, hostId: live.id })
         }, 480)
       }
     }
@@ -168,16 +178,27 @@ export function StoreProvider({ children }) {
       setGiftPrompt(null)
     }
 
+    const dropOrphanGifts = (list) => {
+      const paid = list.filter((item) => !item.gift)
+      return list.filter((item) => {
+        if (!item.gift) return true
+        if (item.giftFor) return paid.some((p) => p.id === item.giftFor)
+        return paid.length > 0
+      })
+    }
+
     const updateQty = (id, size, qty) => {
       setCart((prev) =>
-        prev
-          .map((item) => (item.id === id && item.size === size ? { ...item, qty } : item))
-          .filter((item) => item.qty > 0),
+        dropOrphanGifts(
+          prev
+            .map((item) => (item.id === id && item.size === size && !item.gift ? { ...item, qty } : item))
+            .filter((item) => item.qty > 0),
+        ),
       )
     }
 
     const removeFromCart = (id, size) => {
-      setCart((prev) => prev.filter((item) => !(item.id === id && item.size === size)))
+      setCart((prev) => dropOrphanGifts(prev.filter((item) => !(item.id === id && item.size === size))))
     }
 
     const clearCart = () => setCart([])
