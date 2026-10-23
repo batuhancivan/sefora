@@ -1,17 +1,20 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCatalog } from '../context/CatalogContext'
 import { QUIZ_QUESTIONS, matchQuiz } from '../data/quiz'
 import PriceTag from '../components/ui/PriceTag'
 
 const empty = Object.fromEntries(QUIZ_QUESTIONS.map((q) => [q.id, '']))
+const LAST = QUIZ_QUESTIONS.length - 1
 
 export default function Quiz() {
   const { shopProducts } = useCatalog()
   const [answers, setAnswers] = useState(empty)
+  const [step, setStep] = useState(0)
   const [result, setResult] = useState(null)
+  const lock = useRef(false)
 
-  const filled = QUIZ_QUESTIONS.every((q) => answers[q.id])
+  const question = QUIZ_QUESTIONS[step]
   const pick = result?.[0]
   const alts = result?.slice(1, 3) || []
 
@@ -21,15 +24,26 @@ export default function Quiz() {
     return `Seçimlerin — ${unique.join(', ').toLocaleLowerCase('tr')} — bu imzayla kesişiyor.`
   }, [pick])
 
-  const find = (e) => {
-    e.preventDefault()
-    if (!filled) return
-    setResult(matchQuiz(answers, shopProducts))
+  const finish = (nextAnswers) => {
+    setResult(matchQuiz(nextAnswers, shopProducts))
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const choose = (optionId) => {
+    if (lock.current) return
+    lock.current = true
+    const next = { ...answers, [question.id]: optionId }
+    setAnswers(next)
+    window.setTimeout(() => {
+      lock.current = false
+      if (step === LAST) finish(next)
+      else setStep((s) => s + 1)
+    }, 180)
   }
 
   const reset = () => {
     setAnswers(empty)
+    setStep(0)
     setResult(null)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -41,9 +55,7 @@ export default function Quiz() {
           <Link to="/">Ana Sayfa</Link> / Koku analizi
         </p>
         <h1 className="page-title">Sana en uygun parfüm</h1>
-        <p className="page-lead">
-          Altı kısa soru. Cevaplar koleksiyondaki notalar, karakter ve kullanım anına göre eşleşir; rastgele öneri yok.
-        </p>
+        <p className="page-lead">Kısa adımlar. Notalar ve karaktere göre eşleşir; rastgele öneri yok.</p>
 
         {pick ? (
           <section className="quiz-result">
@@ -87,34 +99,37 @@ export default function Quiz() {
             )}
           </section>
         ) : (
-          <form className="quiz-form" onSubmit={find}>
-            {QUIZ_QUESTIONS.map((q, i) => (
-              <fieldset key={q.id} className="quiz-q">
-                <legend>
-                  <span>{String(i + 1).padStart(2, '0')}</span>
-                  {q.prompt}
-                </legend>
-                <div className="quiz-opts">
-                  {q.options.map((o) => (
-                    <label key={o.id} className={answers[q.id] === o.id ? 'on' : ''}>
-                      <input
-                        type="radio"
-                        name={q.id}
-                        value={o.id}
-                        checked={answers[q.id] === o.id}
-                        onChange={() => setAnswers((a) => ({ ...a, [q.id]: o.id }))}
-                      />
-                      {o.label}
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-            ))}
-            <button className="btn btn-dark quiz-submit" type="submit" disabled={!filled}>
-              Bana en uygun parfümü bul
-            </button>
-            {!filled && <p className="product-meta">Altı soruyu da yanıtla, sonra eşleşmeyi görelim.</p>}
-          </form>
+          <div className="quiz-card">
+            <div className="quiz-progress" aria-hidden="true">
+              <span>
+                {step + 1} / {QUIZ_QUESTIONS.length}
+              </span>
+              <div className="quiz-bar">
+                <i style={{ width: `${((step + 1) / QUIZ_QUESTIONS.length) * 100}%` }} />
+              </div>
+            </div>
+            <p className="quiz-step-label">
+              <span>{String(step + 1).padStart(2, '0')}</span>
+              {question.prompt}
+            </p>
+            <div className="quiz-opts">
+              {question.options.map((o) => (
+                <button
+                  key={o.id}
+                  type="button"
+                  className={answers[question.id] === o.id ? 'on' : ''}
+                  onClick={() => choose(o.id)}
+                >
+                  {o.label}
+                </button>
+              ))}
+            </div>
+            <div className="quiz-nav">
+              <button type="button" className="quiz-back" disabled={step === 0} onClick={() => setStep((s) => Math.max(0, s - 1))}>
+                Önceki soru
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>

@@ -10,7 +10,7 @@ export const QUIZ_QUESTIONS = [
   },
   {
     id: 'moment',
-    prompt: 'En çok ne zaman sürmek istersin?',
+    prompt: 'Bu koku günün hangi anına yakışsın?',
     options: [
       { id: 'day', label: 'Gündüz, günlük ritim' },
       { id: 'night', label: 'Akşam ve gece' },
