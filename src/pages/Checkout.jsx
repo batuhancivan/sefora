@@ -212,85 +212,89 @@ export default function Checkout() {
         )}
 
         {step === 1 && (
-          <div className="form-grid">
-            <div>
-              <input placeholder="Ad" value={form.first} onChange={set('first')} />
-              {errors.first && <p className="field-error">{errors.first}</p>}
-            </div>
-            <div>
-              <input placeholder="Soyad" value={form.last} onChange={set('last')} />
-              {errors.last && <p className="field-error">{errors.last}</p>}
-            </div>
-            <div>
-              <input
-                placeholder="E-posta"
-                value={form.email}
-                onChange={set('email')}
-                readOnly={Boolean(user || guestEmail)}
-              />
-              {errors.email && <p className="field-error">{errors.email}</p>}
-            </div>
-            <div>
-              <input placeholder="Telefon" value={form.phone} onChange={set('phone')} />
-              {errors.phone && <p className="field-error">{errors.phone}</p>}
-            </div>
-            <div className="full">
-              <input placeholder="Adres" value={form.address} onChange={set('address')} />
-              {errors.address && <p className="field-error">{errors.address}</p>}
-            </div>
-            <div>
-              <input placeholder="Şehir" value={form.city} onChange={set('city')} />
-              {errors.city && <p className="field-error">{errors.city}</p>}
-            </div>
-            <div>
-              <input placeholder="İlçe" value={form.district} onChange={set('district')} />
-              {errors.district && <p className="field-error">{errors.district}</p>}
-            </div>
-            <div className="full">
-              <input placeholder="Posta Kodu" value={form.zip} onChange={set('zip')} />
-              {errors.zip && <p className="field-error">{errors.zip}</p>}
+          <div className="auth-card checkout-sheet">
+            <div className="form-grid">
+              <div>
+                <input placeholder="Ad" value={form.first} onChange={set('first')} />
+                {errors.first && <p className="field-error">{errors.first}</p>}
+              </div>
+              <div>
+                <input placeholder="Soyad" value={form.last} onChange={set('last')} />
+                {errors.last && <p className="field-error">{errors.last}</p>}
+              </div>
+              <div>
+                <input
+                  placeholder="E-posta"
+                  value={form.email}
+                  onChange={set('email')}
+                  readOnly={Boolean(user || guestEmail)}
+                />
+                {errors.email && <p className="field-error">{errors.email}</p>}
+              </div>
+              <div>
+                <input placeholder="Telefon" value={form.phone} onChange={set('phone')} />
+                {errors.phone && <p className="field-error">{errors.phone}</p>}
+              </div>
+              <div className="full">
+                <input placeholder="Adres" value={form.address} onChange={set('address')} />
+                {errors.address && <p className="field-error">{errors.address}</p>}
+              </div>
+              <div>
+                <input placeholder="Şehir" value={form.city} onChange={set('city')} />
+                {errors.city && <p className="field-error">{errors.city}</p>}
+              </div>
+              <div>
+                <input placeholder="İlçe" value={form.district} onChange={set('district')} />
+                {errors.district && <p className="field-error">{errors.district}</p>}
+              </div>
+              <div className="full">
+                <input placeholder="Posta Kodu" value={form.zip} onChange={set('zip')} />
+                {errors.zip && <p className="field-error">{errors.zip}</p>}
+              </div>
             </div>
           </div>
         )}
 
         {step === 2 && (
-          <div className="form-grid">
-            <div className="full">
-              <input
-                placeholder="Kart numarası"
-                value={form.card}
-                onChange={set('card')}
-                autoComplete="off"
-              />
-              {errors.card && <p className="field-error">{errors.card}</p>}
-            </div>
-            <div className="checkout-pair">
-              <div>
-                <input placeholder="AA/YY" value={form.exp} onChange={set('exp')} autoComplete="off" inputMode="numeric" />
-                {errors.exp && <p className="field-error">{errors.exp}</p>}
+          <div className="auth-card checkout-sheet">
+            <div className="form-grid">
+              <div className="full">
+                <input
+                  placeholder="Kart numarası"
+                  value={form.card}
+                  onChange={set('card')}
+                  autoComplete="off"
+                />
+                {errors.card && <p className="field-error">{errors.card}</p>}
               </div>
-              <div>
-                <input placeholder="CVV" value={form.cvv} onChange={set('cvv')} autoComplete="off" inputMode="numeric" />
-                {errors.cvv && <p className="field-error">{errors.cvv}</p>}
+              <div className="checkout-pair">
+                <div>
+                  <input placeholder="AA/YY" value={form.exp} onChange={set('exp')} autoComplete="off" inputMode="numeric" />
+                  {errors.exp && <p className="field-error">{errors.exp}</p>}
+                </div>
+                <div>
+                  <input placeholder="CVV" value={form.cvv} onChange={set('cvv')} autoComplete="off" inputMode="numeric" />
+                  {errors.cvv && <p className="field-error">{errors.cvv}</p>}
+                </div>
               </div>
+              <div className="full">
+                <input placeholder="Kart üzerindeki isim" value={form.holder} onChange={set('holder')} autoComplete="off" />
+                {errors.holder && <p className="field-error">{errors.holder}</p>}
+              </div>
+              <p className="product-meta full">Kart bilgileri kaydedilmez.</p>
             </div>
-            <div className="full">
-              <input placeholder="Kart üzerindeki isim" value={form.holder} onChange={set('holder')} autoComplete="off" />
-              {errors.holder && <p className="field-error">{errors.holder}</p>}
-            </div>
-            <p className="product-meta full">Kart bilgileri kaydedilmez.</p>
           </div>
         )}
 
         {step === 3 && (
-          <div>
+          <div className="auth-card checkout-sheet">
             <p>
               {form.first} {form.last} · {form.email}
             </p>
             <p className="product-meta">
               {form.address}, {form.district} / {form.city} {form.zip}
             </p>
-            <div className="summary" style={{ margin: '1rem 0' }}>
+            <div className="summary">
               <div className="summary-row">
                 <span>Liste (KDV dahil)</span>
                 <span className="price-old">{formatPrice(listSubtotal)}</span>
