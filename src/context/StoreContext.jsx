@@ -165,7 +165,7 @@ export function StoreProvider({ children }) {
       })
       spawnFly(live, from)
       trackEvent('cart', product.id)
-      if (live.line !== 'cep' && live.kind !== 'set') {
+      if ((live.line || 'lux') === 'lux' && live.kind !== 'set') {
         window.clearTimeout(giftTimer.current)
         giftTimer.current = window.setTimeout(() => {
           setGiftPrompt({ gender: live.gender, hostName: live.name, hostId: live.id })
