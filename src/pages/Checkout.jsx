@@ -166,14 +166,22 @@ export default function Checkout() {
 
   return (
     <div className="page">
-      <div className="container" style={{ maxWidth: 760 }}>
+      <div className="container checkout">
         <h1 className="page-title">Ödeme</h1>
         <div className="notice">Demo ödeme ekranıdır. Gerçek ödeme alınmaz.</div>
         <div className="steps">
-          <span className={step === 0 ? 'active' : ''}>1. Hesap</span>
-          <span className={step === 1 ? 'active' : ''}>2. Teslimat</span>
-          <span className={step === 2 ? 'active' : ''}>3. Ödeme</span>
-          <span className={step === 3 ? 'active' : ''}>4. Onay</span>
+          <span className={step === 0 ? 'active' : ''}>
+            <b>1</b> Hesap
+          </span>
+          <span className={step === 1 ? 'active' : ''}>
+            <b>2</b> Teslimat
+          </span>
+          <span className={step === 2 ? 'active' : ''}>
+            <b>3</b> Ödeme
+          </span>
+          <span className={step === 3 ? 'active' : ''}>
+            <b>4</b> Onay
+          </span>
         </div>
 
         {step === 0 && (
@@ -186,10 +194,8 @@ export default function Checkout() {
             <Link className="btn btn-outline btn-full" to="/kayit?next=/odeme">
               Kayıt ol
             </Link>
-            <form onSubmit={guestContinue}>
-              <p className="pdp-brand" style={{ marginTop: '1rem' }}>
-                E-posta ile devam et
-              </p>
+            <form className="checkout-guest" onSubmit={guestContinue}>
+              <p className="checkout-guest-label">E-posta ile devam et</p>
               <input
                 type="email"
                 placeholder="E-posta"
@@ -258,13 +264,15 @@ export default function Checkout() {
               />
               {errors.card && <p className="field-error">{errors.card}</p>}
             </div>
-            <div>
-              <input placeholder="Son kullanma (AA/YY)" value={form.exp} onChange={set('exp')} autoComplete="off" />
-              {errors.exp && <p className="field-error">{errors.exp}</p>}
-            </div>
-            <div>
-              <input placeholder="CVV" value={form.cvv} onChange={set('cvv')} autoComplete="off" />
-              {errors.cvv && <p className="field-error">{errors.cvv}</p>}
+            <div className="checkout-pair">
+              <div>
+                <input placeholder="AA/YY" value={form.exp} onChange={set('exp')} autoComplete="off" inputMode="numeric" />
+                {errors.exp && <p className="field-error">{errors.exp}</p>}
+              </div>
+              <div>
+                <input placeholder="CVV" value={form.cvv} onChange={set('cvv')} autoComplete="off" inputMode="numeric" />
+                {errors.cvv && <p className="field-error">{errors.cvv}</p>}
+              </div>
             </div>
             <div className="full">
               <input placeholder="Kart üzerindeki isim" value={form.holder} onChange={set('holder')} autoComplete="off" />
@@ -309,7 +317,7 @@ export default function Checkout() {
           </div>
         )}
 
-        <div style={{ display: 'flex', gap: '0.7rem', marginTop: '1.4rem' }}>
+        <div className="checkout-actions">
           {step > (identified ? 1 : 0) && step > 0 && (
             <button className="btn btn-outline" onClick={() => setStep(step - 1)}>
               Geri
