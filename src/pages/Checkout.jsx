@@ -222,7 +222,7 @@ export default function Checkout() {
                 <input placeholder="Soyad" value={form.last} onChange={set('last')} />
                 {errors.last && <p className="field-error">{errors.last}</p>}
               </div>
-              <div>
+              <div className="full">
                 <input
                   placeholder="E-posta"
                   value={form.email}
@@ -231,7 +231,7 @@ export default function Checkout() {
                 />
                 {errors.email && <p className="field-error">{errors.email}</p>}
               </div>
-              <div>
+              <div className="full">
                 <input placeholder="Telefon" value={form.phone} onChange={set('phone')} />
                 {errors.phone && <p className="field-error">{errors.phone}</p>}
               </div>
