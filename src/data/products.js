@@ -15,6 +15,7 @@ const SCENTS = [
     featured: true,
     isNew: true,
     bestSeller: true,
+    price100: 3000,
     character: 'Kadifemsi, ışıltılı, neşeli ve bahar tazeliğinde.',
     typeLabel: 'Taze Çiçeksi — Meyvemsi',
     description:
@@ -33,6 +34,7 @@ const SCENTS = [
     featured: true,
     isNew: true,
     bestSeller: false,
+    price100: 4200,
     character: 'Romantik, merak uyandırıcı, taze ve masalsı.',
     typeLabel: 'Meyvemsi — Çiçeksi',
     description:
@@ -51,6 +53,7 @@ const SCENTS = [
     featured: true,
     isNew: false,
     bestSeller: true,
+    price100: 3300,
     character: 'Cüretkar, lüks, tensel ve geceye yakışır derinlikte.',
     typeLabel: 'Çiçeksi — Kehribarlı',
     description:
@@ -69,6 +72,7 @@ const SCENTS = [
     featured: true,
     isNew: true,
     bestSeller: true,
+    price100: 3100,
     character: 'Dingin, yeşil, entelektüel ve sofistike.',
     typeLabel: 'Aromatik — Ormansı',
     description:
@@ -87,6 +91,7 @@ const SCENTS = [
     featured: true,
     isNew: false,
     bestSeller: true,
+    price100: 3200,
     character: 'Heykelsi, zamansız, karizmatik ve otoriter.',
     typeLabel: 'Odunsu — Baharatlı',
     description:
@@ -105,6 +110,7 @@ const SCENTS = [
     featured: true,
     isNew: true,
     bestSeller: false,
+    price100: 3200,
     character: 'Enerjik, okyanusal, ferahlatıcı ve cüretkar.',
     typeLabel: 'Narenciye — Akuatik',
     description:
@@ -125,8 +131,7 @@ const SCENTS = [
     bestSeller: false,
     minis: false,
     shots: 1,
-    price50: 1590,
-    price100: 2090,
+    price100: 1249,
     character: 'Gündüz, enerjik ve modern.',
     typeLabel: 'Ferah — Odunsu',
     description:
@@ -147,8 +152,7 @@ const SCENTS = [
     bestSeller: false,
     minis: false,
     shots: 1,
-    price50: 1590,
-    price100: 2090,
+    price100: 1249,
     character: 'Akşam, çekici ve karizmatik.',
     typeLabel: 'Baharatlı — Gurme',
     description:
@@ -169,8 +173,7 @@ const SCENTS = [
     bestSeller: false,
     minis: false,
     shots: 1,
-    price50: 1590,
-    price100: 2090,
+    price100: 1249,
     character: 'Özel davet, lüks ve gizemli.',
     typeLabel: 'Oryantal — Odunsu',
     description:
@@ -191,8 +194,7 @@ const SCENTS = [
     bestSeller: false,
     minis: false,
     shots: 1,
-    price50: 1590,
-    price100: 2090,
+    price100: 1249,
     character: 'İş hayatı, günlük lüks ve şık.',
     typeLabel: 'Modern — Metalik Narenciye',
     description:
@@ -213,8 +215,7 @@ const SCENTS = [
     bestSeller: false,
     minis: false,
     shots: 1,
-    price50: 1590,
-    price100: 2090,
+    price100: 1249,
     character: 'Podyum, gece ve iddialı.',
     typeLabel: 'Deri — Moda Akoru',
     description:
@@ -235,8 +236,7 @@ const SCENTS = [
     bestSeller: false,
     minis: false,
     shots: 1,
-    price50: 1590,
-    price100: 2090,
+    price100: 1249,
     character: 'Kulüp, partiler ve çekici.',
     typeLabel: 'Gece Hayatı — Kristalize Gurme',
     description:
@@ -255,6 +255,27 @@ const LINES = [
   { line: 'canta', ml: 30, price: 1290, suffix: ' Çanta Boy', label: 'Çanta boy 30 ml' },
 ]
 
+const charmPrice = (amount) => {
+  const n = Math.max(1, Number(amount) || 0)
+  let best = 49
+  let bestDist = Infinity
+  const mid = Math.floor(n / 100)
+  for (let h = mid - 2; h <= mid + 2; h += 1) {
+    for (const end of [99, 49]) {
+      const value = h * 100 + end
+      if (value <= 0) continue
+      const dist = Math.abs(value - n)
+      if (dist < bestDist) {
+        best = value
+        bestDist = dist
+      }
+    }
+  }
+  return best
+}
+
+const fromHundred = (price100, parts) => charmPrice((Number(price100) / parts) * 1.15)
+
 const skuOf = (scentId, line) => {
   const tag = scentId.replace(/[^a-z0-9]/g, '').slice(0, 8).toUpperCase()
   const L = line === 'cep' ? '10' : line === 'canta' ? '30' : '100'
@@ -267,7 +288,9 @@ export const PRODUCTS = SCENTS.flatMap((scent) => {
     const images = productGallery(scent.id, line, scent.shots || 4)
     const id = line === 'lux' ? scent.id : `${scent.id}-${line}`
     const price100 = scent.price100 ?? price
-    const price50 = scent.price50 ?? 1890
+    const price50 = scent.price50 ?? fromHundred(price100, 2)
+    const price30 = scent.price30 ?? fromHundred(price100, 3)
+    const linePrice = line === 'lux' ? price100 : line === 'canta' ? price30 : price
     return {
       id,
       scentId: scent.id,
@@ -287,8 +310,8 @@ export const PRODUCTS = SCENTS.flatMap((scent) => {
               { ml: 50, price: price50 },
               { ml: 100, price: price100 },
             ]
-          : [{ ml, price }],
-      price: line === 'lux' ? price100 : price,
+          : [{ ml, price: linePrice }],
+      price: linePrice,
       image: images[0],
       images,
       family: scent.family,

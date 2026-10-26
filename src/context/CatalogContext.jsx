@@ -112,7 +112,7 @@ const applyPriceStock = (next, patch, prev) => {
 
 export function CatalogProvider({ children }) {
   const { isAdmin } = useAuth()
-  const [raw, setRaw] = useLocalStorage('sefora-catalog-v5', [])
+  const [raw, setRaw] = useLocalStorage('sefora-catalog-v6', [])
   const products = useMemo(() => hydrate(raw), [raw])
   const shopProducts = useMemo(
     () => products.filter((p) => p.active !== false && p.line !== 'cep'),
@@ -182,7 +182,7 @@ export function CatalogProvider({ children }) {
       const isSet = draft.kind === 'set'
       const setMl = Number(draft.setMl) || 8
       const ml = isSet ? setMl : line === 'cep' ? 10 : line === 'canta' ? 30 : 100
-      const price = Number(isSet ? draft.price100 : line === 'cep' ? draft.price10 : line === 'canta' ? draft.price30 : draft.price100) || (isSet ? 890 : line === 'cep' ? 690 : line === 'canta' ? 1290 : 2490)
+      const price = Number(isSet ? draft.price100 : line === 'cep' ? draft.price10 : line === 'canta' ? draft.price30 : draft.price100) || (isSet ? 890 : line === 'cep' ? 690 : line === 'canta' ? 499 : 1249)
       const stockN = Math.max(MIN_STOCK, Number(draft.stock100 || draft.stock10 || draft.stock30) || MIN_STOCK)
       const product = withDefaults({
         id,
@@ -198,7 +198,7 @@ export function CatalogProvider({ children }) {
           isSet || line === 'cep' || line === 'canta'
             ? [{ ml, price }]
             : [
-                { ml: 50, price: Number(draft.price50) || 1890 },
+                { ml: 50, price: Number(draft.price50) || 699 },
                 { ml: 100, price },
               ],
         price,
