@@ -1846,7 +1846,6 @@ textarea:focus-visible {
 }
 
 .drawer,
-.search-panel,
 .sheet {
   position: fixed;
   z-index: 90;
@@ -1886,26 +1885,54 @@ textarea:focus-visible {
   border-top: 1px solid var(--line);
 }
 
-.search-panel {
+.search-layer {
+  position: fixed;
   inset: 0;
+  z-index: 210;
+  display: grid;
+  align-items: start;
+  justify-items: center;
+  padding: max(4.4rem, calc(env(safe-area-inset-top) + 3.2rem)) 1rem 1.2rem;
+}
+
+.search-scrim {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(12, 12, 12, 0.55);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.search-panel {
+  position: relative;
+  width: min(28rem, 100%);
+  max-height: min(78vh, 36rem);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 70px rgba(12, 10, 8, 0.28);
+  animation: gift-in 0.35s var(--ease);
 }
 
 .search-panel input {
-  width: min(100% - 2.4rem, 720px);
-  margin: 2rem auto 0;
-  border: none;
-  border-bottom: 1px solid var(--line);
-  background: transparent;
-  font-family: var(--font-serif);
-  font-size: clamp(1.6rem, 4vw, 2.6rem);
-  padding: 0.4rem 0;
+  width: calc(100% - 2.4rem);
+  margin: 0.85rem 1.2rem 0;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  min-height: 3rem;
+  padding: 0.8rem 0.9rem;
 }
 
 .search-results {
-  width: min(100% - 2.4rem, 720px);
-  margin: 1.5rem auto;
+  width: 100%;
+  margin: 0.4rem 0 0;
+  padding: 0.35rem 1.2rem 0.9rem;
   overflow: auto;
 }
 
@@ -2127,7 +2154,8 @@ textarea:focus-visible {
 
 body:has(.checkout) .wa-float,
 body:has(.auth-page) .wa-float,
-body:has(.success-box) .wa-float {
+body:has(.success-box) .wa-float,
+body:has(.search-layer) .wa-float {
   display: none;
 }
 
