@@ -541,26 +541,6 @@ textarea:focus-visible {
   flex-wrap: wrap;
 }
 
-.hero-dots {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  gap: 0.45rem;
-  padding-bottom: 1.4rem;
-}
-
-.hero-dots span {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
-}
-
-.hero-dots span.active {
-  background: #fff;
-}
-
 .seal {
   position: absolute;
   right: 6%;
@@ -2409,9 +2389,6 @@ body:has(.menu-panel) .wa-float {
     margin-top: 0;
     margin-bottom: 0;
     padding: 0 1.1rem 1rem;
-  }
-  .hero-dots {
-    margin-top: auto;
   }
   .italy-banner {
     min-height: 70svh;

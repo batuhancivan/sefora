@@ -72,11 +72,6 @@ export default function Home() {
           Casa Sefora
           <b>SEFORA</b>
         </div>
-        <div className="hero-dots" aria-hidden="true">
-          <span className="active" />
-          <span />
-          <span />
-        </div>
       </section>
 
       <LaunchBand />
