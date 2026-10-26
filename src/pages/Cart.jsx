@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useStore } from '../context/StoreContext'
 import { formatPrice } from '../utils/assets'
+import { SALE_PERCENT } from '../utils/promo'
 import PriceTag from '../components/ui/PriceTag'
 import VatSummary from '../components/cart/VatSummary'
 
@@ -67,7 +68,7 @@ export default function Cart() {
             <span className="price-old">{formatPrice(listSubtotal)}</span>
           </div>
           <div className="summary-row sale-save">
-            <span>Lansman indirimi %25</span>
+            <span>Lansman indirimi %{SALE_PERCENT}</span>
             <span>−{formatPrice(savings)}</span>
           </div>
           <div className="summary-row">

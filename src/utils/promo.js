@@ -1,4 +1,4 @@
-export const SALE_PERCENT = 25
+export const SALE_PERCENT = 20
 export const SALE_CYCLE_MS = 24 * 60 * 60 * 1000
 export const VAT_RATE = 20
 
