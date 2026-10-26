@@ -6,6 +6,40 @@ import { useCatalog } from '../context/CatalogContext'
 import { formatPrice } from '../utils/assets'
 import VatSummary from '../components/cart/VatSummary'
 
+const formatCard = (raw) =>
+  raw
+    .replace(/\D/g, '')
+    .slice(0, 16)
+    .replace(/(\d{4})(?=\d)/g, '$1 ')
+    .trim()
+
+const formatExp = (raw, prev = '') => {
+  const digits = raw.replace(/\D/g, '').slice(0, 4)
+  if (prev && raw.length < prev.length) {
+    return digits.length <= 2 ? digits : `${digits.slice(0, 2)}/${digits.slice(2)}`
+  }
+  if (!digits) return ''
+  if (digits.length === 1) return Number(digits) > 1 ? `0${digits}/` : digits
+  let month = digits.slice(0, 2)
+  const n = Number(month)
+  if (n > 12) month = '12'
+  if (n === 0) month = '01'
+  if (digits.length === 2) return `${month}/`
+  return `${month}/${digits.slice(2)}`
+}
+
+const formatCvv = (raw) => raw.replace(/\D/g, '').slice(0, 4)
+
+const formatPhone = (raw) => {
+  let d = raw.replace(/\D/g, '')
+  if (d.startsWith('90')) d = d.slice(2)
+  d = d.slice(0, 11)
+  if (d.length <= 4) return d
+  if (d.length <= 7) return `${d.slice(0, 4)} ${d.slice(4)}`
+  if (d.length <= 9) return `${d.slice(0, 4)} ${d.slice(4, 7)} ${d.slice(7)}`
+  return `${d.slice(0, 4)} ${d.slice(4, 7)} ${d.slice(7, 9)} ${d.slice(9)}`
+}
+
 const empty = {
   first: '',
   last: '',
@@ -52,6 +86,16 @@ export default function Checkout() {
   }, [user, guestEmail])
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
+
+  const setCard = (e) => setForm((f) => ({ ...f, card: formatCard(e.target.value) }))
+  const setExp = (e) => setForm((f) => ({ ...f, exp: formatExp(e.target.value, f.exp) }))
+  const setCvv = (e) => setForm((f) => ({ ...f, cvv: formatCvv(e.target.value) }))
+  const setPhone = (e) => setForm((f) => ({ ...f, phone: formatPhone(e.target.value) }))
+
+  const focusField = (e) => {
+    const el = e.currentTarget
+    window.setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 300)
+  }
 
   const validate = (s) => {
     const e = {}
@@ -201,6 +245,9 @@ export default function Checkout() {
                 placeholder="E-posta"
                 value={guestMail}
                 onChange={(e) => setGuestMail(e.target.value)}
+                autoComplete="email"
+                inputMode="email"
+                onFocus={focusField}
                 required
               />
               {identErr && <p className="field-error">{identErr}</p>}
@@ -215,40 +262,52 @@ export default function Checkout() {
           <div className="auth-card checkout-sheet">
             <div className="form-grid">
               <div>
-                <input placeholder="Ad" value={form.first} onChange={set('first')} />
+                <input placeholder="Ad" value={form.first} onChange={set('first')} autoComplete="given-name" onFocus={focusField} />
                 {errors.first && <p className="field-error">{errors.first}</p>}
               </div>
               <div>
-                <input placeholder="Soyad" value={form.last} onChange={set('last')} />
+                <input placeholder="Soyad" value={form.last} onChange={set('last')} autoComplete="family-name" onFocus={focusField} />
                 {errors.last && <p className="field-error">{errors.last}</p>}
               </div>
               <div className="full">
                 <input
+                  type="email"
                   placeholder="E-posta"
                   value={form.email}
                   onChange={set('email')}
                   readOnly={Boolean(user || guestEmail)}
+                  autoComplete="email"
+                  inputMode="email"
+                  onFocus={focusField}
                 />
                 {errors.email && <p className="field-error">{errors.email}</p>}
               </div>
               <div className="full">
-                <input placeholder="Telefon" value={form.phone} onChange={set('phone')} />
+                <input
+                  placeholder="Telefon"
+                  value={form.phone}
+                  onChange={setPhone}
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  onFocus={focusField}
+                />
                 {errors.phone && <p className="field-error">{errors.phone}</p>}
               </div>
               <div className="full">
-                <input placeholder="Adres" value={form.address} onChange={set('address')} />
+                <input placeholder="Adres" value={form.address} onChange={set('address')} autoComplete="street-address" onFocus={focusField} />
                 {errors.address && <p className="field-error">{errors.address}</p>}
               </div>
               <div>
-                <input placeholder="Şehir" value={form.city} onChange={set('city')} />
+                <input placeholder="Şehir" value={form.city} onChange={set('city')} autoComplete="address-level1" onFocus={focusField} />
                 {errors.city && <p className="field-error">{errors.city}</p>}
               </div>
               <div>
-                <input placeholder="İlçe" value={form.district} onChange={set('district')} />
+                <input placeholder="İlçe" value={form.district} onChange={set('district')} autoComplete="address-level2" onFocus={focusField} />
                 {errors.district && <p className="field-error">{errors.district}</p>}
               </div>
               <div className="full">
-                <input placeholder="Posta Kodu" value={form.zip} onChange={set('zip')} />
+                <input placeholder="Posta Kodu" value={form.zip} onChange={set('zip')} inputMode="numeric" autoComplete="postal-code" onFocus={focusField} />
                 {errors.zip && <p className="field-error">{errors.zip}</p>}
               </div>
             </div>
@@ -262,23 +321,49 @@ export default function Checkout() {
                 <input
                   placeholder="Kart numarası"
                   value={form.card}
-                  onChange={set('card')}
-                  autoComplete="off"
+                  onChange={setCard}
+                  inputMode="numeric"
+                  autoComplete="cc-number"
+                  maxLength={19}
+                  onFocus={focusField}
                 />
                 {errors.card && <p className="field-error">{errors.card}</p>}
               </div>
               <div className="checkout-pair">
                 <div>
-                  <input placeholder="AA/YY" value={form.exp} onChange={set('exp')} autoComplete="off" inputMode="numeric" />
+                  <input
+                    placeholder="AA/YY"
+                    value={form.exp}
+                    onChange={setExp}
+                    inputMode="numeric"
+                    autoComplete="cc-exp"
+                    maxLength={5}
+                    onFocus={focusField}
+                  />
                   {errors.exp && <p className="field-error">{errors.exp}</p>}
                 </div>
                 <div>
-                  <input placeholder="CVV" value={form.cvv} onChange={set('cvv')} autoComplete="off" inputMode="numeric" />
+                  <input
+                    placeholder="CVV"
+                    value={form.cvv}
+                    onChange={setCvv}
+                    inputMode="numeric"
+                    autoComplete="cc-csc"
+                    maxLength={4}
+                    onFocus={focusField}
+                  />
                   {errors.cvv && <p className="field-error">{errors.cvv}</p>}
                 </div>
               </div>
               <div className="full">
-                <input placeholder="Kart üzerindeki isim" value={form.holder} onChange={set('holder')} autoComplete="off" />
+                <input
+                  placeholder="Kart üzerindeki isim"
+                  value={form.holder}
+                  onChange={set('holder')}
+                  autoComplete="cc-name"
+                  autoCapitalize="characters"
+                  onFocus={focusField}
+                />
                 {errors.holder && <p className="field-error">{errors.holder}</p>}
               </div>
               <p className="product-meta full">Kart bilgileri kaydedilmez.</p>

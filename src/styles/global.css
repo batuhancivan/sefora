@@ -33,11 +33,12 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-html,
 body {
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 html,
@@ -1567,11 +1568,17 @@ textarea:focus-visible {
 .checkout {
   max-width: 760px;
   min-width: 0;
+  padding-bottom: 2rem;
 }
 
 .checkout input {
   min-width: 0;
   max-width: 100%;
+  font-size: 16px;
+}
+
+.checkout input:not([type='checkbox']) {
+  min-height: 3rem;
 }
 
 .checkout-guest {
@@ -1691,6 +1698,7 @@ textarea:focus-visible {
   background: var(--paper);
   padding: 0.8rem 0.9rem;
   resize: vertical;
+  font-size: 16px;
 }
 
 .contact-page .page-lead {
@@ -2117,6 +2125,12 @@ textarea:focus-visible {
   stroke-width: 1.5;
 }
 
+body:has(.checkout) .wa-float,
+body:has(.auth-page) .wa-float,
+body:has(.success-box) .wa-float {
+  display: none;
+}
+
 body:has(.menu-panel) .wa-float {
   display: none;
 }
@@ -2500,8 +2514,8 @@ body:has(.menu-panel) .wa-float {
   .checkout .auth-card {
     padding: 1.1rem;
   }
-  body:has(.checkout) .wa-float {
-    display: none;
+  .checkout {
+    padding-bottom: 5.5rem;
   }
   .success-box .pdp-brand {
     display: flex;
@@ -2580,6 +2594,8 @@ body:has(.menu-panel) .wa-float {
   border: 1px solid var(--line);
   background: #fff;
   padding: 0.8rem 0.9rem;
+  font-size: 16px;
+  min-height: 3rem;
 }
 
 .auth-switch {
